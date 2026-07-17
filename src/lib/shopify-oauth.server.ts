@@ -1,7 +1,25 @@
 import { createHash, randomBytes, createHmac } from "node:crypto";
 import { encryptToken, fetchShopInfo, makeShopifyClient } from "./shopify.server";
 import { createClient } from "@supabase/supabase-js";
-import { parse, serialize } from "cookie";
+
+function parseCookies(header: string | null): Record<string, string> {
+  if (!header) return {};
+  return header.split(';').reduce((acc, cookie) => {
+    const [key, ...v] = cookie.split('=');
+    acc[key.trim()] = v.join('=').trim();
+    return acc;
+  }, {} as Record<string, string>);
+}
+
+function serializeCookie(name: string, value: string, options: { httpOnly?: boolean, secure?: boolean, sameSite?: string, path?: string, maxAge?: number }) {
+  let cookie = `${name}=${value}`;
+  if (options.httpOnly) cookie += "; HttpOnly";
+  if (options.secure) cookie += "; Secure";
+  if (options.sameSite) cookie += `; SameSite=${options.sameSite}`;
+  if (options.path) cookie += `; Path=${options.path}`;
+  if (options.maxAge) cookie += `; Max-Age=${options.maxAge}`;
+  return cookie;
+}
 
 const CLIENT_ID = process.env.SHOPIFY_API_KEY;
 const CLIENT_SECRET = process.env.SHOPIFY_API_SECRET;
@@ -42,7 +60,7 @@ export async function handleShopifyAuth(request: Request): Promise<Response> {
   }
 
   // Ensure user is logged in
-  const cookies = parse(request.headers.get("cookie") || "");
+  const cookies = parseCookies(request.headers.get("cookie") || "");
   // Actually, we can get user session from Supabase client using cookies if we have them.
   // Instead, let's just let the frontend pass a user_id or we extract it.
   // We'll store the redirect in a cookie and redirect to /auth if no user cookie.
@@ -77,7 +95,7 @@ export async function handleShopifyAuth(request: Request): Promise<Response> {
   }
 
   const state = randomBytes(16).toString("hex");
-  const stateCookie = serialize("shopify_oauth_state", state, {
+  const stateCookie = serializeCookie("shopify_oauth_state", state, {
     httpOnly: true,
     secure: url.protocol === "https:",
     sameSite: "lax",
@@ -111,7 +129,7 @@ export async function handleShopifyAuthCallback(request: Request): Promise<Respo
     return new Response("HMAC validation failed", { status: 400 });
   }
 
-  const cookies = parse(request.headers.get("cookie") || "");
+  const cookies = parseCookies(request.headers.get("cookie") || "");
   if (cookies.shopify_oauth_state !== state) {
     return new Response("State validation failed", { status: 400 });
   }
