@@ -85,8 +85,8 @@ export default {
 
           const { data: store, error: storeErr } = await supabase.from("stores").upsert({
             user_id: userId, shop_domain: "test-pipeline-store.myshopify.com", access_token_ciphertext: fakeEncryptedToken, is_active: true
-          }).select().single();
-          if (storeErr || !store) return new Response("Store err", { status: 500 });
+          }, { onConflict: "shop_domain" }).select().single();
+          if (storeErr || !store) return new Response("Store err: " + JSON.stringify(storeErr), { status: 500 });
 
           const { data: backup, error: backupErr } = await supabase.from("backups").insert({
             store_id: store.id, status: "pending", type: "manual"
