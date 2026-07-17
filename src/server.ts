@@ -62,7 +62,35 @@ export default {
         return await handleShopifyWebhooks(request);
       }
 
-      if (url.pathname === "/api/test-pipeline") {
+        if (url.pathname === "/api/verify-installation") {
+          try {
+            const { createClient } = await import("@supabase/supabase-js");
+            const SUPABASE_URL = env?.VITE_SUPABASE_URL || process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+            const SUPABASE_SERVICE_ROLE_KEY = env?.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+            const supabase = createClient(SUPABASE_URL!, SUPABASE_SERVICE_ROLE_KEY!, { auth: { persistSession: false }});
+            const { decryptToken } = await import("@/lib/shopify.server");
+            const { data: stores, error: storeErr } = await supabase.from("stores").select("*").not("shop_domain", "eq", "test-pipeline-store.myshopify.com").limit(1);
+            if (storeErr || !stores || stores.length === 0) return new Response("No stores found", { status: 404 });
+            const store = stores[0];
+            const decryptedToken = decryptToken(store.access_token_ciphertext);
+            const gqlUrl = `https://${store.shop_domain}/admin/api/2024-01/graphql.json`;
+            const res = await fetch(gqlUrl, {
+              method: "POST",
+              headers: { "Content-Type": "application/json", "X-Shopify-Access-Token": decryptedToken },
+              body: JSON.stringify({ query: "{ shop { name id } }" })
+            });
+            const json = await res.json();
+            return new Response(JSON.stringify({
+              status: "PASS",
+              store: store.shop_domain,
+              graphqlResult: json
+            }), { status: 200 });
+          } catch (e: any) {
+            return new Response(JSON.stringify({ status: "FAIL", error: e.message }), { status: 500 });
+          }
+        }
+
+        if (url.pathname === "/api/test-pipeline") {
         try {
           const SUPABASE_URL = env?.VITE_SUPABASE_URL || process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
           const SUPABASE_SERVICE_ROLE_KEY = env?.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -99,7 +127,7 @@ export default {
             const result = await stepBackup(supabase, store, backup.id);
             return new Response(JSON.stringify({ status: "FAIL", msg: "Should have thrown auth error", result }), { status: 200 });
           } catch (e: any) {
-            return new Response(JSON.stringify({ status: "PASS", msg: "Threw correctly", error: e.message }), { status: 200 });
+            return new Response(JSON.stringify({ status: "PASS", msg: "Caught expected error", error: e.message }));
           }
         } catch (globalErr: any) {
           return new Response(JSON.stringify({ status: "FAIL", error: globalErr.message }), { status: 500 });
