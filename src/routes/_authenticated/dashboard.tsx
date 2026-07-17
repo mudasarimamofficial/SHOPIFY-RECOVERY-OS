@@ -95,8 +95,8 @@ function DashboardPage() {
                 Connect your first Shopify store
               </h3>
               <p className="mt-2 max-w-md text-sm text-muted-foreground">
-                Imam Recovery OS needs an Admin API access token from a custom app on your Shopify store.
-                Takes about 60 seconds.
+                Imam Recovery OS needs an Admin API access token from a custom app on your Shopify
+                store. Takes about 60 seconds.
               </p>
             </div>
             <Link
@@ -214,9 +214,24 @@ function DashboardPage() {
             <div>
               <SectionHeader title="Quick actions" />
               <div className="surface-panel divide-y divide-border">
-                <QuickAction to="/connect" icon={<Plug />} title="Connect Shopify" desc="Add a store" />
-                <QuickAction to="/stores" icon={<Zap />} title="Create backup" desc="Run a fresh snapshot" />
-                <QuickAction to="/restore" icon={<Archive />} title="Restore package" desc="Deploy to another store" />
+                <QuickAction
+                  to="/connect"
+                  icon={<Plug />}
+                  title="Connect Shopify"
+                  desc="Add a store"
+                />
+                <QuickAction
+                  to="/stores"
+                  icon={<Zap />}
+                  title="Create backup"
+                  desc="Run a fresh snapshot"
+                />
+                <QuickAction
+                  to="/restore"
+                  icon={<Archive />}
+                  title="Restore package"
+                  desc="Deploy to another store"
+                />
               </div>
             </div>
 

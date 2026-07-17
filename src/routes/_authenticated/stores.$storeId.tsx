@@ -81,7 +81,11 @@ function StoreDetail() {
               disabled={startMut.isPending}
               className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-60"
             >
-              {startMut.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Zap className="h-4 w-4" />}
+              {startMut.isPending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Zap className="h-4 w-4" />
+              )}
               {startMut.isPending ? "Backing up…" : "Create backup"}
             </button>
           </div>
@@ -95,8 +99,10 @@ function StoreDetail() {
               Recoverable resources
             </div>
             <p className="mt-1 text-sm text-muted-foreground">
-              Everything Imam Recovery OS knows how to protect for this store. Items marked <span className="text-success">full</span> are automatically restored;
-              <span className="text-warning"> partial</span> respects Shopify limits; <span className="text-info">manual</span> requires reconnecting outside Shopify.
+              Everything Imam Recovery OS knows how to protect for this store. Items marked{" "}
+              <span className="text-success">full</span> are automatically restored;
+              <span className="text-warning"> partial</span> respects Shopify limits;{" "}
+              <span className="text-info">manual</span> requires reconnecting outside Shopify.
             </p>
             <div className="mt-5 space-y-5">
               {[...groups.entries()].map(([group, list]) => (
@@ -138,7 +144,8 @@ function StoreDetail() {
             </div>
             {backups.length === 0 ? (
               <div className="p-6 text-sm text-muted-foreground">
-                No backups yet for this store. Click <span className="text-foreground">Create backup</span> above.
+                No backups yet for this store. Click{" "}
+                <span className="text-foreground">Create backup</span> above.
               </div>
             ) : (
               <ul className="divide-y divide-border">
@@ -216,7 +223,9 @@ function RecoveryBadge({ tier }: { tier: "full" | "partial" | "manual" | "unavai
   }[tier];
   const label = { full: "full", partial: "partial", manual: "manual", unavail: "n/a" }[tier];
   return (
-    <span className={`mono rounded-md border px-1.5 py-0.5 text-[9px] uppercase tracking-widest ${style}`}>
+    <span
+      className={`mono rounded-md border px-1.5 py-0.5 text-[9px] uppercase tracking-widest ${style}`}
+    >
       {label}
     </span>
   );

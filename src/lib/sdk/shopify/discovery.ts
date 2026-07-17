@@ -53,17 +53,16 @@ export class VersionAdapter {
     // Note: To get versions without knowing a version, we can hit the REST endpoint or GraphQL publicSchema
     // Shopify guarantees /admin/api/unstable is always available for this
     try {
-      const res = await this.sdk.rest<{ public_api_versions: { handle: string, supported: boolean }[] }>(
-        "GET", 
-        "../unstable/public_api_versions.json"
-      );
-      return res.public_api_versions.filter(v => v.supported).map(v => v.handle);
+      const res = await this.sdk.rest<{
+        public_api_versions: { handle: string; supported: boolean }[];
+      }>("GET", "../unstable/public_api_versions.json");
+      return res.public_api_versions.filter((v) => v.supported).map((v) => v.handle);
     } catch (err) {
       console.warn("[VersionAdapter] Failed to fetch API versions. Falling back to default.");
       return ["2024-01", "2024-04", "2024-07", "2024-10"];
     }
   }
-  
+
   /**
    * Analyzes an upcoming API deprecation warning returned in a GraphQL extension payload.
    */

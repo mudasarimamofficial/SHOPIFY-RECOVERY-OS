@@ -6,7 +6,7 @@ import type { GIDMapper } from "../mapper";
 export abstract class BaseBulkPlugin implements ResourcePlugin {
   abstract type: string;
   dependencies: string[] = [];
-  
+
   // The GraphQL bulk query used to extract the resource
   abstract getBulkQuery(): string;
   // The GraphQL mutation used to create/restore the resource
@@ -31,7 +31,7 @@ export abstract class BaseBulkPlugin implements ResourcePlugin {
 
   async export(client: ShopifySDK, archive: RecoveryArchive): Promise<void> {
     const query = this.getBulkQuery();
-    
+
     // Execute real bulk operation
     const downloadUrl = await client.bulk.runBulkQuery(query);
     if (!downloadUrl) return; // No data
@@ -39,8 +39,8 @@ export abstract class BaseBulkPlugin implements ResourcePlugin {
     // Stream the JSONL directly into the RecoveryArchive (which encrypts it via AES-GCM)
     const res = await fetch(downloadUrl);
     if (!res.body) throw new Error("Failed to read bulk operation stream");
-    
-    // For Vercel Edge / standard Node environments: 
+
+    // For Vercel Edge / standard Node environments:
     // We parse the streaming body and write chunk by chunk
     const reader = res.body.getReader();
     const decoder = new TextDecoder("utf8");
@@ -49,62 +49,75 @@ export abstract class BaseBulkPlugin implements ResourcePlugin {
     while (true) {
       const { value, done } = await reader.read();
       if (done) break;
-      
+
       chunkBuffer += decoder.decode(value, { stream: true });
-      const lines = chunkBuffer.split('\n');
-      
+      const lines = chunkBuffer.split("\n");
+
       // Write all complete lines
       if (lines.length > 1) {
-        const toWrite = lines.slice(0, -1).join('\n') + '\n';
+        const toWrite = lines.slice(0, -1).join("\n") + "\n";
         await archive.writeResource(this.type, toWrite);
         chunkBuffer = lines[lines.length - 1]; // Keep incomplete line
       }
     }
 
     if (chunkBuffer.trim().length > 0) {
-      await archive.writeResource(this.type, chunkBuffer + '\n');
+      await archive.writeResource(this.type, chunkBuffer + "\n");
     }
   }
 
   diff(source: any, target: any): ResourceDelta {
-    if (!target) return { action: "create", resourceType: this.type, payload: source, reason: "Missing" };
-    if (source.updatedAt !== target.updatedAt) return { action: "update", resourceType: this.type, payload: source, reason: "Timestamp diff" };
+    if (!target)
+      return { action: "create", resourceType: this.type, payload: source, reason: "Missing" };
+    if (source.updatedAt !== target.updatedAt)
+      return {
+        action: "update",
+        resourceType: this.type,
+        payload: source,
+        reason: "Timestamp diff",
+      };
     return { action: "skip", resourceType: this.type, payload: null, reason: "Identical" };
   }
 
   sanitizeInput(payload: any): any {
-    const { 
-      id, __parentId, updatedAt, createdAt, legacyResourceId, 
-      adminGraphqlApiId, publishedAt, ...cleanInput 
+    const {
+      id,
+      __parentId,
+      updatedAt,
+      createdAt,
+      legacyResourceId,
+      adminGraphqlApiId,
+      publishedAt,
+      ...cleanInput
     } = payload;
-    
+
     // Recursively clean deeply nested edges/nodes if any, though bulk JSONL is usually flat
     return cleanInput;
   }
 
   async restore(client: ShopifySDK, delta: ResourceDelta, mapper: GIDMapper): Promise<string> {
     if (delta.action === "skip") return "";
-    
+
     const mappedPayload = mapper.translatePayload(delta.payload);
     const input = this.sanitizeInput(mappedPayload);
-    
+
     const mutation = this.getRestoreMutation();
     const res = await client.graphql<any>(mutation, { input });
-    
+
     // Assume standard Shopify mutation shape: [resourceName]Create { [resourceName] { id } userErrors }
     const mutationKey = Object.keys(res)[0];
     const data = res[mutationKey];
-    
+
     if (data.userErrors && data.userErrors.length > 0) {
       throw new Error(`Restore failed: ${JSON.stringify(data.userErrors)}`);
     }
-    
+
     // Extract ID dynamically based on the mutation key prefix (e.g. productCreate -> product.id)
-    const resourceKey = mutationKey.replace(/(Create|Update)$/, '');
+    const resourceKey = mutationKey.replace(/(Create|Update)$/, "");
     const newId = data[resourceKey]?.id;
-    
+
     if (!newId) throw new Error("Restore succeeded but no ID returned.");
-    
+
     return newId;
   }
 
@@ -124,13 +137,16 @@ export abstract class BaseBulkPlugin implements ResourcePlugin {
   }
 
   async rollback(client: ShopifySDK, resourceId: string): Promise<void> {
-    const mutationKey = `${this.type.replace(/s$/, '')}Delete`;
-    await client.graphql(`
+    const mutationKey = `${this.type.replace(/s$/, "")}Delete`;
+    await client.graphql(
+      `
       mutation($id: ID!) {
         ${mutationKey}(input: { id: $id }) {
           deletedId
         }
       }
-    `, { id: resourceId });
+    `,
+      { id: resourceId },
+    );
   }
 }

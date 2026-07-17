@@ -1,10 +1,10 @@
 import { globalEventBus } from "./event-bus";
-// import { trace, metrics } from "@opentelemetry/api"; 
+// import { trace, metrics } from "@opentelemetry/api";
 // ^ Commented out to prevent build errors before package is installed
 
 export class EnterpriseMonitoring {
   /**
-   * Bootstraps the observability hooks. Binds to the InternalEventBus and 
+   * Bootstraps the observability hooks. Binds to the InternalEventBus and
    * bridges all internal pipeline telemetry to standard OpenTelemetry (OTel) exporters.
    */
   bootstrap() {
@@ -19,24 +19,26 @@ export class EnterpriseMonitoring {
       "ResourceRestored",
       "VerificationFailed",
       "Throttled",
-      "Error"
+      "Error",
     ];
 
-    eventsToTrace.forEach(eventType => {
+    eventsToTrace.forEach((eventType) => {
       globalEventBus.subscribe(eventType, async (payload) => {
         // OTel Counter
         // counter.add(1, { event: eventType, store: payload.storeDomain });
 
         // Structured JSON Logging for Datadog / New Relic
-        console.log(JSON.stringify({
-          service: "shopify-recovery-os",
-          level: eventType === "Error" ? "error" : "info",
-          event: eventType,
-          jobId: payload.jobId,
-          storeDomain: payload.storeDomain,
-          timestamp: payload.timestamp,
-          ...payload.meta
-        }));
+        console.log(
+          JSON.stringify({
+            service: "shopify-recovery-os",
+            level: eventType === "Error" ? "error" : "info",
+            event: eventType,
+            jobId: payload.jobId,
+            storeDomain: payload.storeDomain,
+            timestamp: payload.timestamp,
+            ...payload.meta,
+          }),
+        );
       });
     });
   }

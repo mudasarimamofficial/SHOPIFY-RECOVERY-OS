@@ -22,7 +22,8 @@ function BackupDetail() {
       queryKey: ["backup", backupId],
       queryFn: () => fn({ data: { id: backupId } }),
       refetchInterval: (q) => {
-        const status = (q.state.data as { backup?: { status?: string } } | undefined)?.backup?.status;
+        const status = (q.state.data as { backup?: { status?: string } } | undefined)?.backup
+          ?.status;
         return status === "running" || status === "pending" ? 2000 : false;
       },
     }),
@@ -66,7 +67,11 @@ function BackupDetail() {
               onClick={() => dl.mutate()}
               className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-40"
             >
-              {dl.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+              {dl.isPending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Download className="h-4 w-4" />
+              )}
               Download .recovery
             </button>
           </div>
@@ -101,7 +106,10 @@ function BackupDetail() {
               {resources.map((r) => {
                 const spec = catalog.get(r.resource_type);
                 return (
-                  <li key={r.resource_type} className="flex items-center justify-between px-5 py-3 text-sm">
+                  <li
+                    key={r.resource_type}
+                    className="flex items-center justify-between px-5 py-3 text-sm"
+                  >
                     <div className="flex items-center gap-3 min-w-0">
                       {r.status === "completed" ? (
                         <CheckCircle2 className="h-4 w-4 shrink-0 text-success" />
@@ -113,7 +121,9 @@ function BackupDetail() {
                       <div className="min-w-0">
                         <div className="truncate">{spec?.label ?? r.resource_type}</div>
                         {r.error && (
-                          <div className="mono truncate text-[11px] text-destructive">{r.error}</div>
+                          <div className="mono truncate text-[11px] text-destructive">
+                            {r.error}
+                          </div>
                         )}
                       </div>
                     </div>
@@ -134,8 +144,8 @@ function BackupDetail() {
               Manual reconnect required
             </div>
             <p className="mt-2 text-sm text-muted-foreground">
-              Imam Recovery OS can not automate these — they are enforced by Shopify or by third parties.
-              A restore report will list each item so nothing gets missed.
+              Imam Recovery OS can not automate these — they are enforced by Shopify or by third
+              parties. A restore report will list each item so nothing gets missed.
             </p>
             <div className="mt-4 grid gap-1.5 sm:grid-cols-2">
               {RESOURCE_CATALOG.filter((r) => r.recoverability === "manual").map((r) => (
@@ -171,7 +181,9 @@ function BackupDetail() {
                   <StatusDot status={backup.status} /> {backup.status}
                 </span>
               </Row>
-              <Row label="Resources">{backup.resources_completed}/{backup.resources_total}</Row>
+              <Row label="Resources">
+                {backup.resources_completed}/{backup.resources_total}
+              </Row>
               <Row label="Errors">{backup.errors_count}</Row>
               <Row label="Package size">{formatBytes(backup.size_bytes)}</Row>
               <Row label="Store">{store?.shop_domain ?? "—"}</Row>

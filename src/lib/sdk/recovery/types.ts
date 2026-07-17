@@ -5,9 +5,9 @@ export interface RecoveryManifest {
   generated_at: string;
   store_domain: string;
   signature?: string; // Cryptographic signature of the package
-  catalog: { 
-    type: string; 
-    count: number; 
+  catalog: {
+    type: string;
+    count: number;
     checksum: string; // Hash of the individual resource file
   }[];
   media_catalog: {

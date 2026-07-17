@@ -12,9 +12,7 @@ export const Route = createFileRoute("/_authenticated/reports")({
 
 function ReportsPage() {
   const fn = useServerFn(listBackups);
-  const { data } = useSuspenseQuery(
-    queryOptions({ queryKey: ["backups"], queryFn: () => fn() }),
-  );
+  const { data } = useSuspenseQuery(queryOptions({ queryKey: ["backups"], queryFn: () => fn() }));
 
   const completed = data.filter((b) => b.status === "completed");
   const avgScore = completed.length
@@ -32,7 +30,11 @@ function ReportsPage() {
       <div className="p-8 space-y-6">
         <div className="grid gap-3 sm:grid-cols-3">
           <StatCard label="Backups completed" value={String(completed.length)} />
-          <StatCard label="Average recovery score" value={avgScore !== null ? `${avgScore}/100` : "—"} accent />
+          <StatCard
+            label="Average recovery score"
+            value={avgScore !== null ? `${avgScore}/100` : "—"}
+            accent
+          />
           <StatCard label="Total archive size" value={formatBytes(totalSize)} />
         </div>
 
@@ -66,7 +68,9 @@ function ReportsPage() {
                     <td className="mono px-5 py-3 text-right text-gradient-accent">
                       {b.recovery_score ?? "—"}
                     </td>
-                    <td className="mono px-5 py-3 text-right text-xs">{formatBytes(b.size_bytes)}</td>
+                    <td className="mono px-5 py-3 text-right text-xs">
+                      {formatBytes(b.size_bytes)}
+                    </td>
                     <td className="mono px-5 py-3 text-right text-xs text-muted-foreground">
                       {formatDate(b.completed_at)}
                     </td>
@@ -84,7 +88,9 @@ function ReportsPage() {
 function StatCard({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
   return (
     <div className="surface-panel p-5">
-      <div className="mono text-[10px] uppercase tracking-widest text-muted-foreground">{label}</div>
+      <div className="mono text-[10px] uppercase tracking-widest text-muted-foreground">
+        {label}
+      </div>
       <div className={`mono mt-2 text-3xl font-semibold ${accent ? "text-gradient-accent" : ""}`}>
         {value}
       </div>

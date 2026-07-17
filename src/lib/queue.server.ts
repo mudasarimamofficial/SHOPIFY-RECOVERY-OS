@@ -19,7 +19,7 @@ export async function enqueueJob(
   admin: SupabaseClient,
   jobType: string,
   payload: JobPayload,
-  options?: { queueName?: string; priority?: number; runAt?: Date }
+  options?: { queueName?: string; priority?: number; runAt?: Date },
 ) {
   const { data, error } = await admin
     .from("jobs")
@@ -37,7 +37,13 @@ export async function enqueueJob(
   return data.id;
 }
 
-export async function logJobEvent(admin: SupabaseClient, jobId: string, message: string, level: "info" | "warn" | "error" = "info", meta?: any) {
+export async function logJobEvent(
+  admin: SupabaseClient,
+  jobId: string,
+  message: string,
+  level: "info" | "warn" | "error" = "info",
+  meta?: any,
+) {
   await admin.from("job_logs").insert({ job_id: jobId, message, level, meta });
 }
 
@@ -46,15 +52,15 @@ export async function logJobEvent(admin: SupabaseClient, jobId: string, message:
 export async function processNextJob(
   admin: SupabaseClient,
   handlers: Record<string, (job: Job, admin: SupabaseClient) => Promise<void>>,
-  queueName = "default"
+  queueName = "default",
 ) {
   const workerId = `worker-${Math.random().toString(36).substr(2, 9)}`;
 
-  // Lock a job (Postgres CTE isn't easily doable via Supabase Data API without RPC, 
-  // so we use a simple update where lock is null). 
+  // Lock a job (Postgres CTE isn't easily doable via Supabase Data API without RPC,
+  // so we use a simple update where lock is null).
   // For production, use an RPC function `lock_next_job`.
   // As a workaround using REST:
-  
+
   const { data: candidates, error: findErr } = await admin
     .from("jobs")
     .select("id")
@@ -71,11 +77,11 @@ export async function processNextJob(
 
   const { data: lockedJob, error: lockErr } = await admin
     .from("jobs")
-    .update({ 
-      status: "running", 
-      locked_at: new Date().toISOString(), 
+    .update({
+      status: "running",
+      locked_at: new Date().toISOString(),
       locked_by: workerId,
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     })
     .eq("id", jobToLock)
     .eq("status", "queued") // Optimistic concurrency check
@@ -88,42 +94,54 @@ export async function processNextJob(
   const handler = handlers[job.job_type];
 
   if (!handler) {
-    await admin.from("jobs").update({ 
-      status: "failed", 
-      last_error: `No handler found for job_type: ${job.job_type}` 
-    }).eq("id", job.id);
+    await admin
+      .from("jobs")
+      .update({
+        status: "failed",
+        last_error: `No handler found for job_type: ${job.job_type}`,
+      })
+      .eq("id", job.id);
     return job.id;
   }
 
   try {
     await logJobEvent(admin, job.id, "Job started");
     await handler(job, admin);
-    await admin.from("jobs").update({ status: "completed", updated_at: new Date().toISOString() }).eq("id", job.id);
+    await admin
+      .from("jobs")
+      .update({ status: "completed", updated_at: new Date().toISOString() })
+      .eq("id", job.id);
     await logJobEvent(admin, job.id, "Job completed successfully");
   } catch (err: any) {
     const errorMsg = err.message || String(err);
     await logJobEvent(admin, job.id, `Job failed: ${errorMsg}`, "error");
-    
+
     const attempts = job.attempts + 1;
     if (attempts >= job.max_attempts) {
-      await admin.from("jobs").update({ 
-        status: "failed", 
-        attempts, 
-        last_error: errorMsg,
-        updated_at: new Date().toISOString()
-      }).eq("id", job.id);
+      await admin
+        .from("jobs")
+        .update({
+          status: "failed",
+          attempts,
+          last_error: errorMsg,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", job.id);
     } else {
       // Exponential backoff (e.g. 5s, 25s, 125s)
       const backoffMs = Math.pow(5, attempts) * 1000;
-      await admin.from("jobs").update({ 
-        status: "queued", 
-        attempts, 
-        last_error: errorMsg,
-        locked_by: null,
-        locked_at: null,
-        run_at: new Date(Date.now() + backoffMs).toISOString(),
-        updated_at: new Date().toISOString()
-      }).eq("id", job.id);
+      await admin
+        .from("jobs")
+        .update({
+          status: "queued",
+          attempts,
+          last_error: errorMsg,
+          locked_by: null,
+          locked_at: null,
+          run_at: new Date(Date.now() + backoffMs).toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", job.id);
     }
   }
 

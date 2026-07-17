@@ -1,4 +1,4 @@
-export type EventType = 
+export type EventType =
   | "PipelineStarted"
   | "PipelineCompleted"
   | "ResourceScanned"
@@ -36,11 +36,11 @@ export class InternalEventBus {
   async emit(eventType: EventType, payload: EventPayload) {
     // Fire and forget logging
     console.log(`[EventBus] ${eventType} for job ${payload.jobId}`, payload.meta);
-    
+
     const handlers = this.subscribers.get(eventType);
     if (handlers) {
       // Execute all handlers concurrently
-      await Promise.allSettled(handlers.map(h => h(payload)));
+      await Promise.allSettled(handlers.map((h) => h(payload)));
     }
   }
 }

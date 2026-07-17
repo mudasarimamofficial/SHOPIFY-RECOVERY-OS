@@ -97,7 +97,11 @@ export function makeShopifyClient(domain: string, token: string): ShopifyClient 
     }
     return out;
   }
-  async function graphql<T>(query: string, variables?: Record<string, unknown>, attempts = 0): Promise<T> {
+  async function graphql<T>(
+    query: string,
+    variables?: Record<string, unknown>,
+    attempts = 0,
+  ): Promise<T> {
     const res = await fetch(`https://${domain}/admin/api/${SHOPIFY_API_VERSION}/graphql.json`, {
       method: "POST",
       headers: {
@@ -107,20 +111,20 @@ export function makeShopifyClient(domain: string, token: string): ShopifyClient 
       },
       body: JSON.stringify({ query, variables }),
     });
-    
+
     if (res.status === 429) {
       const retryAfter = parseInt(res.headers.get("Retry-After") || "2", 10);
       await new Promise((r) => setTimeout(r, retryAfter * 1000));
       return graphql(query, variables, attempts + 1);
     }
-    
+
     if (!res.ok) {
       const body = await res.text().catch(() => "");
       throw new Error(`Shopify GraphQL ${res.status}: ${body.slice(0, 200)}`);
     }
-    
+
     const json = (await res.json()) as { data?: T; errors?: any[]; extensions?: any };
-    
+
     // Enterprise Cost-Tracking & Backpressure
     if (json.extensions?.cost?.throttleStatus) {
       const { currentlyAvailable, restoreRate } = json.extensions.cost.throttleStatus;
@@ -131,7 +135,7 @@ export function makeShopifyClient(domain: string, token: string): ShopifyClient 
         await new Promise((r) => setTimeout(r, waitMs));
       }
     }
-    
+
     if (json.errors && json.errors.length > 0) {
       // Handle throttling errors explicitly
       const isThrottled = json.errors.some((e: any) => e.extensions?.code === "THROTTLED");
@@ -141,7 +145,7 @@ export function makeShopifyClient(domain: string, token: string): ShopifyClient 
       }
       throw new Error(`Shopify GraphQL Error: ${JSON.stringify(json.errors)}`);
     }
-    
+
     return json.data as T;
   }
   return { domain, rest, paged, graphql };

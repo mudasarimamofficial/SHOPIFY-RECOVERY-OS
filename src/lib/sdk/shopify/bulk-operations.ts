@@ -37,7 +37,7 @@ export class BulkOperations {
 
     // Polling loop
     while (true) {
-      await new Promise(r => setTimeout(r, 5000)); // Poll every 5s
+      await new Promise((r) => setTimeout(r, 5000)); // Poll every 5s
 
       const statusQuery = `
         query {

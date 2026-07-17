@@ -1,19 +1,58 @@
-import fs from 'fs';
-import path from 'path';
+import fs from "fs";
+import path from "path";
 
 const plugins = [
-  "variants", "smart_collections", "custom_collections",
-  "customers", "orders", "draft_orders", "pages", "blogs", "articles", "menus",
-  "navigation", "files", "media", "themes", "theme_assets", "templates", "sections",
-  "snippets", "locales", "theme_settings", "policies", "markets", "locations", "inventory",
-  "inventory_levels", "metafields", "metaobject_definitions", "metaobject_entries",
-  "metaobject_references", "selling_plans", "discounts", "automatic_discounts",
-  "shipping_profiles", "shipping_zones", "taxes", "translations", "redirects", "seo",
-  "store_settings", "brand_settings", "functions", "scripts", "webhooks", "app_blocks",
-  "theme_app_extensions"
+  "variants",
+  "smart_collections",
+  "custom_collections",
+  "customers",
+  "orders",
+  "draft_orders",
+  "pages",
+  "blogs",
+  "articles",
+  "menus",
+  "navigation",
+  "files",
+  "media",
+  "themes",
+  "theme_assets",
+  "templates",
+  "sections",
+  "snippets",
+  "locales",
+  "theme_settings",
+  "policies",
+  "markets",
+  "locations",
+  "inventory",
+  "inventory_levels",
+  "metafields",
+  "metaobject_definitions",
+  "metaobject_entries",
+  "metaobject_references",
+  "selling_plans",
+  "discounts",
+  "automatic_discounts",
+  "shipping_profiles",
+  "shipping_zones",
+  "taxes",
+  "translations",
+  "redirects",
+  "seo",
+  "store_settings",
+  "brand_settings",
+  "functions",
+  "scripts",
+  "webhooks",
+  "app_blocks",
+  "theme_app_extensions",
 ];
 
-const template = (name: string, className: string) => `import { BaseBulkPlugin } from "./base-plugin";
+const template = (
+  name: string,
+  className: string,
+) => `import { BaseBulkPlugin } from "./base-plugin";
 
 export class ${className}Plugin extends BaseBulkPlugin {
   type = "${name}";
@@ -47,13 +86,16 @@ export class ${className}Plugin extends BaseBulkPlugin {
 }
 `;
 
-const dir = path.join(process.cwd(), 'src/lib/pipeline/plugins');
+const dir = path.join(process.cwd(), "src/lib/pipeline/plugins");
 if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 
 for (const p of plugins) {
   if (p === "products" || p === "collections") continue;
-  
-  const className = p.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');
+
+  const className = p
+    .split("_")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join("");
   const file = path.join(dir, `${p}.ts`);
   fs.writeFileSync(file, template(p, className));
 }

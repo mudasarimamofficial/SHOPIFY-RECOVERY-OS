@@ -68,9 +68,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                   className={`h-4 w-4 ${active ? "text-primary" : "text-muted-foreground group-hover:text-foreground"}`}
                 />
                 {label}
-                {active && (
-                  <span className="ml-auto h-1.5 w-1.5 rounded-full bg-primary" />
-                )}
+                {active && <span className="ml-auto h-1.5 w-1.5 rounded-full bg-primary" />}
               </Link>
             );
           })}
@@ -107,13 +105,9 @@ export function PageHeader({
     <header className="flex items-start justify-between border-b border-border bg-background/80 px-8 py-6 backdrop-blur">
       <div>
         {eyebrow && (
-          <div className="mono text-[11px] uppercase tracking-widest text-primary">
-            {eyebrow}
-          </div>
+          <div className="mono text-[11px] uppercase tracking-widest text-primary">{eyebrow}</div>
         )}
-        <h1 className="mt-1 text-2xl font-semibold tracking-tight text-foreground">
-          {title}
-        </h1>
+        <h1 className="mt-1 text-2xl font-semibold tracking-tight text-foreground">{title}</h1>
         {description && (
           <p className="mt-1.5 max-w-2xl text-sm text-muted-foreground">{description}</p>
         )}

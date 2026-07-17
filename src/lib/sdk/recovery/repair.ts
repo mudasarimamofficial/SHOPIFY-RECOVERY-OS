@@ -21,14 +21,17 @@ export class PackageInspector {
     let totalBytes = 0;
     for (const item of manifest.catalog) {
       // Rough heuristic: Average Shopify resource JSON is ~2KB.
-      totalBytes += item.count * 2048; 
+      totalBytes += item.count * 2048;
     }
     return totalBytes;
   }
 }
 
 export class PackageRepair {
-  constructor(private admin: SupabaseClient, private backupId: string) {}
+  constructor(
+    private admin: SupabaseClient,
+    private backupId: string,
+  ) {}
 
   /**
    * Attempts to salvage a corrupted package where the manifest.json is lost or invalid.
@@ -42,34 +45,34 @@ export class PackageRepair {
     if (error || !files) throw new Error("Could not list resources for salvage.");
 
     const archive = new RecoveryArchive(this.admin, this.backupId);
-    
+
     const catalog = [];
-    
+
     for (const file of files) {
       if (!file.name.endsWith(".jsonl.enc")) continue;
-      
+
       const type = file.name.replace(".jsonl.enc", "");
-      
+
       try {
         // We must download and decrypt it to hash it properly and count lines
         const rawText = await archive.readResource(type);
         const hash = createHash("sha256").update(Buffer.from(rawText, "utf8")).digest("hex");
-        const count = rawText.split('\n').filter(l => l.trim().length > 0).length;
-        
+        const count = rawText.split("\n").filter((l) => l.trim().length > 0).length;
+
         catalog.push({ type, count, checksum: hash });
       } catch (e) {
         console.error(`[PackageRepair] Failed to salvage ${file.name}`, e);
       }
     }
-    
+
     const manifest: RecoveryManifest = {
       format: "recovery/2",
       generated_at: new Date().toISOString(),
       store_domain: storeDomain,
       catalog,
-      media_catalog: []
+      media_catalog: [],
     };
-    
+
     await archive.writeManifest(manifest);
   }
 }

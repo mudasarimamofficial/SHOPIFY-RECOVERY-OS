@@ -32,7 +32,9 @@ function SettingsPage() {
             <User className="h-3.5 w-3.5" /> Account
           </div>
           <dl className="mt-4 space-y-3 text-sm">
-            <Row label="Email" icon={<Mail className="h-3.5 w-3.5" />}>{email}</Row>
+            <Row label="Email" icon={<Mail className="h-3.5 w-3.5" />}>
+              {email}
+            </Row>
             <Row label="User ID" icon={<KeyRound className="h-3.5 w-3.5" />}>
               <span className="mono text-xs text-muted-foreground">{id}</span>
             </Row>
@@ -40,9 +42,7 @@ function SettingsPage() {
         </div>
 
         <div className="surface-panel p-6">
-          <div className="mono text-[11px] uppercase tracking-widest text-primary">
-            Encryption
-          </div>
+          <div className="mono text-[11px] uppercase tracking-widest text-primary">Encryption</div>
           <ul className="mt-4 space-y-2 text-sm text-foreground/85">
             <li>· Shopify Admin API tokens encrypted with AES-256-GCM</li>
             <li>· 96-bit random IV per token, 128-bit auth tag</li>
@@ -58,12 +58,14 @@ function SettingsPage() {
           <div className="mt-4 flex items-center justify-between">
             <div>
               <h4 className="text-sm font-medium">Sign Out</h4>
-              <p className="text-sm text-muted-foreground mt-1">End your current session and return to the login screen.</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                End your current session and return to the login screen.
+              </p>
             </div>
-            <button 
+            <button
               onClick={async () => {
                 await supabase.auth.signOut();
-                window.location.href = '/';
+                window.location.href = "/";
               }}
               className="inline-flex h-9 items-center justify-center rounded-md border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-elevated focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >

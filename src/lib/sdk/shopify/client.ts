@@ -15,19 +15,26 @@ export class ShopifySDK {
     this.bulk = new BulkOperations(this);
   }
 
-  async graphql<T>(query: string, variables: Record<string, unknown> = {}, estimatedCost = 50): Promise<T> {
+  async graphql<T>(
+    query: string,
+    variables: Record<string, unknown> = {},
+    estimatedCost = 50,
+  ): Promise<T> {
     return withExponentialBackoff(async () => {
       await this.rateLimiter.awaitCapacity(estimatedCost);
 
-      const res = await fetch(`https://${this.config.domain}/admin/api/${this.config.apiVersion}/graphql.json`, {
-        method: "POST",
-        headers: {
-          "X-Shopify-Access-Token": this.config.token,
-          "Content-Type": "application/json",
-          Accept: "application/json",
+      const res = await fetch(
+        `https://${this.config.domain}/admin/api/${this.config.apiVersion}/graphql.json`,
+        {
+          method: "POST",
+          headers: {
+            "X-Shopify-Access-Token": this.config.token,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({ query, variables }),
         },
-        body: JSON.stringify({ query, variables }),
-      });
+      );
 
       if (!res.ok) {
         if (res.status === 429) throw new Error("THROTTLED");
@@ -35,8 +42,8 @@ export class ShopifySDK {
         throw new Error(`Shopify GraphQL ${res.status}: ${body.slice(0, 200)}`);
       }
 
-      const json = await res.json() as any;
-      
+      const json = (await res.json()) as any;
+
       // Update our internal leaky bucket state based on the actual cost returned
       this.rateLimiter.updateCost(json.extensions);
 
@@ -53,7 +60,7 @@ export class ShopifySDK {
 
   async rest<T>(method: string, path: string, body?: any): Promise<T> {
     return withExponentialBackoff(async () => {
-      const url = `https://${this.config.domain}/admin/api/${this.config.apiVersion}/${path.replace(/^\//, '')}`;
+      const url = `https://${this.config.domain}/admin/api/${this.config.apiVersion}/${path.replace(/^\//, "")}`;
       const res = await fetch(url, {
         method,
         headers: {
@@ -74,20 +81,26 @@ export class ShopifySDK {
     });
   }
 
-  async *paginateGraphQL<T>(query: string, dataPath: string, variables: Record<string, unknown> = {}): AsyncGenerator<T[], void, unknown> {
+  async *paginateGraphQL<T>(
+    query: string,
+    dataPath: string,
+    variables: Record<string, unknown> = {},
+  ): AsyncGenerator<T[], void, unknown> {
     let hasNextPage = true;
     let endCursor: string | null = null;
-    
+
     while (hasNextPage) {
       const vars = { ...variables, cursor: endCursor };
       const res: any = await this.graphql(query, vars);
-      
-      const connection = dataPath.split('.').reduce((acc, part) => acc && acc[part], res);
+
+      const connection = dataPath.split(".").reduce((acc, part) => acc && acc[part], res);
       if (!connection) throw new Error(`Invalid pagination dataPath: ${dataPath}`);
-      
-      const nodes = connection.edges ? connection.edges.map((e: any) => e.node) : connection.nodes || [];
+
+      const nodes = connection.edges
+        ? connection.edges.map((e: any) => e.node)
+        : connection.nodes || [];
       if (nodes.length > 0) yield nodes;
-      
+
       hasNextPage = connection.pageInfo?.hasNextPage || false;
       endCursor = connection.pageInfo?.endCursor || null;
     }

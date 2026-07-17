@@ -11,8 +11,13 @@ export const connectShopifyStore = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((v) => connectSchema.parse(v))
   .handler(async ({ data, context }) => {
-    const { makeShopifyClient, fetchShopInfo, encryptToken, normalizeShopDomain, SHOPIFY_API_VERSION } =
-      await import("@/lib/shopify.server");
+    const {
+      makeShopifyClient,
+      fetchShopInfo,
+      encryptToken,
+      normalizeShopDomain,
+      SHOPIFY_API_VERSION,
+    } = await import("@/lib/shopify.server");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     const domain = normalizeShopDomain(data.shop_domain);
@@ -69,7 +74,9 @@ export const listStores = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     const { data, error } = await context.supabase
       .from("stores")
-      .select("id, shop_domain, name, plan, country, currency, api_version, status, last_synced_at, created_at")
+      .select(
+        "id, shop_domain, name, plan, country, currency, api_version, status, last_synced_at, created_at",
+      )
       .order("created_at", { ascending: false });
     if (error) throw new Error(error.message);
     return data ?? [];
@@ -99,7 +106,9 @@ export const deleteStore = createServerFn({ method: "POST" })
 
 export const startBackup = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((v) => z.object({ store_id: z.string().uuid(), label: z.string().max(120).optional() }).parse(v))
+  .inputValidator((v) =>
+    z.object({ store_id: z.string().uuid(), label: z.string().max(120).optional() }).parse(v),
+  )
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
@@ -119,7 +128,7 @@ export const startBackup = createServerFn({ method: "POST" })
         status: "running",
         current_stage: "shop",
         progress: 0,
-        package_data: {}
+        package_data: {},
       })
       .select("id")
       .single();
@@ -134,21 +143,21 @@ export const stepBackupFn = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { stepBackup } = await import("@/lib/backup.server");
-    
+
     const { data: backup, error: backupErr } = await context.supabase
       .from("backups")
       .select("store_id")
       .eq("id", data.backup_id)
       .maybeSingle();
     if (backupErr || !backup) throw new Error("Backup not found");
-      
+
     const { data: store, error: storeErr } = await supabaseAdmin
       .from("stores")
       .select("id, user_id, shop_domain, access_token_ciphertext")
       .eq("id", backup.store_id)
       .maybeSingle();
     if (storeErr || !store) throw new Error("Store not found");
-      
+
     return await stepBackup(supabaseAdmin, store, data.backup_id);
   });
 
@@ -157,7 +166,9 @@ export const listBackups = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     const { data, error } = await context.supabase
       .from("backups")
-      .select("id, label, status, progress, current_stage, recovery_score, resources_total, resources_completed, errors_count, size_bytes, started_at, completed_at, created_at, store_id, stores(shop_domain, name)")
+      .select(
+        "id, label, status, progress, current_stage, recovery_score, resources_total, resources_completed, errors_count, size_bytes, started_at, completed_at, created_at, store_id, stores(shop_domain, name)",
+      )
       .order("created_at", { ascending: false })
       .limit(100);
     if (error) throw new Error(error.message);
@@ -170,7 +181,9 @@ export const getBackup = createServerFn({ method: "GET" })
   .handler(async ({ data, context }) => {
     const { data: backup, error } = await context.supabase
       .from("backups")
-      .select("id, label, status, progress, current_stage, recovery_score, resources_total, resources_completed, errors_count, warnings_count, size_bytes, manifest, started_at, completed_at, created_at, store_id, stores(shop_domain, name, plan)")
+      .select(
+        "id, label, status, progress, current_stage, recovery_score, resources_total, resources_completed, errors_count, warnings_count, size_bytes, manifest, started_at, completed_at, created_at, store_id, stores(shop_domain, name, plan)",
+      )
       .eq("id", data.id)
       .maybeSingle();
     if (error) throw new Error(error.message);
@@ -219,7 +232,9 @@ export const dashboardSummary = createServerFn({ method: "GET" })
       context.supabase.from("stores").select("id, shop_domain, name, plan, status, last_synced_at"),
       context.supabase
         .from("backups")
-        .select("id, status, size_bytes, recovery_score, created_at, completed_at, store_id, label, stores(shop_domain, name)")
+        .select(
+          "id, status, size_bytes, recovery_score, created_at, completed_at, store_id, label, stores(shop_domain, name)",
+        )
         .order("created_at", { ascending: false })
         .limit(10),
       context.supabase
@@ -244,11 +259,13 @@ export const dashboardSummary = createServerFn({ method: "GET" })
 
 export const generateRestorePlanFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((v) => z.object({ backup_id: z.string().uuid(), target_store_id: z.string().uuid() }).parse(v))
+  .inputValidator((v) =>
+    z.object({ backup_id: z.string().uuid(), target_store_id: z.string().uuid() }).parse(v),
+  )
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { generateRestorePlan } = await import("@/lib/restore.server");
-    
+
     const { data: store, error: storeErr } = await context.supabase
       .from("stores")
       .select("id, user_id, shop_domain, access_token_ciphertext")
@@ -261,10 +278,14 @@ export const generateRestorePlanFn = createServerFn({ method: "POST" })
 
 export const startRestoreFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((v) => z.object({ backup_id: z.string().uuid(), target_store_id: z.string().uuid(), plan: z.any() }).parse(v))
+  .inputValidator((v) =>
+    z
+      .object({ backup_id: z.string().uuid(), target_store_id: z.string().uuid(), plan: z.any() })
+      .parse(v),
+  )
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    
+
     const { data: job, error } = await supabaseAdmin
       .from("restore_jobs")
       .insert({
@@ -273,11 +294,11 @@ export const startRestoreFn = createServerFn({ method: "POST" })
         target_store_id: data.target_store_id,
         status: "running",
         progress: 0,
-        plan: data.plan
+        plan: data.plan,
       })
       .select("id")
       .single();
-      
+
     if (error) throw new Error(error.message);
     return { job_id: job.id };
   });
@@ -288,7 +309,6 @@ export const stepRestoreFn = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { executeRestoreStep } = await import("@/lib/restore.server");
-    
+
     return await executeRestoreStep(supabaseAdmin, data.job_id);
   });
-

@@ -10,7 +10,7 @@ export interface ResourceDelta {
 export interface ResourcePlugin {
   type: string;
   dependencies: string[]; // e.g. ["locations", "files"]
-  
+
   scan(client: ApiAdapter): Promise<{ count: number }>;
   export(client: ApiAdapter, writer: any): Promise<void>;
   diff(sourceResource: any, targetResource: any): ResourceDelta;
@@ -21,20 +21,24 @@ export interface ResourcePlugin {
 
 export class ResourceRegistry {
   private plugins: Map<string, ResourcePlugin> = new Map();
-  
+
   constructor() {
     this.autoDiscoverPlugins();
   }
 
   private autoDiscoverPlugins() {
     // Vite specific auto-discovery for all plugin modules
-    const modules = import.meta.glob('./plugins/*.ts', { eager: true }) as Record<string, any>;
-    
+    const modules = import.meta.glob("./plugins/*.ts", { eager: true }) as Record<string, any>;
+
     for (const path in modules) {
       const module = modules[path];
       // Find the exported class that implements ResourcePlugin
       for (const key in module) {
-        if (typeof module[key] === 'function' && module[key].prototype && 'type' in module[key].prototype) {
+        if (
+          typeof module[key] === "function" &&
+          module[key].prototype &&
+          "type" in module[key].prototype
+        ) {
           try {
             const pluginInstance = new module[key]() as ResourcePlugin;
             if (pluginInstance.type && pluginInstance.scan) {
@@ -51,17 +55,17 @@ export class ResourceRegistry {
   register(plugin: ResourcePlugin) {
     this.plugins.set(plugin.type, plugin);
   }
-  
+
   get(type: string): ResourcePlugin {
     const plugin = this.plugins.get(type);
     if (!plugin) throw new Error(`Plugin not found for resource type: ${type}`);
     return plugin;
   }
-  
+
   getAll(): ResourcePlugin[] {
     return Array.from(this.plugins.values());
   }
-  
+
   // Implements Topological Sort to generate deterministic execution order based on dependencies
   getExecutionPlan(): ResourcePlugin[] {
     const plugins = this.getAll();
@@ -86,7 +90,7 @@ export class ResourceRegistry {
     for (const plugin of plugins) {
       if (!visited.has(plugin.type)) visit(plugin);
     }
-    
+
     return result;
   }
 }

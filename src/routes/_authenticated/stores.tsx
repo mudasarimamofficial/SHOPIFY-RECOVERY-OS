@@ -12,9 +12,7 @@ export const Route = createFileRoute("/_authenticated/stores")({
 
 function StoresPage() {
   const fn = useServerFn(listStores);
-  const { data } = useSuspenseQuery(
-    queryOptions({ queryKey: ["stores"], queryFn: () => fn() }),
-  );
+  const { data } = useSuspenseQuery(queryOptions({ queryKey: ["stores"], queryFn: () => fn() }));
 
   return (
     <div>

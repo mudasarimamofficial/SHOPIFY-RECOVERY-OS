@@ -63,8 +63,8 @@ function AuthPage() {
       const res = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-        redirect_uri: window.location.origin,
-        }
+          redirect_uri: window.location.origin,
+        },
       });
       if (res.error) throw res.error;
       if (!res.redirected) navigate({ to: "/dashboard", replace: true });
@@ -91,17 +91,25 @@ function AuthPage() {
 
         <div className="surface-panel p-8">
           <div className="mono text-[11px] uppercase tracking-widest text-primary">
-            {mode === "signin" ? "Access console" : mode === "signup" ? "Create account" : "Reset password"}
+            {mode === "signin"
+              ? "Access console"
+              : mode === "signup"
+                ? "Create account"
+                : "Reset password"}
           </div>
           <h1 className="mt-2 text-2xl font-semibold tracking-tight">
-            {mode === "signin" ? "Welcome back." : mode === "signup" ? "Get started in seconds." : "Forgot your password?"}
+            {mode === "signin"
+              ? "Welcome back."
+              : mode === "signup"
+                ? "Get started in seconds."
+                : "Forgot your password?"}
           </h1>
           <p className="mt-1.5 text-sm text-muted-foreground">
             {mode === "signin"
               ? "Sign in to manage your Shopify recovery packages."
               : mode === "signup"
-              ? "Set up an account to connect your first Shopify store."
-              : "Enter your email to receive a password reset link."}
+                ? "Set up an account to connect your first Shopify store."
+                : "Enter your email to receive a password reset link."}
           </p>
 
           <button
@@ -109,11 +117,7 @@ function AuthPage() {
             disabled={googleLoading}
             className="mt-6 flex w-full items-center justify-center gap-2 rounded-md border border-border bg-elevated px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-surface-2 disabled:opacity-60"
           >
-            {googleLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <GoogleG />
-            )}
+            {googleLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <GoogleG />}
             Continue with Google
           </button>
 
@@ -170,7 +174,11 @@ function AuthPage() {
               className="mt-2 flex w-full items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90 disabled:opacity-60"
             >
               {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-              {mode === "signin" ? "Sign in" : mode === "signup" ? "Create account" : "Send reset link"}
+              {mode === "signin"
+                ? "Sign in"
+                : mode === "signup"
+                  ? "Create account"
+                  : "Send reset link"}
             </button>
           </form>
 

@@ -25,19 +25,19 @@ export class PlannerEngine {
       if (!visited.has(node.type)) {
         tempMark.add(node.type);
         for (const dep of node.dependencies) {
-          const depPlugin = plugins.find(p => p.type === dep);
+          const depPlugin = plugins.find((p) => p.type === dep);
           if (depPlugin) visit(depPlugin);
         }
         tempMark.delete(node.type);
         visited.add(node.type);
-        
+
         // Add to plan if it exists in the manifest
-        const catalogItem = manifest.catalog.find(c => c.type === node.type);
+        const catalogItem = manifest.catalog.find((c) => c.type === node.type);
         if (catalogItem && catalogItem.count > 0) {
           result.push({
             plugin: node,
             estimatedCount: catalogItem.count,
-            actionType: targetDomain === manifest.store_domain ? "update" : "create"
+            actionType: targetDomain === manifest.store_domain ? "update" : "create",
           });
         }
       }
@@ -46,7 +46,7 @@ export class PlannerEngine {
     for (const plugin of plugins) {
       if (!visited.has(plugin.type)) visit(plugin);
     }
-    
+
     return result;
   }
 }

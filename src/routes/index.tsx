@@ -24,8 +24,7 @@ function Landing() {
         <div
           className="absolute -top-40 left-1/2 h-[600px] w-[900px] -translate-x-1/2 rounded-full opacity-30 blur-3xl"
           style={{
-            background:
-              "radial-gradient(closest-side, oklch(0.85 0.14 190 / 40%), transparent)",
+            background: "radial-gradient(closest-side, oklch(0.85 0.14 190 / 40%), transparent)",
           }}
         />
         <div
@@ -48,9 +47,15 @@ function Landing() {
           </span>
         </div>
         <nav className="flex items-center gap-6 text-sm text-muted-foreground">
-          <a href="#platform" className="hidden hover:text-foreground sm:inline">Platform</a>
-          <a href="#modules" className="hidden hover:text-foreground sm:inline">Modules</a>
-          <a href="#limits" className="hidden hover:text-foreground sm:inline">Limits</a>
+          <a href="#platform" className="hidden hover:text-foreground sm:inline">
+            Platform
+          </a>
+          <a href="#modules" className="hidden hover:text-foreground sm:inline">
+            Modules
+          </a>
+          <a href="#limits" className="hidden hover:text-foreground sm:inline">
+            Limits
+          </a>
           <Link
             to="/auth"
             className="rounded-md border border-border bg-surface px-3 py-1.5 text-sm text-foreground transition hover:bg-elevated"
@@ -168,21 +173,43 @@ function Landing() {
         </h2>
         <div className="mt-12 grid gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
           {[
-            [Database, "Complete Scanner", "Discovers every recoverable resource — products, themes, metafields, metaobjects, files, translations, redirects, and more."],
-            [PackageCheck, "Portable Packages", "Signed .recovery archives with manifest, checksums, dependency graph, and per-resource integrity hashes."],
-            [History, "Versioned Snapshots", "Every backup is a snapshot. Diff two versions, roll back a single resource, or restore in full."],
-            [GitBranch, "Restore Engine", "Analyze compatibility, generate a restore plan, and replay resources in dependency order into any Shopify store."],
-            [Activity, "Recovery Score", "A 0–100 confidence score. See exactly what would recover automatically and what needs manual action."],
-            [Zap, "AI Recovery Assistant", "Explains failures, recommends restore order, and turns raw logs into human-readable reports."],
+            [
+              Database,
+              "Complete Scanner",
+              "Discovers every recoverable resource — products, themes, metafields, metaobjects, files, translations, redirects, and more.",
+            ],
+            [
+              PackageCheck,
+              "Portable Packages",
+              "Signed .recovery archives with manifest, checksums, dependency graph, and per-resource integrity hashes.",
+            ],
+            [
+              History,
+              "Versioned Snapshots",
+              "Every backup is a snapshot. Diff two versions, roll back a single resource, or restore in full.",
+            ],
+            [
+              GitBranch,
+              "Restore Engine",
+              "Analyze compatibility, generate a restore plan, and replay resources in dependency order into any Shopify store.",
+            ],
+            [
+              Activity,
+              "Recovery Score",
+              "A 0–100 confidence score. See exactly what would recover automatically and what needs manual action.",
+            ],
+            [
+              Zap,
+              "AI Recovery Assistant",
+              "Explains failures, recommends restore order, and turns raw logs into human-readable reports.",
+            ],
           ].map(([Icon, title, body]) => (
             <div key={title as string} className="group bg-card p-6 transition hover:bg-elevated">
               <div className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-surface text-primary">
                 <Icon className="h-[18px] w-[18px]" />
               </div>
               <h3 className="mt-5 text-base font-semibold tracking-tight">{title as string}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                {body as string}
-              </p>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{body as string}</p>
             </div>
           ))}
         </div>
@@ -212,10 +239,7 @@ function Landing() {
               "Compress into .recovery archive",
               "Publish signed recovery package",
             ].map((step, i) => (
-              <li
-                key={step}
-                className="surface-panel flex items-center gap-4 px-4 py-3"
-              >
+              <li key={step} className="surface-panel flex items-center gap-4 px-4 py-3">
                 <span className="mono flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-border bg-elevated text-xs text-primary">
                   {String(i + 1).padStart(2, "0")}
                 </span>
@@ -286,9 +310,7 @@ function Landing() {
             }}
           />
           <ShieldCheck className="mx-auto h-8 w-8 text-primary" />
-          <h2 className="mt-4 text-3xl font-semibold tracking-tight">
-            Sleep better. Ship faster.
-          </h2>
+          <h2 className="mt-4 text-3xl font-semibold tracking-tight">Sleep better. Ship faster.</h2>
           <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
             Every Shopify store deserves an escape hatch. Connect yours in under a minute.
           </p>
@@ -311,9 +333,7 @@ function Landing() {
           <span className="mono flex items-center gap-1.5">
             <Lock className="h-3 w-3" /> Tokens encrypted at rest
           </span>
-          <span className="mono hidden sm:inline">
-
-          </span>
+          <span className="mono hidden sm:inline"></span>
         </div>
       </footer>
     </div>
@@ -339,11 +359,7 @@ function LimitCard({
   items: string[];
 }) {
   const toneClass =
-    tone === "success"
-      ? "text-success"
-      : tone === "warning"
-        ? "text-warning"
-        : "text-info";
+    tone === "success" ? "text-success" : tone === "warning" ? "text-warning" : "text-info";
   return (
     <div className="surface-panel p-6">
       <div className={`mono text-[11px] uppercase tracking-widest ${toneClass}`}>{title}</div>

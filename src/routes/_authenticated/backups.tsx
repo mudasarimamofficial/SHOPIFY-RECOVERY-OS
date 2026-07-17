@@ -13,9 +13,7 @@ export const Route = createFileRoute("/_authenticated/backups")({
 
 function BackupsPage() {
   const fn = useServerFn(listBackups);
-  const { data } = useSuspenseQuery(
-    queryOptions({ queryKey: ["backups"], queryFn: () => fn() }),
-  );
+  const { data } = useSuspenseQuery(queryOptions({ queryKey: ["backups"], queryFn: () => fn() }));
 
   return (
     <div>
@@ -29,7 +27,8 @@ function BackupsPage() {
           <div className="surface-panel p-12 text-center">
             <Archive className="mx-auto h-8 w-8 text-muted-foreground" />
             <p className="mt-4 text-sm text-muted-foreground">
-              No backups yet. Open a store and click <span className="text-foreground">Create backup</span>.
+              No backups yet. Open a store and click{" "}
+              <span className="text-foreground">Create backup</span>.
             </p>
           </div>
         ) : (
@@ -47,7 +46,10 @@ function BackupsPage() {
               </thead>
               <tbody>
                 {data.map((b) => (
-                  <tr key={b.id} className="border-b border-border last:border-b-0 hover:bg-elevated/60">
+                  <tr
+                    key={b.id}
+                    className="border-b border-border last:border-b-0 hover:bg-elevated/60"
+                  >
                     <td className="px-5 py-3">
                       <Link
                         to="/backups/$backupId"
@@ -68,7 +70,9 @@ function BackupsPage() {
                     <td className="mono px-5 py-3 text-right text-gradient-accent">
                       {b.recovery_score ?? "—"}
                     </td>
-                    <td className="mono px-5 py-3 text-right text-xs">{formatBytes(b.size_bytes)}</td>
+                    <td className="mono px-5 py-3 text-right text-xs">
+                      {formatBytes(b.size_bytes)}
+                    </td>
                     <td className="mono px-5 py-3 text-right text-xs text-muted-foreground">
                       {formatRelative(b.created_at)}
                     </td>

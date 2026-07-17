@@ -12,9 +12,19 @@ export const Route = createFileRoute("/_authenticated/connect")({
 });
 
 const REQUIRED_SCOPES = [
-  "read_products", "read_content", "read_themes", "read_customers", "read_orders",
-  "read_files", "read_locations", "read_inventory", "read_translations",
-  "read_shipping", "read_price_rules", "read_metaobjects", "read_online_store_pages",
+  "read_products",
+  "read_content",
+  "read_themes",
+  "read_customers",
+  "read_orders",
+  "read_files",
+  "read_locations",
+  "read_inventory",
+  "read_translations",
+  "read_shipping",
+  "read_price_rules",
+  "read_metaobjects",
+  "read_online_store_pages",
   "read_online_store_navigation",
 ];
 
@@ -84,7 +94,8 @@ function ConnectPage() {
                 className="mono mt-1.5 w-full rounded-md border border-border bg-elevated px-3 py-2.5 text-sm outline-none focus:border-primary/60 focus:ring-2 focus:ring-ring"
               />
               <p className="mt-1.5 text-xs text-muted-foreground">
-                We validate the token against <span className="mono">/admin/api/2024-10/shop.json</span> before saving.
+                We validate the token against{" "}
+                <span className="mono">/admin/api/2024-10/shop.json</span> before saving.
               </p>
             </div>
 
@@ -93,7 +104,11 @@ function ConnectPage() {
               type="submit"
               className="flex w-full items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90 disabled:opacity-60"
             >
-              {m.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
+              {m.isPending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <ArrowRight className="h-4 w-4" />
+              )}
               Verify & connect
             </button>
           </div>
@@ -105,10 +120,19 @@ function ConnectPage() {
               <ShieldCheck className="h-3.5 w-3.5" /> Security
             </div>
             <ul className="mt-3 space-y-2 text-sm text-foreground/85">
-              <li className="flex gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 text-success" /> AES-256-GCM at rest</li>
-              <li className="flex gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 text-success" /> Read-only recommended</li>
-              <li className="flex gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 text-success" /> Never exposed in the UI</li>
-              <li className="flex gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 text-success" /> Revokable from Shopify Admin</li>
+              <li className="flex gap-2">
+                <CheckCircle2 className="mt-0.5 h-4 w-4 text-success" /> AES-256-GCM at rest
+              </li>
+              <li className="flex gap-2">
+                <CheckCircle2 className="mt-0.5 h-4 w-4 text-success" /> Read-only recommended
+              </li>
+              <li className="flex gap-2">
+                <CheckCircle2 className="mt-0.5 h-4 w-4 text-success" /> Never exposed in the UI
+              </li>
+              <li className="flex gap-2">
+                <CheckCircle2 className="mt-0.5 h-4 w-4 text-success" /> Revokable from Shopify
+                Admin
+              </li>
             </ul>
           </div>
 
@@ -117,11 +141,23 @@ function ConnectPage() {
               Create a custom app
             </div>
             <ol className="mt-3 space-y-2 text-sm text-foreground/85">
-              <li><span className="mono text-primary">01</span> Shopify Admin → Settings → Apps and sales channels</li>
-              <li><span className="mono text-primary">02</span> Develop apps → Create an app</li>
-              <li><span className="mono text-primary">03</span> Configure Admin API scopes (see below)</li>
-              <li><span className="mono text-primary">04</span> Install app → reveal the Admin API access token</li>
-              <li><span className="mono text-primary">05</span> Paste it here</li>
+              <li>
+                <span className="mono text-primary">01</span> Shopify Admin → Settings → Apps and
+                sales channels
+              </li>
+              <li>
+                <span className="mono text-primary">02</span> Develop apps → Create an app
+              </li>
+              <li>
+                <span className="mono text-primary">03</span> Configure Admin API scopes (see below)
+              </li>
+              <li>
+                <span className="mono text-primary">04</span> Install app → reveal the Admin API
+                access token
+              </li>
+              <li>
+                <span className="mono text-primary">05</span> Paste it here
+              </li>
             </ol>
           </div>
 
