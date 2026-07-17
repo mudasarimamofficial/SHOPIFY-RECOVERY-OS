@@ -179,6 +179,7 @@ function AuthPage() {
               <>
                 No account?{" "}
                 <button
+                  type="button"
                   onClick={() => setMode("signup")}
                   className="text-primary hover:underline"
                 >
@@ -189,6 +190,7 @@ function AuthPage() {
               <>
                 Already have one?{" "}
                 <button
+                  type="button"
                   onClick={() => setMode("signin")}
                   className="text-primary hover:underline"
                 >
@@ -197,6 +199,7 @@ function AuthPage() {
               </>
             ) : (
               <button
+                type="button"
                 onClick={() => setMode("signin")}
                 className="text-primary hover:underline"
               >

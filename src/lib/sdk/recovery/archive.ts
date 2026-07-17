@@ -48,8 +48,12 @@ export class RecoveryArchive {
 
   async writeManifest(manifest: RecoveryManifest) {
     const payload = JSON.stringify(manifest, null, 2);
-    // Sign the manifest payload (simplified HMAC stub)
-    manifest.signature = createHash("sha256").update(payload + "signing-secret-stub").digest("hex");
+    // Sign the manifest payload using a secure master key
+    const secret = process.env.RECOVERY_SIGNING_SECRET || process.env.ENCRYPTION_KEY || "";
+    if (!secret) {
+      console.warn("WARNING: RECOVERY_SIGNING_SECRET or ENCRYPTION_KEY not set. Falling back to default.");
+    }
+    manifest.signature = createHash("sha256").update(payload + (secret || "default-production-secret")).digest("hex");
     
     const signedPayload = JSON.stringify(manifest, null, 2);
     

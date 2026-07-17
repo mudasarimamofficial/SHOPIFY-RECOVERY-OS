@@ -12,45 +12,23 @@
 # Error details
 
 ```
-Test timeout of 30000ms exceeded.
-```
+Error: expect(locator).toContainText(expected) failed
 
-```
-Error: page.click: Test timeout of 30000ms exceeded.
+Locator: locator('h1')
+Expected substring: "Get started in seconds."
+Received string:    "Welcome back."
+Timeout: 5000ms
+
 Call log:
-  - waiting for locator('button:has-text("Return to sign in")')
+  - Expect "toContainText" with timeout 5000ms
+  - waiting for locator('h1')
+    14 × locator resolved to <h1 class="mt-2 text-2xl font-semibold tracking-tight">Welcome back.</h1>
+       - unexpected value "Welcome back."
 
 ```
-
-# Page snapshot
 
 ```yaml
-- generic [ref=e1]:
-  - generic [ref=e3]:
-    - link "Imam Recovery OS" [ref=e4] [cursor=pointer]:
-      - /url: /
-      - img [ref=e5]
-      - generic [ref=e8]: Imam Recovery OS
-    - generic [ref=e9]:
-      - generic [ref=e10]: Create account
-      - heading "Get started in seconds." [level=1] [ref=e11]
-      - paragraph [ref=e12]: Set up an account to connect your first Shopify store.
-      - button "Continue with Google" [ref=e13]:
-        - img [ref=e14]
-        - text: Continue with Google
-      - generic [ref=e21]: OR
-      - generic [ref=e23]:
-        - generic [ref=e24]:
-          - generic [ref=e25]: Email
-          - textbox "you@company.com" [ref=e26]
-        - generic [ref=e27]:
-          - generic [ref=e29]: Password
-          - textbox "••••••••" [ref=e30]
-        - button "Create account" [ref=e31]
-      - generic [ref=e32]:
-        - text: Already have one?
-        - button "Sign in" [active] [ref=e33]
-  - region "Notifications alt+T"
+- heading "Welcome back." [level=1]
 ```
 
 # Test source
@@ -71,11 +49,11 @@ Call log:
   13 |     
   14 |     // Switch to signup
   15 |     await page.click('button:has-text("Create one")');
-  16 |     await expect(page.locator('h1')).toContainText('Get started in seconds.');
+> 16 |     await expect(page.locator('h1')).toContainText('Get started in seconds.');
+     |                                      ^ Error: expect(locator).toContainText(expected) failed
   17 |     
   18 |     // Switch to forgot password
-> 19 |     await page.click('button:has-text("Return to sign in")');
-     |                ^ Error: page.click: Test timeout of 30000ms exceeded.
+  19 |     await page.click('button:has-text("Sign in")');
   20 |     await page.click('button:has-text("Forgot?")');
   21 |     await expect(page.locator('h1')).toContainText('Forgot your password?');
   22 |   });

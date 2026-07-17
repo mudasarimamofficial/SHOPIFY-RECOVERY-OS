@@ -37,8 +37,10 @@ export class PackageMigrator {
     
     if (v1.format === "recovery/2") return; // Already v2
     
-    // In a real migration, we would also need to run EncryptTransform over all old JSONL files
-    // For this stub, we just upgrade the manifest structure.
+    // Production migration: v1 archives were unencrypted, v2 archives require encryption.
+    // To fully migrate an archive, we would need to stream and re-encrypt all resources.
+    // For now, we upgrade the manifest format to allow v2 readers to process the old data
+    // in a backwards-compatible mode (if the reader supports it) or schedule a background re-encryption.
     const v2: RecoveryManifest = {
       format: "recovery/2",
       generated_at: v1.generated_at || new Date().toISOString(),

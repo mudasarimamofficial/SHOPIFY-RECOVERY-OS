@@ -11,14 +11,18 @@ test.describe('Authentication & Core Workflows', () => {
     await expect(page.locator('h1')).toContainText('Welcome back.');
     await expect(page.locator('text=Imam Recovery OS').first()).toBeVisible();
     
-    // Switch to signup
-    await page.click('button:has-text("Create one")');
-    await expect(page.locator('h1')).toContainText('Get started in seconds.');
+    // Switch to signup (retry if hydration misses the first click)
+    await expect(async () => {
+      await page.locator('button:has-text("Create one")').click();
+      await expect(page.locator('h1')).toContainText('Get started in seconds.');
+    }).toPass();
     
-    // Switch to forgot password
-    await page.click('button:has-text("Return to sign in")');
-    await page.click('button:has-text("Forgot?")');
-    await expect(page.locator('h1')).toContainText('Forgot your password?');
+    // Switch to forgot password (retry if hydration misses the click)
+    await expect(async () => {
+      await page.locator('button:has-text("Sign in")').click();
+      await page.locator('button:has-text("Forgot?")').click();
+      await expect(page.locator('h1')).toContainText('Forgot your password?');
+    }).toPass();
   });
 
   test('Public landing page renders without errors', async ({ page }) => {

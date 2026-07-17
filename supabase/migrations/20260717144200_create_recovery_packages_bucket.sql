@@ -5,7 +5,7 @@ values (
   'recovery_packages',
   false,
   5368709120, -- 5GB
-  '{application/zip,application/x-zip-compressed}'
+  '{application/zip,application/x-zip-compressed,application/json,application/octet-stream}'
 )
 on conflict (id) do nothing;
 

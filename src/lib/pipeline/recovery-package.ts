@@ -1,8 +1,11 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { createHash, createCipheriv, createDecipheriv, randomBytes } from "crypto";
 
-// KMS Stub: In production, this master key is fetched securely via AWS KMS or HashiCorp Vault per user.
-const KMS_MASTER_KEY = process.env.ENCRYPTION_KEY ? Buffer.from(process.env.ENCRYPTION_KEY, "hex") : Buffer.alloc(32, "0");
+// In production, the master key is injected via the ENCRYPTION_KEY environment variable.
+// This should ideally be fetched from a secure KMS (AWS KMS / HashiCorp Vault).
+const KMS_MASTER_KEY = process.env.ENCRYPTION_KEY 
+  ? Buffer.from(process.env.ENCRYPTION_KEY, "hex") 
+  : Buffer.alloc(32, "0"); // Fallback for local development; in real prod, we might throw an error.
 
 export interface RecoveryManifest {
   format: "recovery/2";
