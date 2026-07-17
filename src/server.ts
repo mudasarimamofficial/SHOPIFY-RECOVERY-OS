@@ -62,6 +62,19 @@ export default {
         return await handleShopifyWebhooks(request);
       }
 
+      if (url.pathname === "/api/test-db") {
+        const SUPABASE_URL = env?.VITE_SUPABASE_URL || process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+        const SUPABASE_SERVICE_ROLE_KEY = env?.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+        if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+          return new Response("Missing Supabase credentials", { status: 500 });
+        }
+        const { createClient } = await import("@supabase/supabase-js");
+        const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false }});
+        const { data, error } = await supabase.from("stores").select("id").limit(1);
+        if (error) return new Response(JSON.stringify(error), { status: 500 });
+        return new Response(JSON.stringify({ status: "PASS", data }), { status: 200 });
+      }
+
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);
