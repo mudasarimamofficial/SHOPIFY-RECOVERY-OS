@@ -44,20 +44,15 @@ function isH3SwallowedErrorBody(body: string): boolean {
   }
 }
 
-import { handleShopifyAuth, handleShopifyAuthCallback, handleShopifyWebhooks } from "./lib/shopify-oauth.server";
+import { handleShopifyWebhooks } from "./lib/shopify-oauth.server";
 
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
       const url = new URL(request.url);
 
-      // Intercept Shopify OAuth routes
-      if (url.pathname === "/api/auth") {
-        return await handleShopifyAuth(request);
-      }
-      if (url.pathname === "/api/auth/callback") {
-        return await handleShopifyAuthCallback(request);
-      }
+      // Intercept Shopify Webhooks
+
       if (url.pathname.startsWith("/api/webhooks")) {
         return await handleShopifyWebhooks(request);
       }

@@ -56,10 +56,8 @@ function ConnectPage() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            if (!domain) return;
-            // Initiate OAuth flow by redirecting to /api/auth?shop=...
-            const cleanDomain = domain.replace(/^https?:\/\//, '').split('/')[0];
-            window.location.href = `/api/auth?shop=${encodeURIComponent(cleanDomain)}`;
+            if (!domain || !token) return;
+            m.mutate({ shop_domain: domain, access_token: token });
           }}
           className="surface-panel p-8"
         >
@@ -79,13 +77,26 @@ function ConnectPage() {
                 placeholder="atlas-supply.myshopify.com"
                 className="mono mt-1.5 w-full rounded-md border border-border bg-elevated px-3 py-2.5 text-sm outline-none focus:border-primary/60 focus:ring-2 focus:ring-ring"
               />
+            </div>
+
+            <div>
+              <label className="mono block text-[10px] uppercase tracking-widest text-muted-foreground">
+                Admin API Access Token
+              </label>
+              <input
+                type="password"
+                value={token}
+                onChange={(e) => setToken(e.target.value)}
+                placeholder="shpat_..."
+                className="mono mt-1.5 w-full rounded-md border border-border bg-elevated px-3 py-2.5 text-sm outline-none focus:border-primary/60 focus:ring-2 focus:ring-ring"
+              />
               <p className="mt-1.5 text-xs text-muted-foreground">
-                Enter your .myshopify.com subdomain to initiate the secure OAuth flow.
+                Create a Custom App in your Shopify Admin, enable the required scopes, and paste the "Admin API access token" here.
               </p>
             </div>
 
             <button
-              disabled={!domain}
+              disabled={!domain || !token || m.isPending}
               type="submit"
               className="flex w-full items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90 disabled:opacity-60"
             >
