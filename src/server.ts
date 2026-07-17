@@ -62,6 +62,31 @@ export default {
         return await handleShopifyWebhooks(request);
       }
 
+        if (url.pathname === "/api/audit-stores") {
+          try {
+            const { createClient } = await import("@supabase/supabase-js");
+            const SUPABASE_URL = env?.VITE_SUPABASE_URL || process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+            const SUPABASE_SERVICE_ROLE_KEY = env?.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+            const supabase = createClient(SUPABASE_URL!, SUPABASE_SERVICE_ROLE_KEY!, { auth: { persistSession: false }});
+            
+            const { data: allStores, error: allStoreErr } = await supabase.from("stores").select("*");
+            
+            const envVars = {
+                hasShopifyAdminToken: !!process.env.SHOPIFY_ADMIN_API_TOKEN || !!env?.SHOPIFY_ADMIN_API_TOKEN,
+                hasShopifyApiKey: !!process.env.SHOPIFY_API_KEY || !!env?.SHOPIFY_API_KEY,
+            };
+
+            return new Response(JSON.stringify({
+                status: "SUCCESS",
+                stores: allStores,
+                error: allStoreErr,
+                envVars
+            }), { status: 200, headers: { "Content-Type": "application/json" } });
+          } catch (e: any) {
+            return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+          }
+        }
+
         if (url.pathname === "/api/production-acceptance-test") {
           try {
             const { createClient } = await import("@supabase/supabase-js");
