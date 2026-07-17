@@ -95,7 +95,7 @@ function StoreDetail() {
               Recoverable resources
             </div>
             <p className="mt-1 text-sm text-muted-foreground">
-              Everything Recovery OS knows how to protect for this store. Items marked <span className="text-success">full</span> are automatically restored;
+              Everything Imam Recovery OS knows how to protect for this store. Items marked <span className="text-success">full</span> are automatically restored;
               <span className="text-warning"> partial</span> respects Shopify limits; <span className="text-info">manual</span> requires reconnecting outside Shopify.
             </p>
             <div className="mt-5 space-y-5">

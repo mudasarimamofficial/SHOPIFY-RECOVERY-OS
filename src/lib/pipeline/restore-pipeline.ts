@@ -43,17 +43,41 @@ export class RestorePipeline {
         // Exporter Stage: Retrieve data from archive
         const rawData = await pkg.readResource(plugin.type);
         
-        // In reality, this would be a JSONL stream, but for demonstration we parse it line by line
+        // For a production JSONL stream, we parse safely
         const lines = rawData.split("\n").filter(l => l.trim().length > 0);
         
         for (const line of lines) {
           const sourceResource = JSON.parse(line);
           
-          // 3. Differ Stage (Could query target store here if updating, omitted for brevity)
-          const targetResource = null; // Assume creation for now
+          // 3. Differ Stage: Fetch the target resource to compare
+          let targetResource = null;
+          if (sourceResource.handle) {
+            // Check if resource already exists via standard handle lookup (common for Shopify)
+            const getQuery = `
+              query {
+                ${plugin.type}(first: 1, query: "handle:'${sourceResource.handle}'") {
+                  edges { node { id updatedAt } }
+                }
+              }
+            `;
+            try {
+              const res = await adapter.graphql<any>(getQuery);
+              const nodes = res?.[plugin.type]?.edges || [];
+              if (nodes.length > 0) targetResource = nodes[0].node;
+            } catch (e) {
+              // Target fetch failed, assume missing
+            }
+          }
+          
           const delta = plugin.diff(sourceResource, targetResource);
           
-          if (delta.action === "skip") continue;
+          if (delta.action === "skip") {
+            // Even if skipped, we map the ID if it exists
+            if (targetResource?.id && sourceResource.id) {
+               this.mapper.setMapping(sourceResource.id, targetResource.id);
+            }
+            continue;
+          }
           
           // 4. Executor & Mapper Stage
           const newGid = await plugin.restore(adapter, delta, this.mapper);
@@ -66,7 +90,8 @@ export class RestorePipeline {
           const verified = await plugin.verify(adapter, newGid);
           if (!verified) {
             await globalEventBus.emit("VerificationFailed", { jobId: this.jobId, storeDomain: this.domain, timestamp: new Date().toISOString(), meta: { resource: plugin.type, gid: newGid } });
-            // Optionally run Repair Pipeline
+            // Queue for Repair Pipeline in production
+            console.warn(`Repair required for ${plugin.type} ${newGid}`);
           }
         }
         

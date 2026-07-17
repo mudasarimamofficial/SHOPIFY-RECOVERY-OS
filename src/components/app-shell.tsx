@@ -43,7 +43,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <LogoMark />
           <div>
             <div className="text-sm font-semibold tracking-tight text-sidebar-foreground">
-              Recovery OS
+              Imam Recovery OS
             </div>
             <div className="mono text-[10px] uppercase tracking-widest text-muted-foreground">
               for Shopify

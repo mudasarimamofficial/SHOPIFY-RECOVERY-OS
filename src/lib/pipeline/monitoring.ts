@@ -29,7 +29,7 @@ export class EnterpriseMonitoring {
 
         // Structured JSON Logging for Datadog / New Relic
         console.log(JSON.stringify({
-          service: "recovery-os",
+          service: "shopify-recovery-os",
           level: eventType === "Error" ? "error" : "info",
           event: eventType,
           jobId: payload.jobId,

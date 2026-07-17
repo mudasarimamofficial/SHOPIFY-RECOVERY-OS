@@ -1,7 +1,7 @@
 # System Architecture Blueprint
-**Shopify Recovery OS — Reference Implementation**
+**Imam Recovery OS — Reference Implementation**
 
-This document serves as the master blueprint for transforming Shopify Recovery OS into the commercial standard for disaster recovery. It pivots the platform from monolithic backup/restore engines into a modular, event-driven pipeline architecture.
+This document serves as the master blueprint for transforming Imam Recovery OS into the commercial standard for disaster recovery. It pivots the platform from monolithic backup/restore engines into a modular, event-driven pipeline architecture.
 
 ---
 
@@ -150,7 +150,7 @@ Instead of a simple chatbot, the AI is integrated directly into the `Reporter` a
 ## 4. API Adapter Layer
 To insulate the engine from Shopify's quarterly API changes (e.g., `2024-04` to `2024-07`), all external calls pass through versioned Adapters.
 - The `Registry` calls `Adapter.getProducts()`.
-- The `AdapterFactory` loads the specific implementation for the store's configured API version, normalizing the response into the standard Recovery OS format.
+- The `AdapterFactory` loads the specific implementation for the store's configured API version, normalizing the response into the standard Imam Recovery OS format.
 
 ---
 
@@ -193,12 +193,12 @@ To support massive enterprise merchants (5M+ orders, 500K+ products) without mem
 
 ---
 
-## 7. Disaster Recovery Strategy for Recovery OS
+## 7. Disaster Recovery Strategy for Imam Recovery OS
 
 A disaster recovery platform must be resilient itself.
 - **Cross-Region Replication:** Postgres database and Supabase Storage buckets must be configured for multi-region replication.
 - **KMS Secret Rotation:** Encrypted Shopify tokens rely on keys that can be safely rotated without losing access.
-- **Immutable Audit Logs:** All user and system actions are written to append-only logs stored separately from the main transactional DB, enabling forensic analysis if the Recovery OS is compromised.
+- **Immutable Audit Logs:** All user and system actions are written to append-only logs stored separately from the main transactional DB, enabling forensic analysis if the Imam Recovery OS is compromised.
 
 > [!IMPORTANT]
 > **Developer Approval Required:** This blueprint defines the architectural standard moving forward. Implementing this requires abandoning tactical "feature building" in favor of systematic framework construction (specifically: building the Registry interface, GID Mapper, and Event Bus first). Do I have your approval to establish this as our definitive architecture?

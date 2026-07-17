@@ -12,7 +12,7 @@ export const Route = createFileRoute("/auth")({
 
 function AuthPage() {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const [mode, setMode] = useState<"signin" | "signup" | "forgot_password">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -36,10 +36,18 @@ function AuthPage() {
         });
         if (error) throw error;
         toast.success("Account created. Redirecting…");
-      } else {
+      } else if (mode === "signin") {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         toast.success("Welcome back.");
+      } else if (mode === "forgot_password") {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: window.location.origin + "/reset-password",
+        });
+        if (error) throw error;
+        toast.success("Password reset email sent.");
+        setMode("signin");
+        return;
       }
       navigate({ to: "/dashboard", replace: true });
     } catch (err) {
@@ -75,20 +83,22 @@ function AuthPage() {
       <div className="relative w-full max-w-md">
         <Link to="/" className="mb-8 flex items-center justify-center gap-2">
           <LogoMark />
-          <span className="text-sm font-semibold tracking-tight">Recovery OS</span>
+          <span className="text-sm font-semibold tracking-tight">Imam Recovery OS</span>
         </Link>
 
         <div className="surface-panel p-8">
           <div className="mono text-[11px] uppercase tracking-widest text-primary">
-            {mode === "signin" ? "Access console" : "Create account"}
+            {mode === "signin" ? "Access console" : mode === "signup" ? "Create account" : "Reset password"}
           </div>
           <h1 className="mt-2 text-2xl font-semibold tracking-tight">
-            {mode === "signin" ? "Welcome back." : "Get started in seconds."}
+            {mode === "signin" ? "Welcome back." : mode === "signup" ? "Get started in seconds." : "Forgot your password?"}
           </h1>
           <p className="mt-1.5 text-sm text-muted-foreground">
             {mode === "signin"
               ? "Sign in to manage your Shopify recovery packages."
-              : "Set up an account to connect your first Shopify store."}
+              : mode === "signup"
+              ? "Set up an account to connect your first Shopify store."
+              : "Enter your email to receive a password reset link."}
           </p>
 
           <button
@@ -124,27 +134,40 @@ function AuthPage() {
                 placeholder="you@company.com"
               />
             </div>
-            <div>
-              <label className="mono block text-[10px] uppercase tracking-widest text-muted-foreground">
-                Password
-              </label>
-              <input
-                type="password"
-                required
-                minLength={6}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="mt-1.5 w-full rounded-md border border-border bg-elevated px-3 py-2 text-sm text-foreground outline-none transition focus:border-primary/60 focus:ring-2 focus:ring-ring"
-                placeholder="••••••••"
-              />
-            </div>
+            {mode !== "forgot_password" && (
+              <div>
+                <div className="flex items-center justify-between">
+                  <label className="mono block text-[10px] uppercase tracking-widest text-muted-foreground">
+                    Password
+                  </label>
+                  {mode === "signin" && (
+                    <button
+                      type="button"
+                      onClick={() => setMode("forgot_password")}
+                      className="text-[10px] uppercase tracking-widest text-primary hover:underline mono"
+                    >
+                      Forgot?
+                    </button>
+                  )}
+                </div>
+                <input
+                  type="password"
+                  required
+                  minLength={6}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="mt-1.5 w-full rounded-md border border-border bg-elevated px-3 py-2 text-sm text-foreground outline-none transition focus:border-primary/60 focus:ring-2 focus:ring-ring"
+                  placeholder="••••••••"
+                />
+              </div>
+            )}
             <button
               type="submit"
               disabled={loading}
               className="mt-2 flex w-full items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90 disabled:opacity-60"
             >
               {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-              {mode === "signin" ? "Sign in" : "Create account"}
+              {mode === "signin" ? "Sign in" : mode === "signup" ? "Create account" : "Send reset link"}
             </button>
           </form>
 
@@ -159,7 +182,7 @@ function AuthPage() {
                   Create one
                 </button>
               </>
-            ) : (
+            ) : mode === "signup" ? (
               <>
                 Already have one?{" "}
                 <button
@@ -169,6 +192,13 @@ function AuthPage() {
                   Sign in
                 </button>
               </>
+            ) : (
+              <button
+                onClick={() => setMode("signin")}
+                className="text-primary hover:underline"
+              >
+                Return to sign in
+              </button>
             )}
           </div>
         </div>

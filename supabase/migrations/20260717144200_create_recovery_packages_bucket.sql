@@ -9,8 +9,7 @@ values (
 )
 on conflict (id) do nothing;
 
--- Enable RLS
-alter table storage.objects enable row level security;
+
 
 -- Policies for recovery_packages
 create policy "Users can view their own recovery packages"

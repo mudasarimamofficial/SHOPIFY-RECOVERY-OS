@@ -5,7 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Recovery OS design system.
+ * Imam Recovery OS design system.
  * Deep obsidian surfaces, crisp mono-inflected UI, single accent (electric aqua).
  * All colors oklch. Never hardcode hex/tailwind color utilities in components.
  */

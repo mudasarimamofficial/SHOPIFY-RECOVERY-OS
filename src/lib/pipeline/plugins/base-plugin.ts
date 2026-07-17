@@ -72,11 +72,21 @@ export abstract class BaseBulkPlugin implements ResourcePlugin {
     return { action: "skip", resourceType: this.type, payload: null, reason: "Identical" };
   }
 
+  sanitizeInput(payload: any): any {
+    const { 
+      id, __parentId, updatedAt, createdAt, legacyResourceId, 
+      adminGraphqlApiId, publishedAt, ...cleanInput 
+    } = payload;
+    
+    // Recursively clean deeply nested edges/nodes if any, though bulk JSONL is usually flat
+    return cleanInput;
+  }
+
   async restore(client: ShopifySDK, delta: ResourceDelta, mapper: GIDMapper): Promise<string> {
     if (delta.action === "skip") return "";
     
-    const safePayload = mapper.translatePayload(delta.payload);
-    const { id, __parentId, ...input } = safePayload;
+    const mappedPayload = mapper.translatePayload(delta.payload);
+    const input = this.sanitizeInput(mappedPayload);
     
     const mutation = this.getRestoreMutation();
     const res = await client.graphql<any>(mutation, { input });
@@ -99,7 +109,18 @@ export abstract class BaseBulkPlugin implements ResourcePlugin {
   }
 
   async verify(client: ShopifySDK, resourceId: string): Promise<boolean> {
-    return true;
+    try {
+      const res = await client.graphql<any>(`
+        query {
+          node(id: "${resourceId}") {
+            id
+          }
+        }
+      `);
+      return !!res?.node?.id;
+    } catch {
+      return false;
+    }
   }
 
   async rollback(client: ShopifySDK, resourceId: string): Promise<void> {

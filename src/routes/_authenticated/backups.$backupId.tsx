@@ -134,7 +134,7 @@ function BackupDetail() {
               Manual reconnect required
             </div>
             <p className="mt-2 text-sm text-muted-foreground">
-              Recovery OS can not automate these — they are enforced by Shopify or by third parties.
+              Imam Recovery OS can not automate these — they are enforced by Shopify or by third parties.
               A restore report will list each item so nothing gets missed.
             </p>
             <div className="mt-4 grid gap-1.5 sm:grid-cols-2">

@@ -42,7 +42,7 @@ function Landing() {
       <header className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
         <div className="flex items-center gap-2">
           <LogoMark />
-          <span className="text-sm font-semibold tracking-tight">Recovery OS</span>
+          <span className="text-sm font-semibold tracking-tight">Imam Recovery OS</span>
           <span className="mono ml-2 rounded-md border border-border bg-surface px-1.5 py-0.5 text-[10px] uppercase tracking-widest text-muted-foreground">
             for Shopify
           </span>
@@ -100,7 +100,7 @@ function Landing() {
               <span className="h-2.5 w-2.5 rounded-full bg-success/70" />
             </div>
             <div className="mono text-[11px] text-muted-foreground">
-              recovery-os / atlas-supply.myshopify.com
+              imam-recovery-os / atlas-supply.myshopify.com
             </div>
             <div className="mono flex items-center gap-1.5 text-[11px] text-success">
               <span className="pulse-dot h-1.5 w-1.5 rounded-full bg-success" />
@@ -305,7 +305,7 @@ function Landing() {
       <footer className="mx-auto flex max-w-7xl items-center justify-between border-t border-border px-6 py-8 text-xs text-muted-foreground">
         <div className="flex items-center gap-2">
           <LogoMark small />
-          <span className="mono">recovery-os · v0.1</span>
+          <span className="mono">imam-recovery-os · v0.1</span>
         </div>
         <div className="flex items-center gap-4">
           <span className="mono flex items-center gap-1.5">
