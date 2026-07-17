@@ -56,14 +56,16 @@ function ConnectPage() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            if (!domain || !token) return;
-            m.mutate({ shop_domain: domain, access_token: token });
+            if (!domain) return;
+            // Initiate OAuth flow by redirecting to /api/auth?shop=...
+            const cleanDomain = domain.replace(/^https?:\/\//, '').split('/')[0];
+            window.location.href = `/api/auth?shop=${encodeURIComponent(cleanDomain)}`;
           }}
           className="surface-panel p-8"
         >
           <div className="flex items-center gap-2 text-primary">
             <KeyRound className="h-4 w-4" />
-            <span className="mono text-[11px] uppercase tracking-widest">Credentials</span>
+            <span className="mono text-[11px] uppercase tracking-widest">Connect Store</span>
           </div>
 
           <div className="mt-6 space-y-5">
@@ -78,38 +80,17 @@ function ConnectPage() {
                 className="mono mt-1.5 w-full rounded-md border border-border bg-elevated px-3 py-2.5 text-sm outline-none focus:border-primary/60 focus:ring-2 focus:ring-ring"
               />
               <p className="mt-1.5 text-xs text-muted-foreground">
-                Either the .myshopify.com subdomain or your custom domain works.
-              </p>
-            </div>
-
-            <div>
-              <label className="mono block text-[10px] uppercase tracking-widest text-muted-foreground">
-                Admin API access token
-              </label>
-              <input
-                value={token}
-                onChange={(e) => setToken(e.target.value)}
-                placeholder="shpat_••••••••••••••••"
-                type="password"
-                className="mono mt-1.5 w-full rounded-md border border-border bg-elevated px-3 py-2.5 text-sm outline-none focus:border-primary/60 focus:ring-2 focus:ring-ring"
-              />
-              <p className="mt-1.5 text-xs text-muted-foreground">
-                We validate the token against{" "}
-                <span className="mono">/admin/api/2024-10/shop.json</span> before saving.
+                Enter your .myshopify.com subdomain to initiate the secure OAuth flow.
               </p>
             </div>
 
             <button
-              disabled={m.isPending}
+              disabled={!domain}
               type="submit"
               className="flex w-full items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90 disabled:opacity-60"
             >
-              {m.isPending ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <ArrowRight className="h-4 w-4" />
-              )}
-              Verify & connect
+              <ArrowRight className="h-4 w-4" />
+              Connect via Shopify
             </button>
           </div>
         </form>

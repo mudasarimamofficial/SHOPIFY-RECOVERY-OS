@@ -15,3 +15,12 @@ scopes = "write_products, write_customers, write_orders, write_draft_orders, wri
 [auth]
 redirect_urls = [ "https://shopify-recovery-os.vercel.app/api/auth/callback" ]
 
+
+[[webhooks.subscriptions]]
+topics = [ "app/uninstalled" ]
+uri = "https://shopify-recovery-os.vercel.app/api/webhooks"
+
+[webhooks.privacy_compliance]
+customer_deletion_url = "https://shopify-recovery-os.vercel.app/api/webhooks/customers-redact"
+customer_data_request_url = "https://shopify-recovery-os.vercel.app/api/webhooks/customers-data-request"
+shop_deletion_url = "https://shopify-recovery-os.vercel.app/api/webhooks/shop-redact"
