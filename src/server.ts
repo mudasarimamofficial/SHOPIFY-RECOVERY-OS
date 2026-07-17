@@ -62,17 +62,48 @@ export default {
         return await handleShopifyWebhooks(request);
       }
 
-      if (url.pathname === "/api/test-db") {
-        const SUPABASE_URL = env?.VITE_SUPABASE_URL || process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-        const SUPABASE_SERVICE_ROLE_KEY = env?.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
-        if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-          return new Response("Missing Supabase credentials", { status: 500 });
+      if (url.pathname === "/api/test-pipeline") {
+        try {
+          const SUPABASE_URL = env?.VITE_SUPABASE_URL || process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+          const SUPABASE_SERVICE_ROLE_KEY = env?.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+          if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+            return new Response("Missing Supabase credentials", { status: 500 });
+          }
+          const { createClient } = await import("@supabase/supabase-js");
+          const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false }});
+          
+          const { data: user, error: userErr } = await supabase.auth.admin.createUser({
+            email: "test_pipeline@example.com",
+            password: "test_password123",
+            email_confirm: true
+          });
+          const userId = user?.user?.id || (await supabase.auth.admin.listUsers()).data.users.find(u => u.email === "test_pipeline@example.com")?.id;
+          if (!userId) return new Response("No user ID", { status: 500 });
+
+          const { encryptToken } = await import("@/lib/shopify.server");
+          const fakeEncryptedToken = encryptToken("shpua_test123");
+
+          const { data: store, error: storeErr } = await supabase.from("stores").upsert({
+            user_id: userId, shop_domain: "test-pipeline-store.myshopify.com", access_token_ciphertext: fakeEncryptedToken, is_active: true
+          }).select().single();
+          if (storeErr || !store) return new Response("Store err", { status: 500 });
+
+          const { data: backup, error: backupErr } = await supabase.from("backups").insert({
+            store_id: store.id, status: "pending", type: "manual"
+          }).select().single();
+          if (backupErr || !backup) return new Response("Backup err", { status: 500 });
+
+          const { stepBackup } = await import("@/lib/backup.server");
+          
+          try {
+            const result = await stepBackup(supabase, store, backup.id);
+            return new Response(JSON.stringify({ status: "FAIL", msg: "Should have thrown auth error", result }), { status: 200 });
+          } catch (e: any) {
+            return new Response(JSON.stringify({ status: "PASS", msg: "Threw correctly", error: e.message }), { status: 200 });
+          }
+        } catch (globalErr: any) {
+          return new Response(JSON.stringify({ status: "FAIL", error: globalErr.message }), { status: 500 });
         }
-        const { createClient } = await import("@supabase/supabase-js");
-        const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false }});
-        const { data, error } = await supabase.from("stores").select("id").limit(1);
-        if (error) return new Response(JSON.stringify(error), { status: 500 });
-        return new Response(JSON.stringify({ status: "PASS", data }), { status: 200 });
       }
 
       const handler = await getServerEntry();
