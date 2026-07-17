@@ -89,7 +89,7 @@ export default {
           if (storeErr || !store) return new Response("Store err: " + JSON.stringify(storeErr), { status: 500 });
 
           const { data: backup, error: backupErr } = await supabase.from("backups").insert({
-            store_id: store.id, status: "pending", type: "manual"
+            user_id: userId, store_id: store.id, status: "pending"
           }).select().single();
           if (backupErr || !backup) return new Response("Backup err: " + JSON.stringify(backupErr), { status: 500 });
 
