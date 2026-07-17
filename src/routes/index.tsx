@@ -312,7 +312,7 @@ function Landing() {
             <Lock className="h-3 w-3" /> Tokens encrypted at rest
           </span>
           <span className="mono hidden sm:inline">
-            <Server className="mr-1 inline h-3 w-3" /> Powered by Lovable Cloud
+
           </span>
         </div>
       </footer>
