@@ -91,7 +91,7 @@ export default {
           const { data: backup, error: backupErr } = await supabase.from("backups").insert({
             store_id: store.id, status: "pending", type: "manual"
           }).select().single();
-          if (backupErr || !backup) return new Response("Backup err", { status: 500 });
+          if (backupErr || !backup) return new Response("Backup err: " + JSON.stringify(backupErr), { status: 500 });
 
           const { stepBackup } = await import("@/lib/backup.server");
           
