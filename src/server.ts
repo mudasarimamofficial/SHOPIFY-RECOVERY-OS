@@ -84,8 +84,8 @@ export default {
           const fakeEncryptedToken = encryptToken("shpua_test123");
 
           const { data: store, error: storeErr } = await supabase.from("stores").upsert({
-            user_id: userId, shop_domain: "test-pipeline-store.myshopify.com", access_token_ciphertext: fakeEncryptedToken, is_active: true
-          }, { onConflict: "shop_domain" }).select().single();
+            user_id: userId, shop_domain: "test-pipeline-store.myshopify.com", access_token_ciphertext: fakeEncryptedToken, status: "connected"
+          }, { onConflict: "user_id, shop_domain" }).select().single();
           if (storeErr || !store) return new Response("Store err: " + JSON.stringify(storeErr), { status: 500 });
 
           const { data: backup, error: backupErr } = await supabase.from("backups").insert({
