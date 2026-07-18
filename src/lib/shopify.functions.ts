@@ -69,6 +69,33 @@ export const connectShopifyStore = createServerFn({ method: "POST" })
     return { store: { id: row.id, shop_domain: row.shop_domain, name: row.name } };
   });
 
+// Official OAuth entrypoint. Authenticated: binds the pending install to the
+// current app user via a one-time state row, then returns the Shopify
+// authorization URL for the browser to redirect to.
+export const beginShopifyOAuth = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((v) => z.object({ shop_domain: z.string().min(3).max(200) }).parse(v))
+  .handler(async ({ data, context }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { normalizeShop, isValidShopDomain, generateState, buildAuthorizeUrl } =
+      await import("@/lib/shopify-oauth.server");
+
+    const shop = normalizeShop(data.shop_domain);
+    if (!isValidShopDomain(shop)) {
+      throw new Error("Enter a valid domain like my-store.myshopify.com");
+    }
+
+    const state = generateState();
+    const { error } = await supabaseAdmin.from("oauth_sessions").insert({
+      state,
+      user_id: context.userId,
+      shop_domain: shop,
+    });
+    if (error) throw new Error(`Could not start Shopify authorization: ${error.message}`);
+
+    return { authorizeUrl: buildAuthorizeUrl(shop, state), shop };
+  });
+
 export const listStores = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
