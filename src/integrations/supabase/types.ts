@@ -228,52 +228,85 @@ export type Database = {
         Row: {
           access_token_ciphertext: string;
           api_version: string | null;
+          auth_method: string;
           country: string | null;
           created_at: string;
           currency: string | null;
           email: string | null;
           id: string;
+          installed_at: string | null;
           last_synced_at: string | null;
           name: string | null;
           plan: string | null;
           scopes: string[] | null;
           shop_domain: string;
+          shop_id: string | null;
           status: string;
+          timezone: string | null;
           updated_at: string;
           user_id: string;
         };
         Insert: {
           access_token_ciphertext: string;
           api_version?: string | null;
+          auth_method?: string;
           country?: string | null;
           created_at?: string;
           currency?: string | null;
           email?: string | null;
           id?: string;
+          installed_at?: string | null;
           last_synced_at?: string | null;
           name?: string | null;
           plan?: string | null;
           scopes?: string[] | null;
           shop_domain: string;
+          shop_id?: string | null;
           status?: string;
+          timezone?: string | null;
           updated_at?: string;
           user_id: string;
         };
         Update: {
           access_token_ciphertext?: string;
           api_version?: string | null;
+          auth_method?: string;
           country?: string | null;
           created_at?: string;
           currency?: string | null;
           email?: string | null;
           id?: string;
+          installed_at?: string | null;
           last_synced_at?: string | null;
           name?: string | null;
           plan?: string | null;
           scopes?: string[] | null;
           shop_domain?: string;
+          shop_id?: string | null;
           status?: string;
+          timezone?: string | null;
           updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+      oauth_sessions: {
+        Row: {
+          created_at: string;
+          shop_domain: string;
+          state: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          shop_domain: string;
+          state: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          shop_domain?: string;
+          state?: string;
           user_id?: string;
         };
         Relationships: [];

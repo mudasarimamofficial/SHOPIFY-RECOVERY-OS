@@ -45,6 +45,7 @@ function isH3SwallowedErrorBody(body: string): boolean {
 }
 
 import { handleShopifyWebhooks } from "./lib/shopify-webhooks.server";
+import { handleOAuthCallback } from "./lib/shopify-oauth.server";
 
 type RuntimeEnv = Record<string, string | undefined> | undefined;
 
@@ -57,6 +58,11 @@ export default {
 
       if (url.pathname.startsWith("/api/webhooks")) {
         return await handleShopifyWebhooks(request);
+      }
+
+      // Shopify OAuth callback (offline token exchange + install).
+      if (url.pathname === "/api/auth/callback") {
+        return await handleOAuthCallback(request);
       }
 
       const handler = await getServerEntry();
