@@ -1,4 +1,6 @@
-export type { ShopifySDK as ApiAdapter } from "../../sdk/shopify/client";
+import type { ShopifySDK } from "../sdk/shopify/client";
+
+export type ApiAdapter = ShopifySDK;
 
 export interface ResourceDelta {
   action: "create" | "update" | "delete" | "skip";
@@ -41,7 +43,7 @@ export class ResourceRegistry {
         ) {
           try {
             const pluginInstance = new module[key]() as ResourcePlugin;
-            if (pluginInstance.type && pluginInstance.scan) {
+            if (pluginInstance.type && typeof pluginInstance.scan === "function") {
               this.register(pluginInstance);
             }
           } catch (e) {

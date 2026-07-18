@@ -38,7 +38,7 @@ function RestorePage() {
   const [restoreStatus, setRestoreStatus] = useState<string | null>(null);
   const [restoreProgress, setRestoreProgress] = useState(0);
 
-  const completedBackups = backups.filter((b) => b.status === "completed");
+  const completedBackups = backups.filter((b: any) => b.status === "completed");
 
   async function handleAnalyze() {
     if (!selectedBackup || !selectedStore) return;
@@ -106,7 +106,7 @@ function RestorePage() {
                 disabled={isGenerating || !!jobId}
               >
                 <option value="">Select a recovery package...</option>
-                {completedBackups.map((b) => (
+                {completedBackups.map((b: any) => (
                   <option key={b.id} value={b.id}>
                     {b.label} ({(b.stores as any)?.shop_domain})
                   </option>
@@ -123,7 +123,7 @@ function RestorePage() {
                 disabled={isGenerating || !!jobId}
               >
                 <option value="">Select target store...</option>
-                {stores.map((s) => (
+                {stores.map((s: any) => (
                   <option key={s.id} value={s.id}>
                     {s.name} ({s.shop_domain})
                   </option>

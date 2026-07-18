@@ -91,7 +91,8 @@ function ConnectPage() {
                 className="mono mt-1.5 w-full rounded-md border border-border bg-elevated px-3 py-2.5 text-sm outline-none focus:border-primary/60 focus:ring-2 focus:ring-ring"
               />
               <p className="mt-1.5 text-xs text-muted-foreground">
-                Create a Custom App in your Shopify Admin, enable the required scopes, and paste the "Admin API access token" here.
+                Create a Custom App in your Shopify Admin, enable the required scopes, and paste the
+                "Admin API access token" here.
               </p>
             </div>
 
