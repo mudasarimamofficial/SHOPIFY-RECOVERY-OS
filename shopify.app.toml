@@ -7,7 +7,7 @@ embedded = false
 automatically_update_urls_on_dev = true
 
 [webhooks]
-api_version = "2024-04"
+api_version = "2024-10"
 
 [access_scopes]
 scopes = "write_products, write_customers, write_orders, write_draft_orders, write_content, write_files, write_themes, write_metaobject_definitions, write_metaobjects, write_inventory, write_locations, read_legal_policies, write_shipping, write_discounts, write_translations, write_online_store_navigation, write_price_rules, write_locales"

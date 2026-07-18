@@ -1,5 +1,5 @@
 import { globalRegistry } from "./registry";
-import { ShopifyAdapter } from "./api-adapter";
+import { ShopifySDK } from "../sdk/shopify/client";
 import { RecoveryPackage } from "./recovery-package";
 import { globalEventBus } from "./event-bus";
 import { GIDMapper } from "./mapper";
@@ -18,7 +18,7 @@ export class RestorePipeline {
   ) {}
 
   async execute() {
-    const adapter = new ShopifyAdapter({
+    const adapter = new ShopifySDK({
       domain: this.domain,
       token: this.token,
       apiVersion: this.apiVersion,

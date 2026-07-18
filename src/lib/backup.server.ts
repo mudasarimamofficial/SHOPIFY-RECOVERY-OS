@@ -132,6 +132,7 @@ export async function stepBackup(admin: SupabaseClient, store: StoreRow, backupI
 
   const currentStage = backup.current_stage || SCAN_STAGES[0];
   const stageIndex = SCAN_STAGES.indexOf(currentStage);
+  const state = (backup.package_data as any) || {};
 
   if (currentStage === "finalize") {
     // Generate manifest
@@ -171,7 +172,6 @@ export async function stepBackup(admin: SupabaseClient, store: StoreRow, backupI
 
   const token = decryptToken(store.access_token_ciphertext);
   const client = makeShopifyClient(store.shop_domain, token);
-  const state = (backup.package_data as any) || {};
 
   try {
     if (currentStage.endsWith("_bulk")) {

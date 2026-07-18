@@ -60,14 +60,15 @@ function AuthPage() {
   async function handleGoogle() {
     setGoogleLoading(true);
     try {
-      const res = await supabase.auth.signInWithOAuth({
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirect_uri: window.location.origin,
+          redirectTo: window.location.origin + "/dashboard",
         },
       });
-      if (res.error) throw res.error;
-      if (!res.redirected) navigate({ to: "/dashboard", replace: true });
+      if (error) throw error;
+      // signInWithOAuth performs a full-page browser redirect to Google;
+      // control does not return here on success.
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Google sign-in failed");
       setGoogleLoading(false);

@@ -34,7 +34,8 @@ export class VerificationEngine {
           }
         `);
 
-        const actualCount = Object.values(res || {})[0]?.count || 0;
+        const values = Object.values(res ?? {}) as Array<{ count?: number }>;
+        const actualCount = values[0]?.count ?? 0;
 
         const status =
           actualCount >= item.count ? "success" : actualCount === 0 ? "failed" : "partial";

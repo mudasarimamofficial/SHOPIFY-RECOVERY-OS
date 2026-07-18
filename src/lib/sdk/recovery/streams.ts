@@ -2,17 +2,33 @@ import { createCipheriv, createDecipheriv, randomBytes } from "crypto";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { Transform } from "stream";
 
-const KMS_MASTER_KEY = process.env.ENCRYPTION_KEY
-  ? Buffer.from(process.env.ENCRYPTION_KEY, "hex")
-  : Buffer.alloc(32, "0"); // Production requires ENCRYPTION_KEY in hex
+// Recovery-package encryption key. Fail closed: never fall back to a default,
+// zero, or placeholder key. Requires a 32-byte (64 hex char) ENCRYPTION_KEY.
+let cachedKey: Buffer | undefined;
+function getKey(): Buffer {
+  if (cachedKey) return cachedKey;
+  const raw = process.env.ENCRYPTION_KEY;
+  if (!raw) {
+    throw new Error("ENCRYPTION_KEY is not configured; refusing to encrypt with a default key.");
+  }
+  const key = Buffer.from(raw, "hex");
+  if (key.length !== 32) {
+    throw new Error(
+      `ENCRYPTION_KEY must be 32 bytes (64 hex chars) for AES-256-GCM; got ${key.length} bytes.`,
+    );
+  }
+  cachedKey = key;
+  return key;
+}
 
 export class EncryptTransform extends Transform {
-  private cipher = createCipheriv("aes-256-gcm", KMS_MASTER_KEY, randomBytes(12));
+  private iv = randomBytes(12);
+  private cipher = createCipheriv("aes-256-gcm", getKey(), this.iv);
 
   constructor() {
     super();
     // We emit the IV first so the decipher knows what it is
-    this.push(this.cipher.getIV());
+    this.push(this.iv);
   }
 
   _transform(
@@ -47,7 +63,7 @@ export class DecryptTransform extends Transform {
     if (!this.decipher && this.buffer.length >= 12) {
       this.iv = this.buffer.subarray(0, 12);
       this.buffer = this.buffer.subarray(12);
-      this.decipher = createDecipheriv("aes-256-gcm", KMS_MASTER_KEY, this.iv);
+      this.decipher = createDecipheriv("aes-256-gcm", getKey(), this.iv);
     }
 
     if (this.decipher && this.buffer.length > 16) {
@@ -95,7 +111,7 @@ export class StreamingWriter {
     // Fallback simple buffer encryption since Supabase JS currently requires Blob/Buffer
     const data = typeof payload === "string" ? Buffer.from(payload, "utf8") : payload;
     const iv = randomBytes(12);
-    const cipher = createCipheriv("aes-256-gcm", KMS_MASTER_KEY, iv);
+    const cipher = createCipheriv("aes-256-gcm", getKey(), iv);
 
     const encrypted = Buffer.concat([cipher.update(data), cipher.final()]);
     const securePayload = Buffer.concat([iv, cipher.getAuthTag(), encrypted]);
@@ -125,7 +141,7 @@ export class StreamingReader {
     const authTag = secureBuffer.subarray(12, 28);
     const ciphertext = secureBuffer.subarray(28);
 
-    const decipher = createDecipheriv("aes-256-gcm", KMS_MASTER_KEY, iv);
+    const decipher = createDecipheriv("aes-256-gcm", getKey(), iv);
     decipher.setAuthTag(authTag);
     const decrypted = Buffer.concat([decipher.update(ciphertext), decipher.final()]);
 
