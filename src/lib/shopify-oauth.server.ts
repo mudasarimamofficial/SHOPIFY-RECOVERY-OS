@@ -105,6 +105,23 @@ export function verifyCallbackHmac(params: URLSearchParams): boolean {
   return timingSafeEqual(provided, digest);
 }
 
+/**
+ * Rejects OAuth callbacks whose `timestamp` is stale or in the future
+ * (defense-in-depth against replayed authorization redirects, on top of the
+ * one-time state). Shopify sends `timestamp` in unix seconds.
+ */
+export function isTimestampFresh(
+  timestamp: string | null,
+  nowMs: number,
+  toleranceSec = 300,
+): boolean {
+  if (!timestamp) return false;
+  const ts = Number(timestamp);
+  if (!Number.isFinite(ts)) return false;
+  const nowSec = Math.floor(nowMs / 1000);
+  return Math.abs(nowSec - ts) <= toleranceSec;
+}
+
 export interface TokenExchangeResult {
   access_token: string;
   scope: string;
@@ -205,6 +222,9 @@ export async function handleOAuthCallback(request: Request): Promise<Response> {
   }
   if (!verifyCallbackHmac(params)) {
     return redirectTo(origin, "/connect?error=hmac_failed");
+  }
+  if (!isTimestampFresh(params.get("timestamp"), Date.now())) {
+    return redirectTo(origin, "/connect?error=timestamp_invalid");
   }
 
   const supabase = getSupabaseAdmin();

@@ -41,6 +41,25 @@ describe("buildAuthorizeUrl", () => {
   });
 });
 
+describe("isTimestampFresh", () => {
+  const now = 1_700_000_000_000; // fixed ms
+  const nowSec = Math.floor(now / 1000);
+  it("accepts a recent timestamp", () => {
+    expect(mod.isTimestampFresh(String(nowSec), now)).toBe(true);
+    expect(mod.isTimestampFresh(String(nowSec - 120), now)).toBe(true);
+  });
+  it("rejects a stale timestamp", () => {
+    expect(mod.isTimestampFresh(String(nowSec - 3600), now)).toBe(false);
+  });
+  it("rejects a far-future timestamp", () => {
+    expect(mod.isTimestampFresh(String(nowSec + 3600), now)).toBe(false);
+  });
+  it("rejects missing/garbage timestamps", () => {
+    expect(mod.isTimestampFresh(null, now)).toBe(false);
+    expect(mod.isTimestampFresh("not-a-number", now)).toBe(false);
+  });
+});
+
 describe("verifyCallbackHmac", () => {
   function signed(params: Record<string, string>): URLSearchParams {
     const entries = Object.entries(params)
