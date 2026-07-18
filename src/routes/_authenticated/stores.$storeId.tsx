@@ -2,7 +2,13 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { queryOptions, useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { getStore, startBackup, deleteStore, listBackups } from "@/lib/shopify.functions";
+import {
+  getStore,
+  startBackup,
+  stepBackupFn,
+  deleteStore,
+  listBackups,
+} from "@/lib/shopify.functions";
 import { PageHeader } from "@/components/app-shell";
 import { StatusDot } from "./dashboard";
 import { formatBytes, formatDate, formatRelative } from "@/lib/format";
@@ -20,6 +26,7 @@ function StoreDetail() {
   const getFn = useServerFn(getStore);
   const backupsFn = useServerFn(listBackups);
   const startFn = useServerFn(startBackup);
+  const stepFn = useServerFn(stepBackupFn);
   const delFn = useServerFn(deleteStore);
 
   const { data: store } = useSuspenseQuery(
@@ -34,7 +41,26 @@ function StoreDetail() {
   const backups = backupsAll.filter((b) => b.store_id === storeId);
 
   const startMut = useMutation({
-    mutationFn: () => startFn({ data: { store_id: storeId } }),
+    mutationFn: async () => {
+      const { backup_id } = await startFn({ data: { store_id: storeId } });
+      // Drive the backup state machine to completion. Each step advances one
+      // stage (REST) or polls one bulk operation; we only pause between bulk
+      // polls so completed stages advance immediately.
+      let done = false;
+      let guard = 0;
+      while (!done && guard++ < 400) {
+        const res = (await stepFn({ data: { backup_id } })) as {
+          done?: boolean;
+          status?: string;
+        };
+        done = Boolean(res?.done);
+        if (!done && res?.status === "polling") {
+          await new Promise((r) => setTimeout(r, 2000));
+        }
+      }
+      if (!done) throw new Error("Backup did not finish within the expected number of steps");
+      return { backup_id };
+    },
     onSuccess: (r) => {
       toast.success("Backup complete");
       qc.invalidateQueries();
