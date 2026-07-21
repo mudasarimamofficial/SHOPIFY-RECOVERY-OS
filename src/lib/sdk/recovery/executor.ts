@@ -338,9 +338,10 @@ async function restoreProduct(
       taxable: v.taxable ?? true,
       barcode: v.barcode,
       compareAtPrice: v.compareAtPrice,
-      weight: v.weight,
-      weightUnit: v.weightUnit,
       requiresShipping: v.requiresShipping ?? true,
+      inventoryItem: {
+        measurement: v.inventoryItem?.measurement || { weight: { value: v.weight, unit: v.weightUnit } },
+      },
     };
 
     if (v.selectedOptions) {

@@ -162,6 +162,8 @@ export function makeShopifyClient(domain: string, token: string): ShopifyClient 
     variables?: Record<string, unknown>,
     attempts = 0,
   ): Promise<T> {
+    const startTime = performance.now();
+    const payload = JSON.stringify({ query, variables });
     const res = await fetch(`https://${domain}/admin/api/${SHOPIFY_API_VERSION}/graphql.json`, {
       method: "POST",
       headers: {
@@ -169,8 +171,10 @@ export function makeShopifyClient(domain: string, token: string): ShopifyClient 
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify({ query, variables }),
+      body: payload,
     });
+    const executionTime = Math.round(performance.now() - startTime);
+    console.log(`[FORENSIC-GQL] API_VERSION: ${SHOPIFY_API_VERSION} | ATTEMPTS: ${attempts} | STATUS: ${res.status} | TIME: ${executionTime}ms | PAYLOAD_SIZE: ${payload.length}b | QUERY: ${query.substring(0, 100).replace(/\n/g, " ")}...`);
 
     if (res.status === 429) {
       if (attempts > 7) throw new Error("Max retries exceeded for GraphQL API.");

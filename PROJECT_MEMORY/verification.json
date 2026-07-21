@@ -7,10 +7,10 @@
     "env": 14,
     "graphs": 0
   },
-  "verified": 98,
+  "verified": 95,
   "unknown": 0,
   "assumptions": 0,
-  "documentationDrift": 2,
-  "healthScore": 96,
-  "lastVerified": "2026-07-21T07:53:48.526Z"
+  "documentationDrift": 3,
+  "healthScore": 94,
+  "lastVerified": "2026-07-21T08:49:09.778Z"
 }

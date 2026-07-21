@@ -73,8 +73,8 @@ export async function generateRestorePlan(
     { key: "shop", name: "Shop Settings" },
     { key: "locations", name: "Locations" },
     { key: "metafield_definitions", name: "Metafield Definitions" },
-    { key: "metaobject_definitions_bulk", name: "Metaobject Definitions" },
-    { key: "metaobjects_bulk", name: "Metaobjects" },
+    { key: "metaobject_definitions", name: "Metaobject Definitions" },
+    { key: "metaobjects", name: "Metaobjects" },
     { key: "products_bulk", name: "Products & Variants" },
     { key: "collections_bulk", name: "Collections" },
     { key: "pages", name: "Pages" },
@@ -87,8 +87,8 @@ export async function generateRestorePlan(
   ];
 
   const dependencies: Record<string, string[]> = {
-    metaobjects_bulk: ["metaobject_definitions_bulk"],
-    products_bulk: ["locations", "metafield_definitions", "metaobjects_bulk"],
+    metaobjects: ["metaobject_definitions"],
+    products_bulk: ["locations", "metafield_definitions", "metaobjects"],
     collections_bulk: ["products_bulk"],
     articles: ["blogs"],
     orders_bulk: ["customers_bulk", "products_bulk"],
@@ -99,8 +99,8 @@ export async function generateRestorePlan(
   // fail closed. Unsupported resources remain visible in the plan as skips.
   const executable = new Set([
     "metafield_definitions",
-    "metaobject_definitions_bulk",
-    "metaobjects_bulk",
+    "metaobject_definitions",
+    "metaobjects",
     "locations",
     "products_bulk",
     "collections_bulk",
@@ -123,7 +123,7 @@ export async function generateRestorePlan(
     collections: "collections_bulk",
     customers: "customers_bulk",
     orders: "orders_bulk",
-    metaobjects: "metaobjects_bulk",
+    metaobjects: "metaobjects",
     metafields: "metafield_definitions",
   };
   const requested = new Set(

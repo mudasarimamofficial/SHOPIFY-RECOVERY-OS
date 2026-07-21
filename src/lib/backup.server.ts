@@ -29,8 +29,8 @@ const SCAN_STAGES = [
   "policies",
   "theme",
   "metafield_definitions",
-  "metaobject_definitions_bulk",
-  "metaobjects_bulk",
+  "metaobject_definitions",
+  "metaobjects",
   "products_bulk",
   "customers_bulk",
   "orders_bulk",
@@ -42,21 +42,30 @@ async function uploadToStorage(admin: SupabaseClient, path: string, data: string
   let hash = "stream-no-hash";
 
   if (data instanceof Blob) {
-    payload = data;
+    // Supabase bucket strictly rejects application/jsonl (which Shopify returns for Bulk API).
+    // We forcefully coerce the blob's native type so the Supabase SDK doesn't override our contentType header.
+    payload = data.type === "application/jsonl" || data.type === ""
+      ? new Blob([data], { type: "application/octet-stream" })
+      : data;
   } else {
     payload = typeof data === "string" ? Buffer.from(data, "utf8") : data;
     hash = createHash("sha256").update(payload).digest("hex");
   }
 
+  const startTime = performance.now();
   const { error } = await admin.storage
     .from("recovery_packages")
     .upload(path, payload, { contentType: "application/octet-stream", upsert: true });
+
+  const executionTime = Math.round(performance.now() - startTime);
+  const size = payload instanceof Blob ? payload.size : payload.length;
+  console.log(`[FORENSIC-STORAGE] PATH: ${path} | SIZE: ${size}b | TIME: ${executionTime}ms | BLOB: ${payload instanceof Blob} | SUCCESS: ${!error}`);
 
   if (error) throw new Error(`Storage upload failed: ${error.message}`);
   return hash;
 }
 
-async function runRestStage(client: ShopifyClient, stageKey: string) {
+async function runRestStage(client: ShopifyClient, stageKey: string, admin?: SupabaseClient, backupId?: string) {
   switch (stageKey) {
     case "shop":
       return { count: 1, data: await fetchShopInfo(client) };
@@ -96,6 +105,40 @@ async function runRestStage(client: ShopifyClient, stageKey: string) {
         }
       }
       return { count: allMetafields.length, data: allMetafields };
+    }
+    case "metaobject_definitions": {
+      const allDefs = [];
+      let hasNext = true;
+      let cursor: string | null = null;
+      while (hasNext) {
+         const queryStr: string = `{ metaobjectDefinitions(first: 250${cursor ? `, after: "${cursor}"` : ""}) { pageInfo { hasNextPage endCursor } edges { node { id type name description access { admin store } capabilities { publishable { enabled } translatable { enabled } } fieldDefinitions { key name type required description validations { name value } } } } } }`;
+         const res: any = await client.graphql<any>(queryStr).catch(() => null);
+         if (!res || !res.metaobjectDefinitions) break;
+         allDefs.push(...res.metaobjectDefinitions.edges.map((e: any) => e.node));
+         hasNext = res.metaobjectDefinitions.pageInfo.hasNextPage;
+         cursor = res.metaobjectDefinitions.pageInfo.endCursor;
+      }
+      return { count: allDefs.length, data: allDefs };
+    }
+    case "metaobjects": {
+      if (!admin || !backupId) throw new Error("Metaobjects requires admin and backupId to load definitions");
+      const { data: fileData, error } = await admin.storage.from("recovery_packages").download(`${backupId}/metaobject_definitions.json`);
+      if (error || !fileData) throw new Error("Could not load metaobject_definitions for metaobjects stage");
+      const defs = JSON.parse(await fileData.text());
+      const allObjects = [];
+      for (const def of defs) {
+        let hasNext = true;
+        let cursor: string | null = null;
+        while(hasNext) {
+          const queryStr = `{ metaobjects(type: "${def.type}", first: 250${cursor ? `, after: "${cursor}"` : ""}) { pageInfo { hasNextPage endCursor } edges { node { id handle type capabilities { publishable { status } } fields { key value } } } } }`;
+          const res: any = await client.graphql<any>(queryStr).catch(() => null);
+          if (!res || !res.metaobjects) break;
+          allObjects.push(...res.metaobjects.edges.map((e: any) => e.node));
+          hasNext = res.metaobjects.pageInfo.hasNextPage;
+          cursor = res.metaobjects.pageInfo.endCursor;
+        }
+      }
+      return { count: allObjects.length, data: allObjects };
     }
     default:
       throw new Error(`Unknown REST stage: ${stageKey}`);
@@ -220,7 +263,7 @@ export async function stepBackup(admin: SupabaseClient, store: StoreRow, backupI
         // Start bulk operation
         let query = "";
         if (resource === "products") {
-          query = `{ products { edges { node { id title handle descriptionHtml vendor productType createdAt updatedAt tags status options { name values } media(first: 10) { edges { node { alt mediaContentType ...on MediaImage { image { url altText } } ...on Video { sources { url } } } } } variants { edges { node { id title sku price taxable barcode compareAtPrice weight weightUnit requiresShipping inventoryPolicy inventoryItem { id inventoryLevels(first: 10) { edges { node { id available quantities(names: ["available"]) { name quantity } location { id } } } } } selectedOptions { name value } } } } } } } }`;
+          query = `{ products { edges { node { id title handle descriptionHtml vendor productType createdAt updatedAt tags status options { name values } media(first: 10) { edges { node { alt mediaContentType ...on MediaImage { image { url altText } } ...on Video { sources { url } } } } } variants { edges { node { id title sku price taxable barcode compareAtPrice requiresShipping inventoryPolicy inventoryItem { id measurement { weight { value unit } } inventoryLevels(first: 10) { edges { node { id available quantities(names: ["available"]) { name quantity } location { id } } } } } selectedOptions { name value } } } } } } } }`;
         } else if (resource === "customers") {
           query = `{ customers { edges { node { id firstName lastName email phone createdAt updatedAt note tags state } } } }`;
         } else if (resource === "orders") {
@@ -402,7 +445,7 @@ export async function stepBackup(admin: SupabaseClient, store: StoreRow, backupI
       }
     } else {
       // Standard REST stage
-      const { count, data } = await runRestStage(client, currentStage);
+      const { count, data } = await runRestStage(client, currentStage, admin, backupId);
       const actualCount = count === -1 ? (Array.isArray(data) ? data.length : 0) : count;
 
       if (data) {

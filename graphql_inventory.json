@@ -1,0 +1,122 @@
+[
+  {
+    "file": "src\\lib\\backup.server.ts",
+    "query": "const queryStr: string = `{ metafieldDefinitions(first: 250, ownerType: ${owner}${cursor ? `, after: \"${cursor}\"` : \"\"}) { pageInfo { hasNextPage endCursor } edges { node { id name namespace key description type validationStatus validations { name value } } } } }`;",
+    "line": 93
+  },
+  {
+    "file": "src\\lib\\backup.server.ts",
+    "query": "const queryStr: string = `{ metaobjectDefinitions(first: 250${cursor ? `, after: \"${cursor}\"` : \"\"}) { pageInfo { hasNextPage endCursor } edges { node { id type name description access { admin store } capabilities { publishable { enabled } translatable { enabled } } fieldDefinitions { key name type required description validations { name value } } } } } }`;",
+    "line": 109
+  },
+  {
+    "file": "src\\lib\\backup.server.ts",
+    "query": "const queryStr = `{ metaobjects(type: \"${def.type}\", first: 250${cursor ? `, after: \"${cursor}\"` : \"\"}) { pageInfo { hasNextPage endCursor } edges { node { id handle type capabilities { publishable { status } } fields { key value } } } } }`;",
+    "line": 128
+  },
+  {
+    "file": "src\\lib\\backup.server.ts",
+    "query": "const gql = `\n    mutation {\n      bulkOperationRunQuery(\n        query: \"\"\"${query}\"\"\"\n      ) {\n        bulkOperation { id status }\n        userErrors { field message }\n      }\n    }\n  `;",
+    "line": 144
+  },
+  {
+    "file": "src\\lib\\backup.server.ts",
+    "query": "const gql = `\n    query {\n      currentBulkOperation {\n        id status errorCode url objectCount fileSize\n      }\n    }\n  `;",
+    "line": 176
+  },
+  {
+    "file": "src\\lib\\backup.server.ts",
+    "query": "query = `{ products { edges { node { id title handle descriptionHtml vendor productType createdAt updatedAt tags status options { name values } media(first: 10) { edges { node { alt mediaContentType ...on MediaImage { image { url altText } } ...on Video { sources { url } } } } } variants { edges { node { id title sku price taxable barcode compareAtPrice requiresShipping inventoryPolicy inventoryItem { id measurement { weight { value unit } } inventoryLevels(first: 10) { edges { node { id available quantities(names: [\"available\"]) { name quantity } location { id } } } } } selectedOptions { name value } } } } } } } }`;",
+    "line": 261
+  },
+  {
+    "file": "src\\lib\\backup.server.ts",
+    "query": "query = `{ customers { edges { node { id firstName lastName email phone createdAt updatedAt note tags state } } } }`;",
+    "line": 263
+  },
+  {
+    "file": "src\\lib\\backup.server.ts",
+    "query": "query = `{ orders { edges { node { id name email phone createdAt updatedAt displayFinancialStatus displayFulfillmentStatus note tags customer { id } lineItems { edges { node { id title quantity variant { id } product { id } } } } } } } }`;",
+    "line": 265
+  },
+  {
+    "file": "src\\lib\\backup.server.ts",
+    "query": "query = `{ collections { edges { node { id title handle descriptionHtml updatedAt sortOrder templateSuffix ruleSet { appliedDisjunctively rules { column condition relation } } products { edges { node { id } } } } } } }`;",
+    "line": 267
+  },
+  {
+    "file": "src\\lib\\backup.server.ts",
+    "query": "query = `{ metaobjectDefinitions { edges { node { id type name description access { admin store } capabilities { publishable { enabled } translatable { enabled } } fieldDefinitions { key name type required description validations { name value } } } } } }`;",
+    "line": 269
+  },
+  {
+    "file": "src\\lib\\backup.server.ts",
+    "query": "query = `{ metaobjects { edges { node { id handle type capabilities { publishable { status } } fields { key value } } } } }`;",
+    "line": 271
+  },
+  {
+    "file": "src\\lib\\sdk\\recovery\\executor.ts",
+    "query": "const createMutation = `\n    mutation collectionCreate($input: CollectionInput!) {\n      collectionCreate(input: $input) {\n        collection { id }\n        userErrors { field message }\n      }\n    }\n  `;",
+    "line": 271
+  },
+  {
+    "file": "src\\lib\\sdk\\recovery\\executor.ts",
+    "query": "const mutation = `\n    mutation productSet($identifier: ProductSetIdentifiers, $input: ProductSetInput!) {\n      productSet(identifier: $identifier, input: $input) {\n        product {\n          id\n          variants(first: 250) {\n            edges {\n              node {\n                id\n                title\n                sku\n              }\n            }\n            pageInfo { hasNextPage }\n          }\n        }\n        userErrors { field message }\n      }\n    }\n  `;",
+    "line": 395
+  },
+  {
+    "file": "src\\lib\\sdk\\recovery\\executor.ts",
+    "query": "const createMutation = `\n    mutation customerCreate($input: CustomerInput!) {\n      customerCreate(input: $input) {\n        customer { id }\n        userErrors { field message }\n      }\n    }\n  `;",
+    "line": 477
+  },
+  {
+    "file": "src\\lib\\sdk\\recovery\\executor.ts",
+    "query": "const gql = `\n    mutation metaobjectDefinitionCreate($definition: MetaobjectDefinitionCreateInput!) {\n      metaobjectDefinitionCreate(definition: $definition) {\n        metaobjectDefinition { id }\n        userErrors { field message }\n      }\n    }\n  `;",
+    "line": 777
+  },
+  {
+    "file": "src\\lib\\sdk\\recovery\\executor.ts",
+    "query": "const gql = `\n    mutation metaobjectCreate($metaobject: MetaobjectCreateInput!) {\n      metaobjectCreate(metaobject: $metaobject) {\n        metaobject { id }\n        userErrors { field message }\n      }\n    }\n  `;",
+    "line": 805
+  },
+  {
+    "file": "src\\lib\\sdk\\recovery\\executor.ts",
+    "query": "const gql = `\n    mutation metafieldDefinitionCreate($definition: MetafieldDefinitionInput!) {\n      metafieldDefinitionCreate(definition: $definition) {\n        createdDefinition { id }\n        userErrors { field message }\n      }\n    }\n  `;",
+    "line": 834
+  },
+  {
+    "file": "src\\lib\\sdk\\shopify\\discovery.ts",
+    "query": "const query = `\n      query {\n        webhookSubscriptions(first: 50) {\n          edges {\n            node {\n              id\n              topic\n              endpoint {\n                __typename\n                ... on WebhookHttpEndpoint {\n                  callbackUrl\n                }\n                ... on WebhookEventBridgeEndpoint {\n                  arn\n                }\n                ... on WebhookPubSubEndpoint {\n                  pubSubProject\n                  pubSubTopic\n                }\n              }\n            }\n          }\n        }\n      }\n    `;",
+    "line": 12
+  },
+  {
+    "file": "src\\lib\\sdk\\verification\\compare.ts",
+    "query": "const query = `{ products(first: 250) { edges { node { \n    handle title status vendor productType tags descriptionHtml seo { title description } options { name values } \n    variants(first: 50) { edges { node { title sku barcode price compareAtPrice weight weightUnit requiresShipping inventoryPolicy selectedOptions { name value } } } } \n  } } } }`;",
+    "line": 73
+  },
+  {
+    "file": "src\\lib\\sdk\\verification\\compare.ts",
+    "query": "const query = `{ collections(first: 250) { edges { node { handle title descriptionHtml sortOrder templateSuffix ruleSet { appliedDisjunctively rules { column condition relation } } } } } }`;",
+    "line": 194
+  },
+  {
+    "file": "src\\lib\\sdk\\verification\\compare.ts",
+    "query": "const query = `{ customers(first: 250) { edges { node { email phone firstName lastName tags note state } } } }`;",
+    "line": 279
+  },
+  {
+    "file": "src\\lib\\sdk\\verification\\compare.ts",
+    "query": "const query = `{ pages(first: 250) { edges { node { handle title body templateSuffix } } } }`;",
+    "line": 356
+  },
+  {
+    "file": "src\\lib\\sdk\\verification\\compare.ts",
+    "query": "const query = `{ files(first: 250) { edges { node { id fileStatus ... on MediaImage { image { originalSrc altText } } } } } }`;",
+    "line": 405
+  },
+  {
+    "file": "src\\lib\\shopify-oauth.server.ts",
+    "query": "const mutation = `\n    mutation($topic: WebhookSubscriptionTopic!, $sub: WebhookSubscriptionInput!) {\n      webhookSubscriptionCreate(topic: $topic, webhookSubscription: $sub) {\n        webhookSubscription { id }\n        userErrors { field message }\n      }\n    }`;",
+    "line": 168
+  }
+]

@@ -72,7 +72,7 @@ export async function compareProducts(
 
   const query = `{ products(first: 250) { edges { node { 
     handle title status vendor productType tags descriptionHtml seo { title description } options { name values } 
-    variants(first: 50) { edges { node { title sku barcode price compareAtPrice weight weightUnit requiresShipping inventoryPolicy selectedOptions { name value } } } } 
+    variants(first: 50) { edges { node { title sku barcode price compareAtPrice requiresShipping inventoryPolicy inventoryItem { measurement { weight { value unit } } } selectedOptions { name value } } } } 
   } } } }`;
 
   const prodA = await fetchAllGraphQL(clientA, query, "products");
@@ -155,8 +155,8 @@ export async function compareProducts(
         vA.sku || vA.title,
       );
       assertEqual("barcode", vA.barcode, vB.barcode, "ProductVariant", vA.sku || vA.title);
-      assertEqual("weight", vA.weight, vB.weight, "ProductVariant", vA.sku || vA.title);
-      assertEqual("weightUnit", vA.weightUnit, vB.weightUnit, "ProductVariant", vA.sku || vA.title);
+      assertEqual("weight", vA.inventoryItem?.measurement?.weight?.value, vB.inventoryItem?.measurement?.weight?.value, "ProductVariant", vA.sku || vA.title);
+      assertEqual("weightUnit", vA.inventoryItem?.measurement?.weight?.unit, vB.inventoryItem?.measurement?.weight?.unit, "ProductVariant", vA.sku || vA.title);
       assertEqual(
         "requiresShipping",
         vA.requiresShipping,
