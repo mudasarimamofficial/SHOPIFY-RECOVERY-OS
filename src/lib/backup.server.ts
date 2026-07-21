@@ -92,32 +92,15 @@ async function runRestStage(client: ShopifyClient, stageKey: string, admin?: Sup
       const allMetafields = [];
       const ownerTypes = ["PRODUCT", "COLLECTION", "CUSTOMER", "ORDER", "PAGE", "BLOG", "ARTICLE", "SHOP", "COMPANY", "LOCATION", "PRODUCTVARIANT"];
       for (const owner of ownerTypes) {
-        let hasNext = true;
-        let cursor: string | null = null;
-        while (hasNext) {
-           const queryStr: string = `{ metafieldDefinitions(first: 250, ownerType: ${owner}${cursor ? `, after: "${cursor}"` : ""}) { pageInfo { hasNextPage endCursor } edges { node { id name namespace key description type validationStatus validations { name value } } } } }`;
-           const mfRes: any = await client.graphql<any>(queryStr).catch(() => null);
-           if (!mfRes || !mfRes.metafieldDefinitions) break;
-           const mfs = mfRes.metafieldDefinitions.edges.map((e: any) => e.node);
-           allMetafields.push(...mfs);
-           hasNext = mfRes.metafieldDefinitions.pageInfo.hasNextPage;
-           cursor = mfRes.metafieldDefinitions.pageInfo.endCursor;
-        }
+        const queryBuilder = (cursor: string | null) => `{ metafieldDefinitions(first: 250, ownerType: ${owner}${cursor ? `, after: "${cursor}"` : ""}) { pageInfo { hasNextPage endCursor } edges { node { id name namespace key description type validationStatus validations { name value } } } } }`;
+        const mfs = await client.paginateGraphQL(queryBuilder, ["metafieldDefinitions"]);
+        allMetafields.push(...mfs);
       }
       return { count: allMetafields.length, data: allMetafields };
     }
     case "metaobject_definitions": {
-      const allDefs = [];
-      let hasNext = true;
-      let cursor: string | null = null;
-      while (hasNext) {
-         const queryStr: string = `{ metaobjectDefinitions(first: 250${cursor ? `, after: "${cursor}"` : ""}) { pageInfo { hasNextPage endCursor } edges { node { id type name description access { admin store } capabilities { publishable { enabled } translatable { enabled } } fieldDefinitions { key name type required description validations { name value } } } } } }`;
-         const res: any = await client.graphql<any>(queryStr).catch(() => null);
-         if (!res || !res.metaobjectDefinitions) break;
-         allDefs.push(...res.metaobjectDefinitions.edges.map((e: any) => e.node));
-         hasNext = res.metaobjectDefinitions.pageInfo.hasNextPage;
-         cursor = res.metaobjectDefinitions.pageInfo.endCursor;
-      }
+      const queryBuilder = (cursor: string | null) => `{ metaobjectDefinitions(first: 250${cursor ? `, after: "${cursor}"` : ""}) { pageInfo { hasNextPage endCursor } edges { node { id type name description access { admin store } capabilities { publishable { enabled } translatable { enabled } } fieldDefinitions { key name type required description validations { name value } } } } } }`;
+      const allDefs = await client.paginateGraphQL(queryBuilder, ["metaobjectDefinitions"]);
       return { count: allDefs.length, data: allDefs };
     }
     case "metaobjects": {
@@ -127,16 +110,9 @@ async function runRestStage(client: ShopifyClient, stageKey: string, admin?: Sup
       const defs = JSON.parse(await fileData.text());
       const allObjects = [];
       for (const def of defs) {
-        let hasNext = true;
-        let cursor: string | null = null;
-        while(hasNext) {
-          const queryStr = `{ metaobjects(type: "${def.type}", first: 250${cursor ? `, after: "${cursor}"` : ""}) { pageInfo { hasNextPage endCursor } edges { node { id handle type capabilities { publishable { status } } fields { key value } } } } }`;
-          const res: any = await client.graphql<any>(queryStr).catch(() => null);
-          if (!res || !res.metaobjects) break;
-          allObjects.push(...res.metaobjects.edges.map((e: any) => e.node));
-          hasNext = res.metaobjects.pageInfo.hasNextPage;
-          cursor = res.metaobjects.pageInfo.endCursor;
-        }
+        const queryBuilder = (cursor: string | null) => `{ metaobjects(type: "${def.type}", first: 250${cursor ? `, after: "${cursor}"` : ""}) { pageInfo { hasNextPage endCursor } edges { node { id handle type capabilities { publishable { status } } fields { key value } } } } }`;
+        const objs = await client.paginateGraphQL(queryBuilder, ["metaobjects"]);
+        allObjects.push(...objs);
       }
       return { count: allObjects.length, data: allObjects };
     }

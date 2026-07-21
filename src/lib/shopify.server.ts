@@ -44,6 +44,7 @@ export interface ShopifyClient {
   paged<T = unknown>(path: string, key: string, limit?: number): Promise<T[]>;
   pagedCount(path: string, key: string, limit?: number): Promise<number>;
   graphql<T = unknown>(query: string, variables?: Record<string, unknown>): Promise<T>;
+  paginateGraphQL<T = unknown>(queryBuilder: (cursor: string | null) => string, extractPath: string[]): Promise<T[]>;
 }
 
 export function makeShopifyClient(domain: string, token: string): ShopifyClient {
@@ -174,7 +175,21 @@ export function makeShopifyClient(domain: string, token: string): ShopifyClient 
       body: payload,
     });
     const executionTime = Math.round(performance.now() - startTime);
-    console.log(`[FORENSIC-GQL] API_VERSION: ${SHOPIFY_API_VERSION} | ATTEMPTS: ${attempts} | STATUS: ${res.status} | TIME: ${executionTime}ms | PAYLOAD_SIZE: ${payload.length}b | QUERY: ${query.substring(0, 100).replace(/\n/g, " ")}...`);
+    
+    let json: any = {};
+    let rawText = "";
+    if (res.ok || res.status === 400 || res.status === 429) {
+      rawText = await res.text().catch(() => "");
+      try {
+        json = JSON.parse(rawText);
+      } catch (e) {
+        if (res.ok) throw new Error(`Shopify GraphQL JSON parsing failed`);
+      }
+    }
+
+    const cost = json.extensions?.cost?.actualQueryCost || "?";
+    const heap = Math.round(process.memoryUsage().heapUsed / 1024 / 1024);
+    console.log(`[FORENSIC-GQL] API: ${SHOPIFY_API_VERSION} | ATTEMPTS: ${attempts} | STATUS: ${res.status} | TIME: ${executionTime}ms | COST: ${cost} | HEAP: ${heap}MB | PAYLOAD_SIZE: ${payload.length}b | QUERY: ${query.substring(0, 80).replace(/\n/g, " ")}...`);
 
     if (res.status === 429) {
       if (attempts > 7) throw new Error("Max retries exceeded for GraphQL API.");
@@ -184,7 +199,6 @@ export function makeShopifyClient(domain: string, token: string): ShopifyClient 
       return graphql(query, variables, attempts + 1);
     }
 
-    // Also retry on 500, 502, 503, 504
     if (res.status >= 500 && res.status < 600) {
       if (attempts > 5) throw new Error(`Shopify Server Error ${res.status} after retries.`);
       await new Promise((r) => setTimeout(r, Math.pow(2, attempts) * 1000));
@@ -192,11 +206,8 @@ export function makeShopifyClient(domain: string, token: string): ShopifyClient 
     }
 
     if (!res.ok) {
-      const body = await res.text().catch(() => "");
-      throw new Error(`Shopify GraphQL ${res.status}: ${body.slice(0, 200)}`);
+      throw new Error(`Shopify GraphQL ${res.status}: ${rawText.slice(0, 200)}`);
     }
-
-    const json = (await res.json()) as { data?: T; errors?: any[]; extensions?: any };
 
     // Enterprise Cost-Tracking & Backpressure
     if (json.extensions?.cost?.throttleStatus) {
@@ -220,7 +231,35 @@ export function makeShopifyClient(domain: string, token: string): ShopifyClient 
 
     return json.data as T;
   }
-  return { domain, rest, paged, pagedCount, graphql };
+
+  async function paginateGraphQL<T = unknown>(queryBuilder: (cursor: string | null) => string, extractPath: string[]): Promise<T[]> {
+    const allItems: T[] = [];
+    let hasNext = true;
+    let cursor: string | null = null;
+    
+    while (hasNext) {
+      const q = queryBuilder(cursor);
+      const res: any = await graphql<any>(q).catch(() => null);
+      
+      let root = res;
+      for (const p of extractPath) {
+         if (!root) break;
+         root = root[p];
+      }
+      
+      if (!root || !root.edges) break;
+      
+      const items = root.edges.map((e: any) => e.node);
+      allItems.push(...items);
+      
+      hasNext = !!root.pageInfo?.hasNextPage;
+      cursor = root.pageInfo?.endCursor || null;
+    }
+    
+    return allItems;
+  }
+
+  return { domain, rest, paged, pagedCount, graphql, paginateGraphQL };
 }
 
 export interface ShopInfo {

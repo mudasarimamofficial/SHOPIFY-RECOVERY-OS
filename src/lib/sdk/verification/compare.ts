@@ -402,7 +402,7 @@ export async function compareFiles(
     discrepancies: [],
   };
 
-  const query = `{ files(first: 250) { edges { node { id fileStatus ... on MediaImage { image { originalSrc altText } } } } } }`;
+  const query = `{ files(first: 250) { edges { node { id fileStatus ... on MediaImage { image { url altText } } } } } }`;
   const resA = await clientA.graphql<any>(query);
   const resB = await clientB.graphql<any>(query);
 
