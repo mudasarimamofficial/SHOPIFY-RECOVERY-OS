@@ -19,18 +19,18 @@ This is a fresh review. It supersedes prior local claims of production readiness
 
 ## Fresh evidence
 
-| Gate | Result | Evidence |
-| --- | --- | --- |
-| Production build | ✅ VERIFIED | `npm run build` completed successfully on 2026-07-21. |
-| Unit tests | ✅ VERIFIED | `npx vitest run --reporter=verbose`: 23/23 tests in 4 files passed. |
-| Browser smoke tests | ✅ VERIFIED | `npx playwright test`: 3/3 production-hosted unauthenticated/auth-page smoke tests passed. |
-| Dependency vulnerability scan | ✅ VERIFIED | `npm audit --json`: 0 reported vulnerabilities. |
-| Memory consistency tool | ✅ VERIFIED | `npm run memory:verify`: health score 96. This checks documentation structure, not behavioral correctness. |
-| Lint | ❌ FAILED | `npx eslint src tests` reported 3 Prettier errors in `src/lib/shopify.server.ts`. Repository-wide lint exceeded 60 seconds. |
-| TypeScript type gate | ❌ FAILED | `npx tsc --noEmit` did not complete within the 60-second execution budget; package scripts do not provide a typecheck gate. |
-| Production schema parity | ❌ FAILED | `supabase migration list --linked` shows local migrations 20260718000000, 20260718120000, and 20260720172300 absent remotely, and remote migrations 20260717191656 and 20260718082113 absent locally. |
-| Shopify live verification | ⚠️ BLOCKED BY EXTERNAL DEPENDENCY | No usable Shopify Admin token or app credentials were present. Shopify CLI project inspection timed out/non-interactively could not establish account state. |
-| Vercel control-plane verification | ⚠️ BLOCKED BY EXTERNAL DEPENDENCY | `vercel whoami --no-color` timed out. Deployment is browser-reachable, but CLI identity and production environment parity were not verified. |
+| Gate                              | Result                            | Evidence                                                                                                                                                                                              |
+| --------------------------------- | --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Production build                  | ✅ VERIFIED                       | `npm run build` completed successfully on 2026-07-21.                                                                                                                                                 |
+| Unit tests                        | ✅ VERIFIED                       | `npx vitest run --reporter=verbose`: 23/23 tests in 4 files passed.                                                                                                                                   |
+| Browser smoke tests               | ✅ VERIFIED                       | `npx playwright test`: 3/3 production-hosted unauthenticated/auth-page smoke tests passed.                                                                                                            |
+| Dependency vulnerability scan     | ✅ VERIFIED                       | `npm audit --json`: 0 reported vulnerabilities.                                                                                                                                                       |
+| Memory consistency tool           | ✅ VERIFIED                       | `npm run memory:verify`: health score 96. This checks documentation structure, not behavioral correctness.                                                                                            |
+| Lint                              | ❌ FAILED                         | `npx eslint src tests` reported 3 Prettier errors in `src/lib/shopify.server.ts`. Repository-wide lint exceeded 60 seconds.                                                                           |
+| TypeScript type gate              | ❌ FAILED                         | `npx tsc --noEmit` did not complete within the 60-second execution budget; package scripts do not provide a typecheck gate.                                                                           |
+| Production schema parity          | ❌ FAILED                         | `supabase migration list --linked` shows local migrations 20260718000000, 20260718120000, and 20260720172300 absent remotely, and remote migrations 20260717191656 and 20260718082113 absent locally. |
+| Shopify live verification         | ⚠️ BLOCKED BY EXTERNAL DEPENDENCY | No usable Shopify Admin token or app credentials were present. Shopify CLI project inspection timed out/non-interactively could not establish account state.                                          |
+| Vercel control-plane verification | ⚠️ BLOCKED BY EXTERNAL DEPENDENCY | `vercel whoami --no-color` timed out. Deployment is browser-reachable, but CLI identity and production environment parity were not verified.                                                          |
 
 ## Release-blocking findings
 
@@ -49,20 +49,20 @@ This is a fresh review. It supersedes prior local claims of production readiness
 
 `Implemented` below means source code contains an attempted handler, not that behavior was live-verified.
 
-| Resource group | Status | Notes |
-| --- | --- | --- |
-| Products, variants, product media, inventory levels | Partial implementation | GraphQL Bulk backup and `productSet` restore; media/inventory are capped in query shape; no live validation, paging, rollback, or deep comparison at scale. |
-| Locations | Partial implementation | Backs up locations; restore only maps to an already-existing same-named destination location. |
-| Smart/custom collections | Partial implementation | Bulk backup and attempted GraphQL create/update; dependency mapping relies on product IDs. |
-| Pages, blogs, articles, redirects | Partial implementation | REST backup/restore only; no complete field fidelity, idempotency proof, or live validation. |
-| Customers | Partial implementation | Basic fields only; addresses, consent, and privacy deletion are absent. |
-| Orders | Backup only | Attempted bulk extraction; restore planner disables execution. |
-| Theme assets/settings/app blocks/embeds | Backup only / unsafe | Active theme assets collected, but cross-store restore is disabled; errors may be silently converted to empty assets. |
-| Store policies/settings | Backup only | Policies are collected but skipped by restore. |
-| Files, metafields, metaobjects, menus, navigation, translations/locales, markets, price lists, discounts, selling plans, delivery/shipping, fulfillment, taxes, pixels, consent, search, storefront settings, companies/B2B, catalogs, publications, gift cards, subscriptions, webhooks | Missing implementation | Some are represented in the UI catalog but have no active backup-and-restore implementation or verification coverage. |
-| GraphQL Bulk Operations | Partial implementation | One active-operation model, full-buffer download, no robust recovery/claiming, and limited resources only. |
-| GraphQL API | Partial implementation | Used for selected resources, but API version is retired and response error/schema compatibility is unverified. |
-| REST fallback | Partial implementation | Used broadly despite REST legacy status; retry exists but lacks request timeout/abort and observability. |
+| Resource group                                                                                                                                                                                                                                                                           | Status                 | Notes                                                                                                                                                       |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Products, variants, product media, inventory levels                                                                                                                                                                                                                                      | Partial implementation | GraphQL Bulk backup and `productSet` restore; media/inventory are capped in query shape; no live validation, paging, rollback, or deep comparison at scale. |
+| Locations                                                                                                                                                                                                                                                                                | Partial implementation | Backs up locations; restore only maps to an already-existing same-named destination location.                                                               |
+| Smart/custom collections                                                                                                                                                                                                                                                                 | Partial implementation | Bulk backup and attempted GraphQL create/update; dependency mapping relies on product IDs.                                                                  |
+| Pages, blogs, articles, redirects                                                                                                                                                                                                                                                        | Partial implementation | REST backup/restore only; no complete field fidelity, idempotency proof, or live validation.                                                                |
+| Customers                                                                                                                                                                                                                                                                                | Partial implementation | Basic fields only; addresses, consent, and privacy deletion are absent.                                                                                     |
+| Orders                                                                                                                                                                                                                                                                                   | Backup only            | Attempted bulk extraction; restore planner disables execution.                                                                                              |
+| Theme assets/settings/app blocks/embeds                                                                                                                                                                                                                                                  | Backup only / unsafe   | Active theme assets collected, but cross-store restore is disabled; errors may be silently converted to empty assets.                                       |
+| Store policies/settings                                                                                                                                                                                                                                                                  | Backup only            | Policies are collected but skipped by restore.                                                                                                              |
+| Files, metafields, metaobjects, menus, navigation, translations/locales, markets, price lists, discounts, selling plans, delivery/shipping, fulfillment, taxes, pixels, consent, search, storefront settings, companies/B2B, catalogs, publications, gift cards, subscriptions, webhooks | Missing implementation | Some are represented in the UI catalog but have no active backup-and-restore implementation or verification coverage.                                       |
+| GraphQL Bulk Operations                                                                                                                                                                                                                                                                  | Partial implementation | One active-operation model, full-buffer download, no robust recovery/claiming, and limited resources only.                                                  |
+| GraphQL API                                                                                                                                                                                                                                                                              | Partial implementation | Used for selected resources, but API version is retired and response error/schema compatibility is unverified.                                              |
+| REST fallback                                                                                                                                                                                                                                                                            | Partial implementation | Used broadly despite REST legacy status; retry exists but lacks request timeout/abort and observability.                                                    |
 
 ## Required remediation before reassessment
 
@@ -85,20 +85,20 @@ Shopify’s current versioning schedule shows `2024-10` is outside the accessibl
 
 ## Certification
 
-| Engineering gate | Classification |
-| --- | --- |
-| Build and public smoke rendering | ✅ VERIFIED |
-| Dependency vulnerability scan | ✅ VERIFIED |
-| Unit behavior | ✅ VERIFIED, but insufficient scope |
-| Code quality gate | ❌ FAILED |
-| Tenant isolation and authorization | ❌ FAILED |
-| Secret management | ❌ FAILED |
-| Shopify privacy compliance | ❌ FAILED |
-| Production database parity | ❌ FAILED |
-| Supported Shopify API compatibility | ❌ FAILED |
-| Backup/restore correctness, resume, rollback, verification | ❌ FAILED |
-| Enterprise-scale performance | ❌ FAILED |
-| Live Shopify store validation | ⚠️ BLOCKED BY EXTERNAL DEPENDENCY |
-| Vercel control-plane validation | ⚠️ BLOCKED BY EXTERNAL DEPENDENCY |
+| Engineering gate                                           | Classification                      |
+| ---------------------------------------------------------- | ----------------------------------- |
+| Build and public smoke rendering                           | ✅ VERIFIED                         |
+| Dependency vulnerability scan                              | ✅ VERIFIED                         |
+| Unit behavior                                              | ✅ VERIFIED, but insufficient scope |
+| Code quality gate                                          | ❌ FAILED                           |
+| Tenant isolation and authorization                         | ❌ FAILED                           |
+| Secret management                                          | ❌ FAILED                           |
+| Shopify privacy compliance                                 | ❌ FAILED                           |
+| Production database parity                                 | ❌ FAILED                           |
+| Supported Shopify API compatibility                        | ❌ FAILED                           |
+| Backup/restore correctness, resume, rollback, verification | ❌ FAILED                           |
+| Enterprise-scale performance                               | ❌ FAILED                           |
+| Live Shopify store validation                              | ⚠️ BLOCKED BY EXTERNAL DEPENDENCY   |
+| Vercel control-plane validation                            | ⚠️ BLOCKED BY EXTERNAL DEPENDENCY   |
 
 **Final certification: NOT APPROVED FOR PRODUCTION.**

@@ -3,7 +3,6 @@ import {
   fetchShopInfo,
   SHOPIFY_API_VERSION,
   type ShopifyClient,
-  encryptToken,
 } from "./shopify.server";
 import { AuthManager } from "./auth-manager.server";
 import { RESOURCE_CATALOG } from "./resource-catalog";

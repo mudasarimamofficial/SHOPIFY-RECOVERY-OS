@@ -9,7 +9,7 @@ import { formatBytes, formatDate } from "@/lib/format";
 import { Download, ArrowLeft, CheckCircle2, XCircle, AlertTriangle, Loader2 } from "lucide-react";
 import { RESOURCE_CATALOG } from "@/lib/resource-catalog";
 
-export const Route = createFileRoute("/_authenticated/backups/$backupId")({
+export const Route = createFileRoute("/_authenticated/extractions/$extractionId")({
   component: BackupDetail,
 });
 

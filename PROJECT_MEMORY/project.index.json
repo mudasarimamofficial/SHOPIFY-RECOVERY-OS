@@ -4,531 +4,301 @@
       "name": "AppShell",
       "file": "src/components/app-shell.tsx",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "PageHeader",
       "file": "src/components/app-shell.tsx",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "useIsMobile",
       "file": "src/hooks/use-mobile.tsx",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "stepBackup",
       "file": "src/lib/backup.server.ts",
-      "databaseTables": [
-        "recovery_packages",
-        "backups",
-        "backup_resources",
-        "activity_log"
-      ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "databaseTables": ["recovery_packages", "backups", "backup_resources", "activity_log"],
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "handleDownload",
       "file": "src/lib/download.server.ts",
-      "databaseTables": [
-        "backups",
-        "recovery_packages"
-      ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "databaseTables": ["backups", "recovery_packages"],
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "consumeLastCapturedError",
       "file": "src/lib/error-capture.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "renderErrorPage",
       "file": "src/lib/error-page.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "formatBytes",
       "file": "src/lib/format.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "formatRelative",
       "file": "src/lib/format.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "formatDate",
       "file": "src/lib/format.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "generateRestorePlan",
       "file": "src/lib/migration.server.ts",
-      "databaseTables": [
-        "backups",
-        "migration_jobs",
-        "activity_log",
-        "recovery_packages"
-      ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "databaseTables": ["backups", "migration_jobs", "activity_log", "recovery_packages"],
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "executeRestoreStep",
       "file": "src/lib/migration.server.ts",
-      "databaseTables": [
-        "backups",
-        "migration_jobs",
-        "activity_log",
-        "recovery_packages"
-      ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "databaseTables": ["backups", "migration_jobs", "activity_log", "recovery_packages"],
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "enqueueJob",
       "file": "src/lib/queue.server.ts",
-      "databaseTables": [
-        "jobs",
-        "job_logs"
-      ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "databaseTables": ["jobs", "job_logs"],
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "logJobEvent",
       "file": "src/lib/queue.server.ts",
-      "databaseTables": [
-        "jobs",
-        "job_logs"
-      ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "databaseTables": ["jobs", "job_logs"],
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "processNextJob",
       "file": "src/lib/queue.server.ts",
-      "databaseTables": [
-        "jobs",
-        "job_logs"
-      ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "databaseTables": ["jobs", "job_logs"],
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "catalogByGroup",
       "file": "src/lib/resource-catalog.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "explainShopifyLimitation",
       "file": "src/lib/sdk/migration/ai-assistant.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "executeCleanMigrationEngine",
       "file": "src/lib/sdk/migration/cleaning.server.ts",
-      "databaseTables": [
-        "conflict_intelligence"
-      ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "databaseTables": ["conflict_intelligence"],
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "executeDeepCompareEngine",
       "file": "src/lib/sdk/migration/deep-compare.server.ts",
-      "databaseTables": [
-        "deep_compare_results"
-      ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "databaseTables": ["deep_compare_results"],
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "generateDependencyGraphMermaid",
       "file": "src/lib/sdk/migration/dependency-graph.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "classifyShopifyError",
       "file": "src/lib/sdk/migration/executor.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "executeResourceRestore",
       "file": "src/lib/sdk/migration/executor.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "generateRecoveryPlan",
       "file": "src/lib/sdk/migration/intelligence.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "generateStorePreparationReport",
       "file": "src/lib/sdk/migration/preparation.server.ts",
-      "databaseTables": [
-        "store_preparations"
-      ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "databaseTables": ["store_preparations"],
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "generateAndStoreReports",
       "file": "src/lib/sdk/migration/reports.server.ts",
-      "databaseTables": [
-        "reports",
-        "telemetry"
-      ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "databaseTables": ["reports", "telemetry"],
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "generateMerchantRecoveryBookMarkdown",
       "file": "src/lib/sdk/reports/generator.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "triggerDownload",
       "file": "src/lib/sdk/reports/generator.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "withExponentialBackoff",
       "file": "src/lib/sdk/shopify/rate-limiter.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "computeAssetChecksum",
       "file": "src/lib/sdk/verification/binary-hash.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "verifyChecksumPair",
       "file": "src/lib/sdk/verification/binary-hash.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "generateRecoveryCertificate",
       "file": "src/lib/sdk/verification/certificate.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "compareProducts",
       "file": "src/lib/sdk/verification/compare.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "compareCollections",
       "file": "src/lib/sdk/verification/compare.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "compareCustomers",
       "file": "src/lib/sdk/verification/compare.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "comparePages",
       "file": "src/lib/sdk/verification/compare.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "compareFiles",
       "file": "src/lib/sdk/verification/compare.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "classifyThemeFile",
       "file": "src/lib/sdk/verification/theme-verifier.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "verifyThemeAssets",
       "file": "src/lib/sdk/verification/theme-verifier.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "getAppCredentials",
       "file": "src/lib/shopify-oauth.server.ts",
-      "databaseTables": [
-        "oauth_sessions",
-        "stores",
-        "activity_log"
-      ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "databaseTables": ["oauth_sessions", "stores", "activity_log"],
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "normalizeShop",
       "file": "src/lib/shopify-oauth.server.ts",
-      "databaseTables": [
-        "oauth_sessions",
-        "stores",
-        "activity_log"
-      ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "databaseTables": ["oauth_sessions", "stores", "activity_log"],
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "isValidShopDomain",
       "file": "src/lib/shopify-oauth.server.ts",
-      "databaseTables": [
-        "oauth_sessions",
-        "stores",
-        "activity_log"
-      ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "databaseTables": ["oauth_sessions", "stores", "activity_log"],
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "generateState",
       "file": "src/lib/shopify-oauth.server.ts",
-      "databaseTables": [
-        "oauth_sessions",
-        "stores",
-        "activity_log"
-      ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "databaseTables": ["oauth_sessions", "stores", "activity_log"],
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "buildAuthorizeUrl",
       "file": "src/lib/shopify-oauth.server.ts",
-      "databaseTables": [
-        "oauth_sessions",
-        "stores",
-        "activity_log"
-      ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "databaseTables": ["oauth_sessions", "stores", "activity_log"],
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "verifyCallbackHmac",
       "file": "src/lib/shopify-oauth.server.ts",
-      "databaseTables": [
-        "oauth_sessions",
-        "stores",
-        "activity_log"
-      ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "databaseTables": ["oauth_sessions", "stores", "activity_log"],
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "isTimestampFresh",
       "file": "src/lib/shopify-oauth.server.ts",
-      "databaseTables": [
-        "oauth_sessions",
-        "stores",
-        "activity_log"
-      ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "databaseTables": ["oauth_sessions", "stores", "activity_log"],
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "exchangeCodeForToken",
       "file": "src/lib/shopify-oauth.server.ts",
-      "databaseTables": [
-        "oauth_sessions",
-        "stores",
-        "activity_log"
-      ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "databaseTables": ["oauth_sessions", "stores", "activity_log"],
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "registerWebhooks",
       "file": "src/lib/shopify-oauth.server.ts",
-      "databaseTables": [
-        "oauth_sessions",
-        "stores",
-        "activity_log"
-      ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "databaseTables": ["oauth_sessions", "stores", "activity_log"],
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "handleOAuthCallback",
       "file": "src/lib/shopify-oauth.server.ts",
-      "databaseTables": [
-        "oauth_sessions",
-        "stores",
-        "activity_log"
-      ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "databaseTables": ["oauth_sessions", "stores", "activity_log"],
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "verifyWebhookHmac",
       "file": "src/lib/shopify-webhooks.server.ts",
-      "databaseTables": [
-        "stores"
-      ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "databaseTables": ["stores"],
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "handleShopifyWebhooks",
       "file": "src/lib/shopify-webhooks.server.ts",
-      "databaseTables": [
-        "stores"
-      ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "databaseTables": ["stores"],
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "connectShopifyStore",
@@ -541,10 +311,7 @@
         "backup_resources",
         "migration_jobs"
       ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "beginShopifyOAuth",
@@ -557,10 +324,7 @@
         "backup_resources",
         "migration_jobs"
       ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "listStores",
@@ -573,10 +337,7 @@
         "backup_resources",
         "migration_jobs"
       ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "getStore",
@@ -589,10 +350,7 @@
         "backup_resources",
         "migration_jobs"
       ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "deleteStore",
@@ -605,10 +363,7 @@
         "backup_resources",
         "migration_jobs"
       ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "startBackup",
@@ -621,10 +376,7 @@
         "backup_resources",
         "migration_jobs"
       ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "stepBackupFn",
@@ -637,10 +389,7 @@
         "backup_resources",
         "migration_jobs"
       ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "listBackups",
@@ -653,10 +402,7 @@
         "backup_resources",
         "migration_jobs"
       ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "getBackup",
@@ -669,10 +415,7 @@
         "backup_resources",
         "migration_jobs"
       ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "listRecentActivity",
@@ -685,10 +428,7 @@
         "backup_resources",
         "migration_jobs"
       ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "dashboardSummary",
@@ -701,10 +441,7 @@
         "backup_resources",
         "migration_jobs"
       ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "generateRestorePlanFn",
@@ -717,10 +454,7 @@
         "backup_resources",
         "migration_jobs"
       ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "startRestoreFn",
@@ -733,10 +467,7 @@
         "backup_resources",
         "migration_jobs"
       ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "stepRestoreFn",
@@ -749,109 +480,73 @@
         "backup_resources",
         "migration_jobs"
       ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "encryptToken",
       "file": "src/lib/shopify.server.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "decryptToken",
       "file": "src/lib/shopify.server.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "normalizeShopDomain",
       "file": "src/lib/shopify.server.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "makeShopifyClient",
       "file": "src/lib/shopify.server.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "fetchShopInfo",
       "file": "src/lib/shopify.server.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "runWithConcurrency",
       "file": "src/lib/shopify.server.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "cn",
       "file": "src/lib/utils.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "handleValidationApi",
       "file": "src/lib/validation-api.server.ts",
       "databaseTables": [],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "handleVerifyStoreBApi",
       "file": "src/lib/verify-store-b-api.server.ts",
-      "databaseTables": [
-        "stores"
-      ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
+      "databaseTables": ["stores"],
+      "tags": ["utility", "server-function"]
     },
     {
       "name": "LogoMark",
       "file": "src/routes/index.tsx",
       "databaseTables": [],
-      "tags": [
-        "route-action"
-      ]
+      "tags": ["route-action"]
     },
     {
       "name": "StatusDot",
       "file": "src/routes/_authenticated/dashboard.tsx",
       "databaseTables": [],
-      "tags": [
-        "route-action"
-      ]
+      "tags": ["route-action"]
     }
   ],
   "files": [
@@ -869,76 +564,42 @@
     },
     {
       "file": "src/components/ui/accordion.tsx",
-      "imports": [
-        "react",
-        "@radix-ui/react-accordion",
-        "lucide-react",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "@radix-ui/react-accordion", "lucide-react", "@/lib/utils"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/alert-dialog.tsx",
-      "imports": [
-        "react",
-        "@radix-ui/react-alert-dialog",
-        "@/lib/utils",
-        "@/components/ui/button"
-      ],
+      "imports": ["react", "@radix-ui/react-alert-dialog", "@/lib/utils", "@/components/ui/button"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/alert.tsx",
-      "imports": [
-        "react",
-        "class-variance-authority",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "class-variance-authority", "@/lib/utils"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/aspect-ratio.tsx",
-      "imports": [
-        "@radix-ui/react-aspect-ratio"
-      ],
+      "imports": ["@radix-ui/react-aspect-ratio"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/avatar.tsx",
-      "imports": [
-        "react",
-        "@radix-ui/react-avatar",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "@radix-ui/react-avatar", "@/lib/utils"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/badge.tsx",
-      "imports": [
-        "react",
-        "class-variance-authority",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "class-variance-authority", "@/lib/utils"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/breadcrumb.tsx",
-      "imports": [
-        "react",
-        "@radix-ui/react-slot",
-        "lucide-react",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "@radix-ui/react-slot", "lucide-react", "@/lib/utils"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/button.tsx",
-      "imports": [
-        "react",
-        "@radix-ui/react-slot",
-        "class-variance-authority",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "@radix-ui/react-slot", "class-variance-authority", "@/lib/utils"],
       "databaseTables": []
     },
     {
@@ -954,10 +615,7 @@
     },
     {
       "file": "src/components/ui/card.tsx",
-      "imports": [
-        "react",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "@/lib/utils"],
       "databaseTables": []
     },
     {
@@ -973,28 +631,17 @@
     },
     {
       "file": "src/components/ui/chart.tsx",
-      "imports": [
-        "react",
-        "recharts",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "recharts", "@/lib/utils"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/checkbox.tsx",
-      "imports": [
-        "react",
-        "@radix-ui/react-checkbox",
-        "lucide-react",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "@radix-ui/react-checkbox", "lucide-react", "@/lib/utils"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/collapsible.tsx",
-      "imports": [
-        "@radix-ui/react-collapsible"
-      ],
+      "imports": ["@radix-ui/react-collapsible"],
       "databaseTables": []
     },
     {
@@ -1011,41 +658,22 @@
     },
     {
       "file": "src/components/ui/context-menu.tsx",
-      "imports": [
-        "react",
-        "@radix-ui/react-context-menu",
-        "lucide-react",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "@radix-ui/react-context-menu", "lucide-react", "@/lib/utils"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/dialog.tsx",
-      "imports": [
-        "react",
-        "@radix-ui/react-dialog",
-        "lucide-react",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "@radix-ui/react-dialog", "lucide-react", "@/lib/utils"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/drawer.tsx",
-      "imports": [
-        "react",
-        "vaul",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "vaul", "@/lib/utils"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/dropdown-menu.tsx",
-      "imports": [
-        "react",
-        "@radix-ui/react-dropdown-menu",
-        "lucide-react",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "@radix-ui/react-dropdown-menu", "lucide-react", "@/lib/utils"],
       "databaseTables": []
     },
     {
@@ -1062,49 +690,27 @@
     },
     {
       "file": "src/components/ui/hover-card.tsx",
-      "imports": [
-        "react",
-        "@radix-ui/react-hover-card",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "@radix-ui/react-hover-card", "@/lib/utils"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/input-otp.tsx",
-      "imports": [
-        "react",
-        "input-otp",
-        "lucide-react",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "input-otp", "lucide-react", "@/lib/utils"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/input.tsx",
-      "imports": [
-        "react",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "@/lib/utils"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/label.tsx",
-      "imports": [
-        "react",
-        "@radix-ui/react-label",
-        "class-variance-authority",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "@radix-ui/react-label", "class-variance-authority", "@/lib/utils"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/menubar.tsx",
-      "imports": [
-        "react",
-        "@radix-ui/react-menubar",
-        "lucide-react",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "@radix-ui/react-menubar", "lucide-react", "@/lib/utils"],
       "databaseTables": []
     },
     {
@@ -1120,77 +726,42 @@
     },
     {
       "file": "src/components/ui/pagination.tsx",
-      "imports": [
-        "react",
-        "lucide-react",
-        "@/lib/utils",
-        "@/components/ui/button"
-      ],
+      "imports": ["react", "lucide-react", "@/lib/utils", "@/components/ui/button"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/popover.tsx",
-      "imports": [
-        "react",
-        "@radix-ui/react-popover",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "@radix-ui/react-popover", "@/lib/utils"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/progress.tsx",
-      "imports": [
-        "react",
-        "@radix-ui/react-progress",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "@radix-ui/react-progress", "@/lib/utils"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/radio-group.tsx",
-      "imports": [
-        "react",
-        "@radix-ui/react-radio-group",
-        "lucide-react",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "@radix-ui/react-radio-group", "lucide-react", "@/lib/utils"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/resizable.tsx",
-      "imports": [
-        "lucide-react",
-        "react-resizable-panels",
-        "@/lib/utils"
-      ],
+      "imports": ["lucide-react", "react-resizable-panels", "@/lib/utils"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/scroll-area.tsx",
-      "imports": [
-        "react",
-        "@radix-ui/react-scroll-area",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "@radix-ui/react-scroll-area", "@/lib/utils"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/select.tsx",
-      "imports": [
-        "react",
-        "@radix-ui/react-select",
-        "lucide-react",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "@radix-ui/react-select", "lucide-react", "@/lib/utils"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/separator.tsx",
-      "imports": [
-        "react",
-        "@radix-ui/react-separator",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "@radix-ui/react-separator", "@/lib/utils"],
       "databaseTables": []
     },
     {
@@ -1224,59 +795,37 @@
     },
     {
       "file": "src/components/ui/skeleton.tsx",
-      "imports": [
-        "@/lib/utils"
-      ],
+      "imports": ["@/lib/utils"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/slider.tsx",
-      "imports": [
-        "react",
-        "@radix-ui/react-slider",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "@radix-ui/react-slider", "@/lib/utils"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/sonner.tsx",
-      "imports": [
-        "sonner"
-      ],
+      "imports": ["sonner"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/switch.tsx",
-      "imports": [
-        "react",
-        "@radix-ui/react-switch",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "@radix-ui/react-switch", "@/lib/utils"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/table.tsx",
-      "imports": [
-        "react",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "@/lib/utils"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/tabs.tsx",
-      "imports": [
-        "react",
-        "@radix-ui/react-tabs",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "@radix-ui/react-tabs", "@/lib/utils"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/textarea.tsx",
-      "imports": [
-        "react",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "@/lib/utils"],
       "databaseTables": []
     },
     {
@@ -1292,36 +841,22 @@
     },
     {
       "file": "src/components/ui/toggle.tsx",
-      "imports": [
-        "react",
-        "@radix-ui/react-toggle",
-        "class-variance-authority",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "@radix-ui/react-toggle", "class-variance-authority", "@/lib/utils"],
       "databaseTables": []
     },
     {
       "file": "src/components/ui/tooltip.tsx",
-      "imports": [
-        "react",
-        "@radix-ui/react-tooltip",
-        "@/lib/utils"
-      ],
+      "imports": ["react", "@radix-ui/react-tooltip", "@/lib/utils"],
       "databaseTables": []
     },
     {
       "file": "src/hooks/use-mobile.tsx",
-      "imports": [
-        "react"
-      ],
+      "imports": ["react"],
       "databaseTables": []
     },
     {
       "file": "src/integrations/supabase/auth-attacher.ts",
-      "imports": [
-        "@tanstack/react-start",
-        "./client"
-      ],
+      "imports": ["@tanstack/react-start", "./client"],
       "databaseTables": []
     },
     {
@@ -1336,19 +871,12 @@
     },
     {
       "file": "src/integrations/supabase/client.server.ts",
-      "imports": [
-        "@supabase/supabase-js",
-        "./types"
-      ],
+      "imports": ["@supabase/supabase-js", "./types"],
       "databaseTables": []
     },
     {
       "file": "src/integrations/supabase/client.ts",
-      "imports": [
-        "@supabase/supabase-js",
-        "./types",
-        "@/integrations/supabase/client"
-      ],
+      "imports": ["@supabase/supabase-js", "./types", "@/integrations/supabase/client"],
       "databaseTables": []
     },
     {
@@ -1358,13 +886,8 @@
     },
     {
       "file": "src/lib/auth-manager.server.ts",
-      "imports": [
-        "@supabase/supabase-js",
-        "./shopify.server"
-      ],
-      "databaseTables": [
-        "stores"
-      ]
+      "imports": ["@supabase/supabase-js", "./shopify.server"],
+      "databaseTables": ["stores"]
     },
     {
       "file": "src/lib/backup.server.ts",
@@ -1375,23 +898,12 @@
         "./resource-catalog",
         "node:crypto"
       ],
-      "databaseTables": [
-        "recovery_packages",
-        "backups",
-        "backup_resources",
-        "activity_log"
-      ]
+      "databaseTables": ["recovery_packages", "backups", "backup_resources", "activity_log"]
     },
     {
       "file": "src/lib/download.server.ts",
-      "imports": [
-        "@/integrations/supabase/client.server",
-        "jszip"
-      ],
-      "databaseTables": [
-        "backups",
-        "recovery_packages"
-      ]
+      "imports": ["@/integrations/supabase/client.server", "jszip"],
+      "databaseTables": ["backups", "recovery_packages"]
     },
     {
       "file": "src/lib/error-capture.ts",
@@ -1410,36 +922,18 @@
     },
     {
       "file": "src/lib/migration.server.ts",
-      "imports": [
-        "@supabase/supabase-js",
-        "./shopify.server",
-        "./auth-manager.server"
-      ],
-      "databaseTables": [
-        "backups",
-        "migration_jobs",
-        "activity_log",
-        "recovery_packages"
-      ]
+      "imports": ["@supabase/supabase-js", "./shopify.server", "./auth-manager.server"],
+      "databaseTables": ["backups", "migration_jobs", "activity_log", "recovery_packages"]
     },
     {
       "file": "src/lib/pipeline/id-mapper.ts",
-      "imports": [
-        "@supabase/supabase-js"
-      ],
-      "databaseTables": [
-        "id_mappings"
-      ]
+      "imports": ["@supabase/supabase-js"],
+      "databaseTables": ["id_mappings"]
     },
     {
       "file": "src/lib/queue.server.ts",
-      "imports": [
-        "@supabase/supabase-js"
-      ],
-      "databaseTables": [
-        "jobs",
-        "job_logs"
-      ]
+      "imports": ["@supabase/supabase-js"],
+      "databaseTables": ["jobs", "job_logs"]
     },
     {
       "file": "src/lib/resource-catalog.ts",
@@ -1448,40 +942,23 @@
     },
     {
       "file": "src/lib/sdk/migration/ai-assistant.ts",
-      "imports": [
-        "./intelligence"
-      ],
+      "imports": ["./intelligence"],
       "databaseTables": []
     },
     {
       "file": "src/lib/sdk/migration/archive.ts",
-      "imports": [
-        "@supabase/supabase-js",
-        "crypto",
-        "./types",
-        "./streams"
-      ],
+      "imports": ["@supabase/supabase-js", "crypto", "./types", "./streams"],
       "databaseTables": []
     },
     {
       "file": "src/lib/sdk/migration/cleaning.server.ts",
-      "imports": [
-        "@supabase/supabase-js",
-        "../../auth-manager.server"
-      ],
-      "databaseTables": [
-        "conflict_intelligence"
-      ]
+      "imports": ["@supabase/supabase-js", "../../auth-manager.server"],
+      "databaseTables": ["conflict_intelligence"]
     },
     {
       "file": "src/lib/sdk/migration/deep-compare.server.ts",
-      "imports": [
-        "@supabase/supabase-js",
-        "../../auth-manager.server"
-      ],
-      "databaseTables": [
-        "deep_compare_results"
-      ]
+      "imports": ["@supabase/supabase-js", "../../auth-manager.server"],
+      "databaseTables": ["deep_compare_results"]
     },
     {
       "file": "src/lib/sdk/migration/dependency-graph.ts",
@@ -1490,13 +967,8 @@
     },
     {
       "file": "src/lib/sdk/migration/differ.ts",
-      "imports": [
-        "./archive",
-        "./types"
-      ],
-      "databaseTables": [
-        "recovery_packages"
-      ]
+      "imports": ["./archive", "./types"],
+      "databaseTables": ["recovery_packages"]
     },
     {
       "file": "src/lib/sdk/migration/executor.ts",
@@ -1515,44 +987,22 @@
     },
     {
       "file": "src/lib/sdk/migration/preparation.server.ts",
-      "imports": [
-        "@supabase/supabase-js",
-        "../../auth-manager.server"
-      ],
-      "databaseTables": [
-        "store_preparations"
-      ]
+      "imports": ["@supabase/supabase-js", "../../auth-manager.server"],
+      "databaseTables": ["store_preparations"]
     },
     {
       "file": "src/lib/sdk/migration/repair.ts",
-      "imports": [
-        "@supabase/supabase-js",
-        "./types",
-        "./archive",
-        "crypto"
-      ],
-      "databaseTables": [
-        "recovery_packages"
-      ]
+      "imports": ["@supabase/supabase-js", "./types", "./archive", "crypto"],
+      "databaseTables": ["recovery_packages"]
     },
     {
       "file": "src/lib/sdk/migration/reports.server.ts",
-      "imports": [
-        "@supabase/supabase-js",
-        "./executor"
-      ],
-      "databaseTables": [
-        "reports",
-        "telemetry"
-      ]
+      "imports": ["@supabase/supabase-js", "./executor"],
+      "databaseTables": ["reports", "telemetry"]
     },
     {
       "file": "src/lib/sdk/migration/streams.ts",
-      "imports": [
-        "crypto",
-        "@supabase/supabase-js",
-        "stream"
-      ],
+      "imports": ["crypto", "@supabase/supabase-js", "stream"],
       "databaseTables": []
     },
     {
@@ -1562,31 +1012,22 @@
     },
     {
       "file": "src/lib/sdk/reports/generator.ts",
-      "imports": [
-        "../../resource-catalog"
-      ],
+      "imports": ["../../resource-catalog"],
       "databaseTables": []
     },
     {
       "file": "src/lib/sdk/shopify/bulk-operations.ts",
-      "imports": [
-        "./client"
-      ],
+      "imports": ["./client"],
       "databaseTables": []
     },
     {
       "file": "src/lib/sdk/shopify/client.ts",
-      "imports": [
-        "./rate-limiter",
-        "./bulk-operations"
-      ],
+      "imports": ["./rate-limiter", "./bulk-operations"],
       "databaseTables": []
     },
     {
       "file": "src/lib/sdk/shopify/discovery.ts",
-      "imports": [
-        "./client"
-      ],
+      "imports": ["./client"],
       "databaseTables": []
     },
     {
@@ -1596,63 +1037,37 @@
     },
     {
       "file": "src/lib/sdk/verification/binary-hash.ts",
-      "imports": [
-        "node:crypto"
-      ],
+      "imports": ["node:crypto"],
       "databaseTables": []
     },
     {
       "file": "src/lib/sdk/verification/certificate.ts",
-      "imports": [
-        "node:crypto",
-        "./compare"
-      ],
+      "imports": ["node:crypto", "./compare"],
       "databaseTables": []
     },
     {
       "file": "src/lib/sdk/verification/compare.ts",
-      "imports": [
-        "../../shopify.server"
-      ],
+      "imports": ["../../shopify.server"],
       "databaseTables": []
     },
     {
       "file": "src/lib/sdk/verification/theme-verifier.ts",
-      "imports": [
-        "./binary-hash"
-      ],
+      "imports": ["./binary-hash"],
       "databaseTables": []
     },
     {
       "file": "src/lib/shopify-oauth.server.ts",
-      "imports": [
-        "node:crypto",
-        "@supabase/supabase-js",
-        "./shopify.server"
-      ],
-      "databaseTables": [
-        "oauth_sessions",
-        "stores",
-        "activity_log"
-      ]
+      "imports": ["node:crypto", "@supabase/supabase-js", "./shopify.server"],
+      "databaseTables": ["oauth_sessions", "stores", "activity_log"]
     },
     {
       "file": "src/lib/shopify-webhooks.server.ts",
-      "imports": [
-        "node:crypto",
-        "@supabase/supabase-js"
-      ],
-      "databaseTables": [
-        "stores"
-      ]
+      "imports": ["node:crypto", "@supabase/supabase-js"],
+      "databaseTables": ["stores"]
     },
     {
       "file": "src/lib/shopify.functions.ts",
-      "imports": [
-        "@tanstack/react-start",
-        "zod",
-        "@/integrations/supabase/auth-middleware"
-      ],
+      "imports": ["@tanstack/react-start", "zod", "@/integrations/supabase/auth-middleware"],
       "databaseTables": [
         "stores",
         "activity_log",
@@ -1664,77 +1079,47 @@
     },
     {
       "file": "src/lib/shopify.server.ts",
-      "imports": [
-        "node:crypto"
-      ],
+      "imports": ["node:crypto"],
       "databaseTables": []
     },
     {
       "file": "src/lib/utils.ts",
-      "imports": [
-        "clsx",
-        "tailwind-merge"
-      ],
+      "imports": ["clsx", "tailwind-merge"],
       "databaseTables": []
     },
     {
       "file": "src/lib/validation-api.server.ts",
-      "imports": [
-        "./sdk/migration/reports.server",
-        "node:crypto",
-        "@supabase/supabase-js"
-      ],
+      "imports": ["./sdk/migration/reports.server", "node:crypto", "@supabase/supabase-js"],
       "databaseTables": []
     },
     {
       "file": "src/lib/verify-store-b-api.server.ts",
-      "imports": [
-        "@supabase/supabase-js",
-        "./shopify.server",
-        "./shopify-oauth.server"
-      ],
-      "databaseTables": [
-        "stores"
-      ]
+      "imports": ["@supabase/supabase-js", "./shopify.server", "./shopify-oauth.server"],
+      "databaseTables": ["stores"]
     },
     {
       "file": "src/lib/__tests__/encryption.test.ts",
-      "imports": [
-        "vitest"
-      ],
+      "imports": ["vitest"],
       "databaseTables": []
     },
     {
       "file": "src/lib/__tests__/id-mapper.test.ts",
-      "imports": [
-        "vitest",
-        "../pipeline/id-mapper"
-      ],
+      "imports": ["vitest", "../pipeline/id-mapper"],
       "databaseTables": []
     },
     {
       "file": "src/lib/__tests__/shopify-oauth.test.ts",
-      "imports": [
-        "vitest",
-        "node:crypto"
-      ],
+      "imports": ["vitest", "node:crypto"],
       "databaseTables": []
     },
     {
       "file": "src/lib/__tests__/shopify-webhooks.test.ts",
-      "imports": [
-        "vitest",
-        "node:crypto"
-      ],
+      "imports": ["vitest", "node:crypto"],
       "databaseTables": []
     },
     {
       "file": "src/router.tsx",
-      "imports": [
-        "@tanstack/react-query",
-        "@tanstack/react-router",
-        "./routeTree.gen"
-      ],
+      "imports": ["@tanstack/react-query", "@tanstack/react-router", "./routeTree.gen"],
       "databaseTables": []
     },
     {
@@ -1751,10 +1136,7 @@
     },
     {
       "file": "src/routes/index.tsx",
-      "imports": [
-        "@tanstack/react-router",
-        "lucide-react"
-      ],
+      "imports": ["@tanstack/react-router", "lucide-react"],
       "databaseTables": []
     },
     {
@@ -1836,9 +1218,7 @@
         "sonner",
         "../../components/ui/card"
       ],
-      "databaseTables": [
-        "reports"
-      ]
+      "databaseTables": ["reports"]
     },
     {
       "file": "src/routes/_authenticated/restore.tsx",
@@ -1945,12 +1325,7 @@
         "./lib/shopify-webhooks.server",
         "./lib/shopify-oauth.server"
       ],
-      "databaseTables": [
-        "stores",
-        "backups",
-        "migration_jobs",
-        "activity_log"
-      ]
+      "databaseTables": ["stores", "backups", "migration_jobs", "activity_log"]
     },
     {
       "file": "src/start.ts",
@@ -1976,10 +1351,7 @@
     },
     {
       "file": "src/routes/index.tsx",
-      "imports": [
-        "@tanstack/react-router",
-        "lucide-react"
-      ]
+      "imports": ["@tanstack/react-router", "lucide-react"]
     },
     {
       "file": "src/routes/_authenticated/backups.$backupId.tsx",
@@ -2146,5 +1518,5 @@
     "SHOPIFY_TOKEN_ENCRYPTION_KEY",
     "MAGIC_LINK_SECRET"
   ],
-  "last_generated": "2026-07-21T14:38:41.113Z"
+  "last_generated": "2026-07-21T14:38:42.791Z"
 }

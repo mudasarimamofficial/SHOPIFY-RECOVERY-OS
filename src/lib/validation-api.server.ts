@@ -1,6 +1,5 @@
 import { generateAndStoreReports } from "./sdk/migration/reports.server";
 import crypto from "node:crypto";
-import { createClient } from "@supabase/supabase-js";
 
 export async function handleValidationApi(_request: Request) {
   try {
@@ -14,7 +13,6 @@ export async function handleValidationApi(_request: Request) {
       });
     }
 
-    const supabase = createClient(supabaseUrl, supabaseKey);
     const fakeStoreDomain = "test-store-" + crypto.randomUUID().slice(0, 8) + ".myshopify.com";
     const backupId = "backup-" + crypto.randomUUID();
 

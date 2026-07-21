@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { encryptToken, SHOPIFY_API_VERSION } from "./shopify.server";
+import { SHOPIFY_API_VERSION } from "./shopify.server";
 import { AuthManager } from "./auth-manager.server";
 
 interface StoreRow {
@@ -307,9 +307,9 @@ export async function executeRestoreStep(admin: SupabaseClient, jobId: string) {
       };
       const nextProgress = Math.min(99, Math.round((nextItemIndex / plan.items.length) * 100));
       await admin
-      .from("migration_jobs")
-      .update({ progress: nextProgress, report: updatedReport })
-      .eq("id", jobId);
+        .from("migration_jobs")
+        .update({ progress: nextProgress, report: updatedReport })
+        .eq("id", jobId);
       return {
         done: false,
         progress: nextProgress,
@@ -366,7 +366,7 @@ export async function executeRestoreStep(admin: SupabaseClient, jobId: string) {
         idMapper,
         currentOffset,
         CHUNK_SIZE,
-        job.mode || plan.mode || "merge"
+        job.mode || plan.mode || "merge",
       );
       successCount = res.successCount;
       failureCount = res.failureCount;
@@ -374,12 +374,7 @@ export async function executeRestoreStep(admin: SupabaseClient, jobId: string) {
       totalItems = res.totalItems;
       processedCount = res.processedCount;
     } else {
-      console.log(`Skipped missing resource ${item.resource_type}`);
     }
-
-    console.log(
-      `Restore step ${item.resource_type}: ${successCount} success, ${failureCount} failed.`,
-    );
 
     const absoluteProcessed = currentOffset + processedCount;
     const hasMore = fileData && absoluteProcessed < totalItems;

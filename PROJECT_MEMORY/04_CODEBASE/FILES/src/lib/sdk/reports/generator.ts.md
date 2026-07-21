@@ -24,8 +24,10 @@ tags: ["source_index", "file_doc"]
 Verification Status: VERIFIED
 
 ## Purpose
+
 Canonical source module analyzed via AST indexer.
 
 ## Public API / Exports
+
 Exports mapped in project.index.json.
 Analyzed via AST parser.

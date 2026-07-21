@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 const backupsQuery = (fn: any) => queryOptions({ queryKey: ["backups"], queryFn: () => fn() });
 const storesQuery = (fn: any) => queryOptions({ queryKey: ["stores"], queryFn: () => fn() });
 
-export const Route = createFileRoute("/_authenticated/restore")({
+export const Route = createFileRoute("/_authenticated/migration")({
   component: RestorePage,
 });
 
@@ -92,7 +92,12 @@ function RestorePage() {
     setRestoreProgress(0);
     try {
       const { job_id } = await startJob({
-        data: { backup_id: plan.backup_id, target_store_id: plan.target_store_id, plan: plan, mode: migrationMode },
+        data: {
+          backup_id: plan.backup_id,
+          target_store_id: plan.target_store_id,
+          plan: plan,
+          mode: migrationMode,
+        },
       });
       setJobId(job_id);
 

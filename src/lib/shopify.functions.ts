@@ -188,7 +188,7 @@ export const stepBackupFn = createServerFn({ method: "POST" })
   .validator((v) => z.object({ backup_id: z.string().uuid() }).parse(v))
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { stepBackup } = await import("@/lib/backup.server");
+    const { stepBackup } = await import("@/lib/extraction.server");
 
     const { data: backup, error: backupErr } = await context.supabase
       .from("backups")
@@ -317,14 +317,25 @@ export const generateRestorePlanFn = createServerFn({ method: "POST" })
       );
     }
 
-    return await generateRestorePlan(supabaseAdmin, data.backup_id, store, data.selected_resources, data.mode);
+    return await generateRestorePlan(
+      supabaseAdmin,
+      data.backup_id,
+      store,
+      data.selected_resources,
+      data.mode,
+    );
   });
 
 export const startRestoreFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((v) =>
     z
-      .object({ backup_id: z.string().uuid(), target_store_id: z.string().uuid(), plan: z.any(), mode: z.string().optional() })
+      .object({
+        backup_id: z.string().uuid(),
+        target_store_id: z.string().uuid(),
+        plan: z.any(),
+        mode: z.string().optional(),
+      })
       .parse(v),
   )
   .handler(async ({ data, context }) => {
@@ -339,7 +350,7 @@ export const startRestoreFn = createServerFn({ method: "POST" })
         status: "running",
         progress: 0,
         plan: data.plan,
-        mode: data.mode || "merge"
+        mode: data.mode || "merge",
       } as any)
       .select("id")
       .single();

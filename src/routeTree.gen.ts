@@ -14,11 +14,11 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedConnectRouteImport } from './routes/_authenticated/connect'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedMigrationRouteImport } from './routes/_authenticated/migration'
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
-import { Route as AuthenticatedRestoreRouteImport } from './routes/_authenticated/restore'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
-import { Route as AuthenticatedBackupsIndexRouteImport } from './routes/_authenticated/backups.index'
-import { Route as AuthenticatedBackupsBackupIdRouteImport } from './routes/_authenticated/backups.$backupId'
+import { Route as AuthenticatedExtractionsIndexRouteImport } from './routes/_authenticated/extractions.index'
+import { Route as AuthenticatedExtractionsExtractionIdRouteImport } from './routes/_authenticated/extractions.$extractionId'
 import { Route as AuthenticatedRecoveryWizardRouteImport } from './routes/_authenticated/recovery/wizard'
 import { Route as AuthenticatedStoresIndexRouteImport } from './routes/_authenticated/stores.index'
 import { Route as AuthenticatedStoresStoreIdRouteImport } from './routes/_authenticated/stores.$storeId'
@@ -47,14 +47,14 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedMigrationRoute = AuthenticatedMigrationRouteImport.update({
+  id: '/migration',
+  path: '/migration',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
   id: '/reports',
   path: '/reports',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedRestoreRoute = AuthenticatedRestoreRouteImport.update({
-  id: '/restore',
-  path: '/restore',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
@@ -62,16 +62,16 @@ const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedBackupsIndexRoute =
-  AuthenticatedBackupsIndexRouteImport.update({
-    id: '/backups/',
-    path: '/backups/',
+const AuthenticatedExtractionsIndexRoute =
+  AuthenticatedExtractionsIndexRouteImport.update({
+    id: '/extractions/',
+    path: '/extractions/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedBackupsBackupIdRoute =
-  AuthenticatedBackupsBackupIdRouteImport.update({
-    id: '/backups/$backupId',
-    path: '/backups/$backupId',
+const AuthenticatedExtractionsExtractionIdRoute =
+  AuthenticatedExtractionsExtractionIdRouteImport.update({
+    id: '/extractions/$extractionId',
+    path: '/extractions/$extractionId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedRecoveryWizardRoute =
@@ -98,13 +98,13 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/connect': typeof AuthenticatedConnectRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/migration': typeof AuthenticatedMigrationRoute
   '/reports': typeof AuthenticatedReportsRoute
-  '/restore': typeof AuthenticatedRestoreRoute
   '/settings': typeof AuthenticatedSettingsRoute
-  '/backups/$backupId': typeof AuthenticatedBackupsBackupIdRoute
+  '/extractions/$extractionId': typeof AuthenticatedExtractionsExtractionIdRoute
   '/recovery/wizard': typeof AuthenticatedRecoveryWizardRoute
   '/stores/$storeId': typeof AuthenticatedStoresStoreIdRoute
-  '/backups/': typeof AuthenticatedBackupsIndexRoute
+  '/extractions/': typeof AuthenticatedExtractionsIndexRoute
   '/stores/': typeof AuthenticatedStoresIndexRoute
 }
 export interface FileRoutesByTo {
@@ -112,13 +112,13 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/connect': typeof AuthenticatedConnectRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/migration': typeof AuthenticatedMigrationRoute
   '/reports': typeof AuthenticatedReportsRoute
-  '/restore': typeof AuthenticatedRestoreRoute
   '/settings': typeof AuthenticatedSettingsRoute
-  '/backups/$backupId': typeof AuthenticatedBackupsBackupIdRoute
+  '/extractions/$extractionId': typeof AuthenticatedExtractionsExtractionIdRoute
   '/recovery/wizard': typeof AuthenticatedRecoveryWizardRoute
   '/stores/$storeId': typeof AuthenticatedStoresStoreIdRoute
-  '/backups': typeof AuthenticatedBackupsIndexRoute
+  '/extractions': typeof AuthenticatedExtractionsIndexRoute
   '/stores': typeof AuthenticatedStoresIndexRoute
 }
 export interface FileRoutesById {
@@ -128,13 +128,13 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/connect': typeof AuthenticatedConnectRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/migration': typeof AuthenticatedMigrationRoute
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
-  '/_authenticated/restore': typeof AuthenticatedRestoreRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
-  '/_authenticated/backups/$backupId': typeof AuthenticatedBackupsBackupIdRoute
+  '/_authenticated/extractions/$extractionId': typeof AuthenticatedExtractionsExtractionIdRoute
   '/_authenticated/recovery/wizard': typeof AuthenticatedRecoveryWizardRoute
   '/_authenticated/stores/$storeId': typeof AuthenticatedStoresStoreIdRoute
-  '/_authenticated/backups/': typeof AuthenticatedBackupsIndexRoute
+  '/_authenticated/extractions/': typeof AuthenticatedExtractionsIndexRoute
   '/_authenticated/stores/': typeof AuthenticatedStoresIndexRoute
 }
 export interface FileRouteTypes {
@@ -144,13 +144,13 @@ export interface FileRouteTypes {
     | '/auth'
     | '/connect'
     | '/dashboard'
+    | '/migration'
     | '/reports'
-    | '/restore'
     | '/settings'
-    | '/backups/$backupId'
+    | '/extractions/$extractionId'
     | '/recovery/wizard'
     | '/stores/$storeId'
-    | '/backups/'
+    | '/extractions/'
     | '/stores/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -158,13 +158,13 @@ export interface FileRouteTypes {
     | '/auth'
     | '/connect'
     | '/dashboard'
+    | '/migration'
     | '/reports'
-    | '/restore'
     | '/settings'
-    | '/backups/$backupId'
+    | '/extractions/$extractionId'
     | '/recovery/wizard'
     | '/stores/$storeId'
-    | '/backups'
+    | '/extractions'
     | '/stores'
   id:
     | '__root__'
@@ -173,13 +173,13 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/connect'
     | '/_authenticated/dashboard'
+    | '/_authenticated/migration'
     | '/_authenticated/reports'
-    | '/_authenticated/restore'
     | '/_authenticated/settings'
-    | '/_authenticated/backups/$backupId'
+    | '/_authenticated/extractions/$extractionId'
     | '/_authenticated/recovery/wizard'
     | '/_authenticated/stores/$storeId'
-    | '/_authenticated/backups/'
+    | '/_authenticated/extractions/'
     | '/_authenticated/stores/'
   fileRoutesById: FileRoutesById
 }
@@ -226,18 +226,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/migration': {
+      id: '/_authenticated/migration'
+      path: '/migration'
+      fullPath: '/migration'
+      preLoaderRoute: typeof AuthenticatedMigrationRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/reports': {
       id: '/_authenticated/reports'
       path: '/reports'
       fullPath: '/reports'
       preLoaderRoute: typeof AuthenticatedReportsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/restore': {
-      id: '/_authenticated/restore'
-      path: '/restore'
-      fullPath: '/restore'
-      preLoaderRoute: typeof AuthenticatedRestoreRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/settings': {
@@ -247,18 +247,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/backups/': {
-      id: '/_authenticated/backups/'
-      path: '/backups'
-      fullPath: '/backups/'
-      preLoaderRoute: typeof AuthenticatedBackupsIndexRouteImport
+    '/_authenticated/extractions/': {
+      id: '/_authenticated/extractions/'
+      path: '/extractions'
+      fullPath: '/extractions/'
+      preLoaderRoute: typeof AuthenticatedExtractionsIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/backups/$backupId': {
-      id: '/_authenticated/backups/$backupId'
-      path: '/backups/$backupId'
-      fullPath: '/backups/$backupId'
-      preLoaderRoute: typeof AuthenticatedBackupsBackupIdRouteImport
+    '/_authenticated/extractions/$extractionId': {
+      id: '/_authenticated/extractions/$extractionId'
+      path: '/extractions/$extractionId'
+      fullPath: '/extractions/$extractionId'
+      preLoaderRoute: typeof AuthenticatedExtractionsExtractionIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/recovery/wizard': {
@@ -288,26 +288,27 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedConnectRoute: typeof AuthenticatedConnectRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedMigrationRoute: typeof AuthenticatedMigrationRoute
   AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
-  AuthenticatedRestoreRoute: typeof AuthenticatedRestoreRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
-  AuthenticatedBackupsBackupIdRoute: typeof AuthenticatedBackupsBackupIdRoute
+  AuthenticatedExtractionsExtractionIdRoute: typeof AuthenticatedExtractionsExtractionIdRoute
   AuthenticatedRecoveryWizardRoute: typeof AuthenticatedRecoveryWizardRoute
   AuthenticatedStoresStoreIdRoute: typeof AuthenticatedStoresStoreIdRoute
-  AuthenticatedBackupsIndexRoute: typeof AuthenticatedBackupsIndexRoute
+  AuthenticatedExtractionsIndexRoute: typeof AuthenticatedExtractionsIndexRoute
   AuthenticatedStoresIndexRoute: typeof AuthenticatedStoresIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedConnectRoute: AuthenticatedConnectRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedMigrationRoute: AuthenticatedMigrationRoute,
   AuthenticatedReportsRoute: AuthenticatedReportsRoute,
-  AuthenticatedRestoreRoute: AuthenticatedRestoreRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
-  AuthenticatedBackupsBackupIdRoute: AuthenticatedBackupsBackupIdRoute,
+  AuthenticatedExtractionsExtractionIdRoute:
+    AuthenticatedExtractionsExtractionIdRoute,
   AuthenticatedRecoveryWizardRoute: AuthenticatedRecoveryWizardRoute,
   AuthenticatedStoresStoreIdRoute: AuthenticatedStoresStoreIdRoute,
-  AuthenticatedBackupsIndexRoute: AuthenticatedBackupsIndexRoute,
+  AuthenticatedExtractionsIndexRoute: AuthenticatedExtractionsIndexRoute,
   AuthenticatedStoresIndexRoute: AuthenticatedStoresIndexRoute,
 }
 

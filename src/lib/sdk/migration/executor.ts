@@ -547,7 +547,7 @@ async function restoreCustomer(
         const existingId = searchRes?.customers?.edges?.[0]?.node?.id;
         if (existingId) {
           await idMapper.set(node.id, existingId, "Customer");
-          console.log(`Mapped existing customer ${node.email} -> ${existingId}`);
+
           return;
         }
       }

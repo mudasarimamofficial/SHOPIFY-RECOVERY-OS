@@ -7,7 +7,7 @@ import { StatusDot } from "./dashboard";
 import { formatBytes, formatRelative } from "@/lib/format";
 import { Archive } from "lucide-react";
 
-export const Route = createFileRoute("/_authenticated/backups/")({
+export const Route = createFileRoute("/_authenticated/extractions/")({
   component: BackupsPage,
 });
 
