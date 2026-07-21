@@ -55,9 +55,18 @@ export default {
       const url = new URL(request.url);
 
       // Intercept Shopify Webhooks
-
       if (url.pathname.startsWith("/api/webhooks")) {
         return await handleShopifyWebhooks(request);
+      }
+
+      if (url.pathname === "/api/validation") {
+        const { handleValidationApi } = await import("./lib/validation-api.server");
+        return await handleValidationApi(request);
+      }
+
+      if (url.pathname === "/api/verify-store-b") {
+        const { handleVerifyStoreBApi } = await import("./lib/verify-store-b-api.server");
+        return await handleVerifyStoreBApi(request);
       }
 
       if (url.pathname.startsWith("/api/download/")) {
