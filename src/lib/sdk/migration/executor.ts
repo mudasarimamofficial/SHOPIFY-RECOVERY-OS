@@ -3,7 +3,7 @@ import { IdMapper } from "../../pipeline/id-mapper";
 
 export type ErrorClassification =
   | "Shopify Limitation"
-  | "Permission Issue"
+  | "Permission Limitation"
   | "Rate Limit"
   | "Network Failure"
   | "API Change"
@@ -25,7 +25,11 @@ export function classifyShopifyError(e: any): ErrorClassification {
   const msg = (e.message || String(e)).toLowerCase();
 
   // Conflict Intelligence
-  if (msg.includes("path has already been taken") || msg.includes("already taken") || msg.includes("has already been taken")) {
+  if (
+    msg.includes("path has already been taken") ||
+    msg.includes("already taken") ||
+    msg.includes("has already been taken")
+  ) {
     return "Already Exists";
   }
   if (msg.includes("must be unique") || msg.includes("already exists")) {
@@ -37,7 +41,7 @@ export function classifyShopifyError(e: any): ErrorClassification {
   if (msg.includes("permission issue") || msg.includes("configuration issue"))
     return "Configuration Issue";
   if (msg.includes("current implementation bug")) return "Current Implementation Bug";
-  
+
   if (msg.includes("unsupported endpoint") || msg.includes("404") || msg.includes("not found"))
     return "Unsupported Endpoint";
   if (msg.includes("429") || msg.includes("rate limit") || msg.includes("throttled"))
@@ -48,7 +52,7 @@ export function classifyShopifyError(e: any): ErrorClassification {
     msg.includes("access denied") ||
     msg.includes("scope")
   )
-    return "Permission Issue";
+    return "Permission Limitation";
   if (
     msg.includes("network") ||
     msg.includes("econnrefused") ||
@@ -57,7 +61,7 @@ export function classifyShopifyError(e: any): ErrorClassification {
   )
     return "Network Failure";
   if (msg.includes("deprecated")) return "API Change";
-  
+
   // Strict Corruption Detection
   if (msg.includes("invalid") || msg.includes("malformed") || msg.includes("json"))
     return "Data Corruption";
@@ -69,7 +73,13 @@ export function classifyShopifyError(e: any): ErrorClassification {
 import { Readable } from "node:stream";
 import readline from "node:readline";
 
-async function parseChunkFromBlob(blob: Blob | ArrayBuffer, baseResource: string, resourceType: string, offset: number, limit: number) {
+async function parseChunkFromBlob(
+  blob: Blob | ArrayBuffer,
+  baseResource: string,
+  resourceType: string,
+  offset: number,
+  limit: number,
+) {
   let items: any[] = [];
   let totalItems = 0;
 
@@ -97,33 +107,33 @@ async function parseChunkFromBlob(blob: Blob | ArrayBuffer, baseResource: string
     for await (const line of rl) {
       if (!line.trim()) continue;
       const item = JSON.parse(line);
-      
+
       if (item.id && item.id.includes("ProductVariant")) {
-         if (currentProductGroup && currentProductGroup.product.id === item.__parentId) {
-             currentProductGroup.variants.push(item);
-         }
+        if (currentProductGroup && currentProductGroup.product.id === item.__parentId) {
+          currentProductGroup.variants.push(item);
+        }
       } else if (item.id && item.id.includes("Product")) {
-         if (currentProductGroup) {
-             totalItems++;
-             if (totalItems - 1 >= offset && items.length < limit) {
-                 items.push(currentProductGroup);
-             }
-         }
-         currentProductGroup = { product: item, variants: [] };
+        if (currentProductGroup) {
+          totalItems++;
+          if (totalItems - 1 >= offset && items.length < limit) {
+            items.push(currentProductGroup);
+          }
+        }
+        currentProductGroup = { product: item, variants: [] };
       }
     }
     if (currentProductGroup) {
-       totalItems++;
-       if (totalItems - 1 >= offset && items.length < limit) {
-           items.push(currentProductGroup);
-       }
+      totalItems++;
+      if (totalItems - 1 >= offset && items.length < limit) {
+        items.push(currentProductGroup);
+      }
     }
   } else {
     for await (const line of rl) {
       if (!line.trim()) continue;
       totalItems++;
       if (totalItems - 1 >= offset && items.length < limit) {
-         items.push(JSON.parse(line));
+        items.push(JSON.parse(line));
       }
     }
   }
@@ -142,7 +152,13 @@ export async function executeResourceRestore(
   limit = 150,
 ) {
   const baseResource = resourceType.replace("_bulk", "");
-  const { items, totalItems } = await parseChunkFromBlob(fileData, baseResource, resourceType, offset, limit);
+  const { items, totalItems } = await parseChunkFromBlob(
+    fileData,
+    baseResource,
+    resourceType,
+    offset,
+    limit,
+  );
   const chunk = items;
 
   let successCount = 0;
@@ -355,9 +371,11 @@ async function restoreProduct(
       taxable: v.taxable ?? true,
       barcode: v.barcode,
       compareAtPrice: v.compareAtPrice,
-      requiresShipping: v.requiresShipping ?? true,
+      requiresShipping: v.inventoryItem?.requiresShipping ?? true,
       inventoryItem: {
-        measurement: v.inventoryItem?.measurement || { weight: { value: v.weight, unit: v.weightUnit } },
+        measurement: v.inventoryItem?.measurement || {
+          weight: { value: v.weight, unit: v.weightUnit },
+        },
       },
     };
 
@@ -781,7 +799,10 @@ async function restoreMetaobjectDefinition(client: ShopifyClient, item: any) {
     name: node.name,
     type: node.type,
     description: node.description,
-    access: { admin: node.access?.admin || "MERCHANT_READ_WRITE", storefront: node.access?.storefront || "NONE" },
+    access: {
+      admin: node.access?.admin || "MERCHANT_READ_WRITE",
+      storefront: node.access?.storefront || "NONE",
+    },
     fieldDefinitions: (node.fieldDefinitions || []).map((fd: any) => ({
       key: fd.key,
       name: fd.name,

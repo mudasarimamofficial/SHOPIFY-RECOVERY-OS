@@ -2,8 +2,11 @@ import { RESOURCE_CATALOG } from "../../resource-catalog";
 import type { RecoveryWizardPlan } from "../recovery/intelligence";
 
 export interface RecoveryReportContext {
-  storeDomain: string;
+  storeDomain: string; // Store A
+  targetStoreDomain?: string; // Store B
   backupId: string;
+  sourceAppClientId?: string; // Imam Migration OS Store A Client ID
+  targetAppClientId?: string; // Imam Migration OS Store B Client ID
   failedResources: Array<{ type: string; reason: string; items: string[] }>;
   manualResources: RecoveryWizardPlan[];
 }
@@ -12,8 +15,11 @@ export function generateMerchantRecoveryBookMarkdown(ctx: RecoveryReportContext)
   const timestamp = new Date().toISOString();
 
   let markdown = `# Merchant Recovery Book\n\n`;
-  markdown += `**Store:** ${ctx.storeDomain}\n`;
+  markdown += `**Source Store (A):** ${ctx.storeDomain}\n`;
+  if (ctx.targetStoreDomain) markdown += `**Target Store (B):** ${ctx.targetStoreDomain}\n`;
   markdown += `**Backup ID:** ${ctx.backupId}\n`;
+  if (ctx.sourceAppClientId) markdown += `**Source App Client ID:** ${ctx.sourceAppClientId}\n`;
+  if (ctx.targetAppClientId) markdown += `**Target App Client ID:** ${ctx.targetAppClientId}\n`;
   markdown += `**Generated At:** ${timestamp}\n\n`;
 
   markdown += `## Executive Summary\n`;
@@ -22,12 +28,12 @@ export function generateMerchantRecoveryBookMarkdown(ctx: RecoveryReportContext)
   if (ctx.failedResources.length > 0) {
     markdown += `## ⚠️ Shopify Limitation & Conflict Report\n`;
     markdown += `The following resources encountered unrecoverable conflicts or limitations:\n\n`;
-    ctx.failedResources.forEach(failure => {
+    ctx.failedResources.forEach((failure) => {
       markdown += `### ${failure.type}\n`;
       markdown += `- **Reason:** ${failure.reason}\n`;
       markdown += `- **Affected Items:** ${failure.items.length}\n`;
       markdown += "```text\n";
-      failure.items.forEach(item => {
+      failure.items.forEach((item) => {
         markdown += `${item}\n`;
       });
       markdown += "```\n\n";
@@ -39,16 +45,16 @@ export function generateMerchantRecoveryBookMarkdown(ctx: RecoveryReportContext)
     markdown += `*No manual recovery required! All configurations were restored automatically.*\n`;
   }
 
-  ctx.manualResources.forEach(plan => {
+  ctx.manualResources.forEach((plan) => {
     markdown += `### ${plan.resourceType.toUpperCase()}\n`;
     markdown += `- **Estimated Time:** ${plan.estimatedTimeMinutes} minutes\n`;
     markdown += `- **Difficulty:** ${plan.difficulty}\n\n`;
-    
+
     markdown += `#### Step-by-Step Instructions\n`;
     plan.steps.forEach((step, idx) => {
       markdown += `${idx + 1}. **${step.title}**: ${step.instruction}\n`;
     });
-    
+
     if (plan.extractedData) {
       markdown += `\n#### Extracted Configuration\n`;
       markdown += "```json\n";
@@ -59,7 +65,7 @@ export function generateMerchantRecoveryBookMarkdown(ctx: RecoveryReportContext)
   });
 
   markdown += `## 📜 Recovery Certificate\n`;
-  markdown += `This confirms the generation of the intelligent recovery sequence. All configurations not listed above were successfully recovered by Imam Recovery OS.\n`;
+  markdown += `This confirms the generation of the intelligent recovery sequence. All configurations not listed above were successfully recovered by Imam Migration OS.\n`;
 
   return markdown;
 }

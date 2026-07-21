@@ -41,7 +41,7 @@ function Landing() {
       <header className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
         <div className="flex items-center gap-2">
           <LogoMark />
-          <span className="text-sm font-semibold tracking-tight">Imam Recovery OS</span>
+          <span className="text-sm font-semibold tracking-tight">Imam Migration OS</span>
           <span className="mono ml-2 rounded-md border border-border bg-surface px-1.5 py-0.5 text-[10px] uppercase tracking-widest text-muted-foreground">
             for Shopify
           </span>

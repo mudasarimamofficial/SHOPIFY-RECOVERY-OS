@@ -136,21 +136,16 @@ function BackupDetail() {
 
           <div className="surface-panel p-6">
             <div className="mono text-[11px] uppercase tracking-widest text-info">
-              Manual reconnect required
+              Post-Recovery Reports
             </div>
             <p className="mt-2 text-sm text-muted-foreground">
-              Imam Recovery OS can not automate these — they are enforced by Shopify or by third
-              parties. A restore report will list each item so nothing gets missed.
+              Your recovery reports, including the full Merchant Recovery Book and conflict logs,
+              have been generated.
             </p>
-            <div className="mt-4 grid gap-1.5 sm:grid-cols-2">
-              {RESOURCE_CATALOG.filter((r) => r.recoverability === "manual").map((r) => (
-                <div
-                  key={r.key}
-                  className="rounded-md border border-border/60 bg-elevated/40 px-3 py-2 text-sm text-foreground/85"
-                >
-                  {r.label}
-                </div>
-              ))}
+            <div className="mt-4 flex flex-col gap-2">
+              <Link to="/reports" className="text-primary hover:underline font-medium text-sm">
+                View All Reports &rarr;
+              </Link>
             </div>
           </div>
         </div>

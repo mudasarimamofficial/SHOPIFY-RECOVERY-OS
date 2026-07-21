@@ -1,4 +1,4 @@
-import { explainShopifyLimitation } from "../src/lib/sdk/recovery/ai-assistant";
+import { explainShopifyLimitation } from "../src/lib/sdk/migration/ai-assistant";
 
 async function main() {
   console.log("Testing NVIDIA AI Assistant Integration...");
@@ -8,8 +8,8 @@ async function main() {
     extractedConfiguration: {
       supportedDigitalWallets: ["APPLE_PAY", "GOOGLE_PAY"],
       acceptedCardBrands: ["VISA", "MASTERCARD"],
-      customManualPaymentMethods: [{ name: "Bank Transfer" }]
-    }
+      customManualPaymentMethods: [{ name: "Bank Transfer" }],
+    },
   });
 
   console.log("AI Assistant Result:");

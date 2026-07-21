@@ -3,7 +3,7 @@ id: START-001
 title: AI Handover & Onboarding Guide
 status: ACTIVE
 importance: CRITICAL
-owner: Imam Recovery OS
+owner: Imam Migration OS
 last_verified: 2026-07-18
 verification_method: MANUAL
 related: ["START-002", "START-003"]
@@ -26,7 +26,7 @@ Confidence: HIGH
 
 ## Purpose
 
-This document serves as the **mandatory first step** for any future AI assistant (Claude Code, Cursor, Antigravity IDE, Windsurf, etc.) working on Imam Recovery OS.
+This document serves as the **mandatory first step** for any future AI assistant (Claude Code, Cursor, Antigravity IDE, Windsurf, etc.) working on Imam Migration OS.
 
 ## 🛑 AI ONBOARDING RULES (READ THIS FIRST) 🛑
 

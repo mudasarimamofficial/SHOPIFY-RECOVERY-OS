@@ -3,7 +3,7 @@ id: ARCH-002
 title: Restore Engine Architecture & Call Graph
 status: ACTIVE
 importance: CRITICAL
-owner: Imam Recovery OS
+owner: Imam Migration OS
 last_verified: 2026-07-18
 verification_method: MANUAL
 related: ["ARCH-001", "DB-001"]

@@ -3,7 +3,7 @@ id: START-002
 title: Current Project Status
 status: ACTIVE
 importance: HIGH
-owner: Imam Recovery OS
+owner: Imam Migration OS
 last_verified: 2026-07-19
 verification_method: LIVE_BROWSER_E2E
 related: ["START-003"]

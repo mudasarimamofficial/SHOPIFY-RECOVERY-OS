@@ -4,10 +4,10 @@
 //  - partial   : metadata only or subject to Shopify restrictions
 //  - manual    : requires manual reconnect / re-auth outside Shopify
 //  - unavail   : not accessible via Admin API
-export type Recoverability = 
-  | "full" 
-  | "partial" 
-  | "manual" 
+export type Recoverability =
+  | "full"
+  | "partial"
+  | "manual"
   | "unavail"
   | "Shopify Limitation"
   | "External Provider"
@@ -66,7 +66,13 @@ export const RESOURCE_CATALOG: ResourceSpec[] = [
     recoverability: "full",
     scanned: true,
   },
-  { key: "files", label: "Files (images, video, docs)", group: "Content", recoverability: "partial", note: "File uploads require multipart HTTP boundary extraction which cannot be blindly verified without live auth." },
+  {
+    key: "files",
+    label: "Files (images, video, docs)",
+    group: "Content",
+    recoverability: "partial",
+    note: "File uploads require multipart HTTP boundary extraction which cannot be blindly verified without live auth.",
+  },
 
   // Customers & Orders
   {
@@ -106,7 +112,13 @@ export const RESOURCE_CATALOG: ResourceSpec[] = [
     recoverability: "full",
     scanned: true,
   },
-  { key: "metaobjects", label: "Metaobjects", group: "Metafields", recoverability: "full", scanned: true },
+  {
+    key: "metaobjects",
+    label: "Metaobjects",
+    group: "Metafields",
+    recoverability: "full",
+    scanned: true,
+  },
 
   // Commerce config
   {
@@ -124,7 +136,14 @@ export const RESOURCE_CATALOG: ResourceSpec[] = [
     scanned: true,
     note: "Shipping Zones contain deep geographical dependencies requiring active sandbox validation.",
   },
-  { key: "markets", label: "Markets configuration", group: "Commerce", recoverability: "Shopify Limitation", scanned: true, note: "Live API verification required." },
+  {
+    key: "markets",
+    label: "Markets configuration",
+    group: "Commerce",
+    recoverability: "Shopify Limitation",
+    scanned: true,
+    note: "Live API verification required.",
+  },
   {
     key: "translations",
     label: "Translations & locales",
@@ -132,7 +151,13 @@ export const RESOURCE_CATALOG: ResourceSpec[] = [
     recoverability: "partial",
     note: "Store-level multi-locale setup requires live authorization.",
   },
-  { key: "selling_plans", label: "Selling plans", group: "Commerce", recoverability: "partial", note: "Shopify only allows the owning app to create selling plans." },
+  {
+    key: "selling_plans",
+    label: "Selling plans",
+    group: "Commerce",
+    recoverability: "partial",
+    note: "Shopify only allows the owning app to create selling plans.",
+  },
 
   // Store settings
   {
@@ -142,7 +167,13 @@ export const RESOURCE_CATALOG: ResourceSpec[] = [
     recoverability: "full",
     scanned: true,
   },
-  { key: "webhooks", label: "Webhooks", group: "Settings", recoverability: "partial", note: "App-specific endpoints cannot be fully migrated without re-authentication." },
+  {
+    key: "webhooks",
+    label: "Webhooks",
+    group: "Settings",
+    recoverability: "partial",
+    note: "App-specific endpoints cannot be fully migrated without re-authentication.",
+  },
 
   // Manual reconnect
   {
@@ -151,8 +182,19 @@ export const RESOURCE_CATALOG: ResourceSpec[] = [
     group: "External",
     recoverability: "External Provider",
   },
-  { key: "domains", label: "Custom domains & DNS", group: "External", recoverability: "Configuration Required", scanned: true },
-  { key: "pixels", label: "Meta Pixel ownership", group: "External", recoverability: "External Provider" },
+  {
+    key: "domains",
+    label: "Custom domains & DNS",
+    group: "External",
+    recoverability: "Configuration Required",
+    scanned: true,
+  },
+  {
+    key: "pixels",
+    label: "Meta Pixel ownership",
+    group: "External",
+    recoverability: "External Provider",
+  },
   {
     key: "google_analytics",
     label: "Google Analytics / Merchant Center",

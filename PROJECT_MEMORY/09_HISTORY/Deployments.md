@@ -3,7 +3,7 @@ id: DOC-CWFZL7
 title: Deployments
 status: ACTIVE
 importance: HIGH
-owner: Imam Recovery OS
+owner: Imam Migration OS
 last_verified: 2026-07-18
 verification_method: MANUAL
 related: []

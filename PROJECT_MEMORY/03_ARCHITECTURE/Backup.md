@@ -3,7 +3,7 @@ id: ARCH-001
 title: Backup Engine Architecture & Call Graph
 status: ACTIVE
 importance: CRITICAL
-owner: Imam Recovery OS
+owner: Imam Migration OS
 last_verified: 2026-07-18
 verification_method: MANUAL
 related: ["ARCH-002", "DB-001"]

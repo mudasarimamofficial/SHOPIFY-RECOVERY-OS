@@ -3,7 +3,7 @@ id: ADR-0002
 title: Verified Migration Gate and Server-Derived Execution Plans
 status: ACCEPTED
 importance: CRITICAL
-owner: Imam Recovery OS
+owner: Imam Migration OS
 last_verified: 2026-07-20
 verification_method: CODE_REVIEW
 related: ["BUG-0001", "BUG-0002"]

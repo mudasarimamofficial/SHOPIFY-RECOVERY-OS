@@ -1,4 +1,4 @@
-import { generateAndStoreReports } from "./sdk/recovery/reports.server";
+import { generateAndStoreReports } from "./sdk/migration/reports.server";
 import crypto from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 

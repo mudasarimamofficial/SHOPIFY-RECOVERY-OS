@@ -3,7 +3,7 @@ id: FILE-H937AM
 title: encryption.test.ts
 status: ACTIVE
 importance: HIGH
-owner: Imam Recovery OS
+owner: Imam Migration OS
 last_verified: 2026-07-20
 verification_method: AUTOMATED_AST
 related: []

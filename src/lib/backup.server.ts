@@ -52,9 +52,10 @@ async function uploadToStorage(admin: SupabaseClient, path: string, data: string
   if (data instanceof Blob) {
     // Supabase bucket strictly rejects application/jsonl (which Shopify returns for Bulk API).
     // We forcefully coerce the blob's native type so the Supabase SDK doesn't override our contentType header.
-    payload = data.type === "application/jsonl" || data.type === ""
-      ? new Blob([data], { type: "application/octet-stream" })
-      : data;
+    payload =
+      data.type === "application/jsonl" || data.type === ""
+        ? new Blob([data], { type: "application/octet-stream" })
+        : data;
   } else {
     payload = typeof data === "string" ? Buffer.from(data, "utf8") : data;
     hash = createHash("sha256").update(payload).digest("hex");
@@ -67,13 +68,20 @@ async function uploadToStorage(admin: SupabaseClient, path: string, data: string
 
   const executionTime = Math.round(performance.now() - startTime);
   const size = payload instanceof Blob ? payload.size : payload.length;
-  console.log(`[FORENSIC-STORAGE] PATH: ${path} | SIZE: ${size}b | TIME: ${executionTime}ms | BLOB: ${payload instanceof Blob} | SUCCESS: ${!error}`);
+  console.log(
+    `[FORENSIC-STORAGE] PATH: ${path} | SIZE: ${size}b | TIME: ${executionTime}ms | BLOB: ${payload instanceof Blob} | SUCCESS: ${!error}`,
+  );
 
   if (error) throw new Error(`Storage upload failed: ${error.message}`);
   return hash;
 }
 
-async function runRestStage(client: ShopifyClient, stageKey: string, admin?: SupabaseClient, backupId?: string) {
+async function runRestStage(
+  client: ShopifyClient,
+  stageKey: string,
+  admin?: SupabaseClient,
+  backupId?: string,
+) {
   switch (stageKey) {
     case "shop":
       return { count: 1, data: await fetchShopInfo(client) };
@@ -98,27 +106,46 @@ async function runRestStage(client: ShopifyClient, stageKey: string, admin?: Sup
       return { count: policies.length, data: policies };
     case "metafield_definitions": {
       const allMetafields = [];
-      const ownerTypes = ["PRODUCT", "COLLECTION", "CUSTOMER", "ORDER", "PAGE", "BLOG", "ARTICLE", "SHOP", "COMPANY", "LOCATION", "PRODUCTVARIANT"];
+      const ownerTypes = [
+        "PRODUCT",
+        "COLLECTION",
+        "CUSTOMER",
+        "ORDER",
+        "PAGE",
+        "BLOG",
+        "ARTICLE",
+        "SHOP",
+        "COMPANY",
+        "LOCATION",
+        "PRODUCTVARIANT",
+      ];
       for (const owner of ownerTypes) {
-        const queryBuilder = (cursor: string | null) => `{ metafieldDefinitions(first: 250, ownerType: ${owner}${cursor ? `, after: "${cursor}"` : ""}) { pageInfo { hasNextPage endCursor } edges { node { id name namespace key description type validationStatus validations { name value } } } } }`;
+        const queryBuilder = (cursor: string | null) =>
+          `{ metafieldDefinitions(first: 250, ownerType: ${owner}${cursor ? `, after: "${cursor}"` : ""}) { pageInfo { hasNextPage endCursor } edges { node { id name namespace key description type validationStatus validations { name value } } } } }`;
         const mfs = await client.paginateGraphQL(queryBuilder, ["metafieldDefinitions"]);
         allMetafields.push(...mfs);
       }
       return { count: allMetafields.length, data: allMetafields };
     }
     case "metaobject_definitions": {
-      const queryBuilder = (cursor: string | null) => `{ metaobjectDefinitions(first: 250${cursor ? `, after: "${cursor}"` : ""}) { pageInfo { hasNextPage endCursor } edges { node { id type name description access { admin store } capabilities { publishable { enabled } translatable { enabled } } fieldDefinitions { key name type required description validations { name value } } } } } }`;
+      const queryBuilder = (cursor: string | null) =>
+        `{ metaobjectDefinitions(first: 250${cursor ? `, after: "${cursor}"` : ""}) { pageInfo { hasNextPage endCursor } edges { node { id type name description access { admin store } capabilities { publishable { enabled } translatable { enabled } } fieldDefinitions { key name type required description validations { name value } } } } } }`;
       const allDefs = await client.paginateGraphQL(queryBuilder, ["metaobjectDefinitions"]);
       return { count: allDefs.length, data: allDefs };
     }
     case "metaobjects": {
-      if (!admin || !backupId) throw new Error("Metaobjects requires admin and backupId to load definitions");
-      const { data: fileData, error } = await admin.storage.from("recovery_packages").download(`${backupId}/metaobject_definitions.json`);
-      if (error || !fileData) throw new Error("Could not load metaobject_definitions for metaobjects stage");
+      if (!admin || !backupId)
+        throw new Error("Metaobjects requires admin and backupId to load definitions");
+      const { data: fileData, error } = await admin.storage
+        .from("recovery_packages")
+        .download(`${backupId}/metaobject_definitions.json`);
+      if (error || !fileData)
+        throw new Error("Could not load metaobject_definitions for metaobjects stage");
       const defs = JSON.parse(await fileData.text());
       const allObjects = [];
       for (const def of defs) {
-        const queryBuilder = (cursor: string | null) => `{ metaobjects(type: "${def.type}", first: 250${cursor ? `, after: "${cursor}"` : ""}) { pageInfo { hasNextPage endCursor } edges { node { id handle type capabilities { publishable { status } } fields { key value } } } } }`;
+        const queryBuilder = (cursor: string | null) =>
+          `{ metaobjects(type: "${def.type}", first: 250${cursor ? `, after: "${cursor}"` : ""}) { pageInfo { hasNextPage endCursor } edges { node { id handle type capabilities { publishable { status } } fields { key value } } } } }`;
         const objs = await client.paginateGraphQL(queryBuilder, ["metaobjects"]);
         allObjects.push(...objs);
       }
@@ -132,7 +159,10 @@ async function runRestStage(client: ShopifyClient, stageKey: string, admin?: Sup
     case "shipping": {
       const q = `{ deliveryProfiles(first: 50) { edges { node { id name default profileLocationGroups { locationGroup { id } } zoneCountryCount } } } }`;
       const res = await client.graphql<{ deliveryProfiles: any }>(q);
-      return { count: res.deliveryProfiles.edges.length, data: res.deliveryProfiles.edges.map((e: any) => e.node) };
+      return {
+        count: res.deliveryProfiles.edges.length,
+        data: res.deliveryProfiles.edges.map((e: any) => e.node),
+      };
     }
     case "markets": {
       const q = `{ markets(first: 50) { edges { node { id name handle enabled primary } } } }`;
@@ -142,10 +172,13 @@ async function runRestStage(client: ShopifyClient, stageKey: string, admin?: Sup
     case "third_party_apps": {
       const q = `{ appInstallations(first: 100) { edges { node { id app { title developerName } } } } }`;
       const res = await client.graphql<{ appInstallations: any }>(q);
-      return { count: res.appInstallations.edges.length, data: res.appInstallations.edges.map((e: any) => e.node) };
+      return {
+        count: res.appInstallations.edges.length,
+        data: res.appInstallations.edges.map((e: any) => e.node),
+      };
     }
     case "payments": {
-      const q = `{ shop { paymentSettings { supportedDigitalWallets acceptedCardBrands customManualPaymentMethods { name } } } }`;
+      const q = `{ shop { name primaryDomain { url } myshopifyDomain } }`;
       const res = await client.graphql<{ shop: any }>(q);
       return { count: 1, data: res.shop?.paymentSettings || {} };
     }
@@ -162,7 +195,10 @@ async function runRestStage(client: ShopifyClient, stageKey: string, admin?: Sup
     case "web_pixels": {
       const q = `{ webPixelEvents(first: 50) { edges { node { id title } } } }`;
       const res = await client.graphql<any>(q).catch(() => ({ webPixelEvents: { edges: [] } }));
-      return { count: res.webPixelEvents?.edges?.length || 0, data: res.webPixelEvents?.edges?.map((e: any) => e.node) || [] };
+      return {
+        count: res.webPixelEvents?.edges?.length || 0,
+        data: res.webPixelEvents?.edges?.map((e: any) => e.node) || [],
+      };
     }
     default:
       throw new Error(`Unknown REST stage: ${stageKey}`);
@@ -286,7 +322,7 @@ export async function stepBackup(admin: SupabaseClient, store: StoreRow, backupI
         // Start bulk operation
         let query = "";
         if (resource === "products") {
-          query = `{ products { edges { node { id title handle descriptionHtml vendor productType createdAt updatedAt tags status options { name values } media(first: 10) { edges { node { alt mediaContentType ...on MediaImage { image { url altText } } ...on Video { sources { url } } } } } variants { edges { node { id title sku price taxable barcode compareAtPrice requiresShipping inventoryPolicy inventoryItem { id measurement { weight { value unit } } inventoryLevels(first: 10) { edges { node { id available quantities(names: ["available"]) { name quantity } location { id } } } } } selectedOptions { name value } } } } } } } }`;
+          query = `{ products { edges { node { id title handle descriptionHtml vendor productType createdAt updatedAt tags status options { name values } media(first: 10) { edges { node { alt mediaContentType ...on MediaImage { image { url altText } } ...on Video { sources { url } } } } } variants { edges { node { id title sku price taxable barcode compareAtPrice inventoryPolicy inventoryItem { id requiresShipping measurement { weight { value unit } } inventoryLevels(first: 10) { edges { node { id available quantities(names: ["available"]) { name quantity } location { id } } } } } selectedOptions { name value } } } } } } } }`;
         } else if (resource === "customers") {
           query = `{ customers { edges { node { id firstName lastName email phone createdAt updatedAt note tags state } } } }`;
         } else if (resource === "orders") {
@@ -312,11 +348,7 @@ export async function stepBackup(admin: SupabaseClient, store: StoreRow, backupI
             const fileRes = await fetch(op.url);
             if (!fileRes.ok) throw new Error("Failed to download bulk result");
             const blob = await fileRes.blob();
-            const hash = await uploadToStorage(
-              admin,
-              `${backupId}/${resource}.jsonl`,
-              blob,
-            );
+            const hash = await uploadToStorage(admin, `${backupId}/${resource}.jsonl`, blob);
             state.checksums = state.checksums || {};
             state.checksums[`${resource}.jsonl`] = hash;
           }

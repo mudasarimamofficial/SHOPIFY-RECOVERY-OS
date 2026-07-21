@@ -99,6 +99,34 @@
       ]
     },
     {
+      "name": "generateRestorePlan",
+      "file": "src/lib/migration.server.ts",
+      "databaseTables": [
+        "backups",
+        "restore_jobs",
+        "activity_log",
+        "recovery_packages"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "executeRestoreStep",
+      "file": "src/lib/migration.server.ts",
+      "databaseTables": [
+        "backups",
+        "restore_jobs",
+        "activity_log",
+        "recovery_packages"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
       "name": "enqueueJob",
       "file": "src/lib/queue.server.ts",
       "databaseTables": [
@@ -144,36 +172,8 @@
       ]
     },
     {
-      "name": "generateRestorePlan",
-      "file": "src/lib/restore.server.ts",
-      "databaseTables": [
-        "backups",
-        "restore_jobs",
-        "activity_log",
-        "recovery_packages"
-      ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
-    },
-    {
-      "name": "executeRestoreStep",
-      "file": "src/lib/restore.server.ts",
-      "databaseTables": [
-        "backups",
-        "restore_jobs",
-        "activity_log",
-        "recovery_packages"
-      ],
-      "tags": [
-        "utility",
-        "server-function"
-      ]
-    },
-    {
       "name": "explainShopifyLimitation",
-      "file": "src/lib/sdk/recovery/ai-assistant.ts",
+      "file": "src/lib/sdk/migration/ai-assistant.ts",
       "databaseTables": [],
       "tags": [
         "utility",
@@ -181,8 +181,30 @@
       ]
     },
     {
+      "name": "executeCleanMigrationEngine",
+      "file": "src/lib/sdk/migration/cleaning.server.ts",
+      "databaseTables": [
+        "conflict_intelligence"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "executeDeepCompareEngine",
+      "file": "src/lib/sdk/migration/deep-compare.server.ts",
+      "databaseTables": [
+        "deep_compare_results"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
       "name": "generateDependencyGraphMermaid",
-      "file": "src/lib/sdk/recovery/dependency-graph.ts",
+      "file": "src/lib/sdk/migration/dependency-graph.ts",
       "databaseTables": [],
       "tags": [
         "utility",
@@ -191,7 +213,7 @@
     },
     {
       "name": "classifyShopifyError",
-      "file": "src/lib/sdk/recovery/executor.ts",
+      "file": "src/lib/sdk/migration/executor.ts",
       "databaseTables": [],
       "tags": [
         "utility",
@@ -200,7 +222,7 @@
     },
     {
       "name": "executeResourceRestore",
-      "file": "src/lib/sdk/recovery/executor.ts",
+      "file": "src/lib/sdk/migration/executor.ts",
       "databaseTables": [],
       "tags": [
         "utility",
@@ -209,8 +231,31 @@
     },
     {
       "name": "generateRecoveryPlan",
-      "file": "src/lib/sdk/recovery/intelligence.ts",
+      "file": "src/lib/sdk/migration/intelligence.ts",
       "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "generateStorePreparationReport",
+      "file": "src/lib/sdk/migration/preparation.server.ts",
+      "databaseTables": [
+        "store_preparations"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "generateAndStoreReports",
+      "file": "src/lib/sdk/migration/reports.server.ts",
+      "databaseTables": [
+        "reports",
+        "telemetry"
+      ],
       "tags": [
         "utility",
         "server-function"
@@ -328,6 +373,19 @@
       "name": "verifyThemeAssets",
       "file": "src/lib/sdk/verification/theme-verifier.ts",
       "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "getAppCredentials",
+      "file": "src/lib/shopify-oauth.server.ts",
+      "databaseTables": [
+        "oauth_sessions",
+        "stores",
+        "activity_log"
+      ],
       "tags": [
         "utility",
         "server-function"
@@ -754,6 +812,26 @@
       "name": "cn",
       "file": "src/lib/utils.ts",
       "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "handleValidationApi",
+      "file": "src/lib/validation-api.server.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "handleVerifyStoreBApi",
+      "file": "src/lib/verify-store-b-api.server.ts",
+      "databaseTables": [
+        "stores"
+      ],
       "tags": [
         "utility",
         "server-function"
@@ -1331,6 +1409,20 @@
       "databaseTables": []
     },
     {
+      "file": "src/lib/migration.server.ts",
+      "imports": [
+        "@supabase/supabase-js",
+        "./shopify.server",
+        "./auth-manager.server"
+      ],
+      "databaseTables": [
+        "backups",
+        "restore_jobs",
+        "activity_log",
+        "recovery_packages"
+      ]
+    },
+    {
       "file": "src/lib/pipeline/id-mapper.ts",
       "imports": [
         "@supabase/supabase-js"
@@ -1355,28 +1447,14 @@
       "databaseTables": []
     },
     {
-      "file": "src/lib/restore.server.ts",
-      "imports": [
-        "@supabase/supabase-js",
-        "./shopify.server",
-        "./auth-manager.server"
-      ],
-      "databaseTables": [
-        "backups",
-        "restore_jobs",
-        "activity_log",
-        "recovery_packages"
-      ]
-    },
-    {
-      "file": "src/lib/sdk/recovery/ai-assistant.ts",
+      "file": "src/lib/sdk/migration/ai-assistant.ts",
       "imports": [
         "./intelligence"
       ],
       "databaseTables": []
     },
     {
-      "file": "src/lib/sdk/recovery/archive.ts",
+      "file": "src/lib/sdk/migration/archive.ts",
       "imports": [
         "@supabase/supabase-js",
         "crypto",
@@ -1386,12 +1464,32 @@
       "databaseTables": []
     },
     {
-      "file": "src/lib/sdk/recovery/dependency-graph.ts",
+      "file": "src/lib/sdk/migration/cleaning.server.ts",
+      "imports": [
+        "@supabase/supabase-js",
+        "../../auth-manager.server"
+      ],
+      "databaseTables": [
+        "conflict_intelligence"
+      ]
+    },
+    {
+      "file": "src/lib/sdk/migration/deep-compare.server.ts",
+      "imports": [
+        "@supabase/supabase-js",
+        "../../auth-manager.server"
+      ],
+      "databaseTables": [
+        "deep_compare_results"
+      ]
+    },
+    {
+      "file": "src/lib/sdk/migration/dependency-graph.ts",
       "imports": [],
       "databaseTables": []
     },
     {
-      "file": "src/lib/sdk/recovery/differ.ts",
+      "file": "src/lib/sdk/migration/differ.ts",
       "imports": [
         "./archive",
         "./types"
@@ -1401,7 +1499,7 @@
       ]
     },
     {
-      "file": "src/lib/sdk/recovery/executor.ts",
+      "file": "src/lib/sdk/migration/executor.ts",
       "imports": [
         "../../shopify.server",
         "../../pipeline/id-mapper",
@@ -1411,12 +1509,22 @@
       "databaseTables": []
     },
     {
-      "file": "src/lib/sdk/recovery/intelligence.ts",
+      "file": "src/lib/sdk/migration/intelligence.ts",
       "imports": [],
       "databaseTables": []
     },
     {
-      "file": "src/lib/sdk/recovery/repair.ts",
+      "file": "src/lib/sdk/migration/preparation.server.ts",
+      "imports": [
+        "@supabase/supabase-js",
+        "../../auth-manager.server"
+      ],
+      "databaseTables": [
+        "store_preparations"
+      ]
+    },
+    {
+      "file": "src/lib/sdk/migration/repair.ts",
       "imports": [
         "@supabase/supabase-js",
         "./types",
@@ -1428,7 +1536,19 @@
       ]
     },
     {
-      "file": "src/lib/sdk/recovery/streams.ts",
+      "file": "src/lib/sdk/migration/reports.server.ts",
+      "imports": [
+        "@supabase/supabase-js",
+        "./executor",
+        "../verification/compare"
+      ],
+      "databaseTables": [
+        "reports",
+        "telemetry"
+      ]
+    },
+    {
+      "file": "src/lib/sdk/migration/streams.ts",
       "imports": [
         "crypto",
         "@supabase/supabase-js",
@@ -1437,7 +1557,7 @@
       "databaseTables": []
     },
     {
-      "file": "src/lib/sdk/recovery/types.ts",
+      "file": "src/lib/sdk/migration/types.ts",
       "imports": [],
       "databaseTables": []
     },
@@ -1558,6 +1678,26 @@
         "tailwind-merge"
       ],
       "databaseTables": []
+    },
+    {
+      "file": "src/lib/validation-api.server.ts",
+      "imports": [
+        "./sdk/migration/reports.server",
+        "node:crypto",
+        "@supabase/supabase-js"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/lib/verify-store-b-api.server.ts",
+      "imports": [
+        "@supabase/supabase-js",
+        "./shopify.server",
+        "./shopify-oauth.server"
+      ],
+      "databaseTables": [
+        "stores"
+      ]
     },
     {
       "file": "src/lib/__tests__/encryption.test.ts",
@@ -1681,7 +1821,7 @@
       "imports": [
         "@tanstack/react-router",
         "react",
-        "../../../lib/sdk/recovery/intelligence",
+        "../../../lib/sdk/migration/intelligence",
         "../../../components/ui/card",
         "../../../components/ui/button"
       ],
@@ -1692,13 +1832,15 @@
       "imports": [
         "@tanstack/react-router",
         "@tanstack/react-query",
-        "@tanstack/react-start",
-        "@/lib/shopify.functions",
-        "@/components/app-shell",
-        "@/lib/format",
-        "lucide-react"
+        "../../components/app-shell",
+        "lucide-react",
+        "../../integrations/supabase/client",
+        "sonner",
+        "../../components/ui/card"
       ],
-      "databaseTables": []
+      "databaseTables": [
+        "reports"
+      ]
     },
     {
       "file": "src/routes/_authenticated/restore.tsx",
@@ -1899,7 +2041,7 @@
       "imports": [
         "@tanstack/react-router",
         "react",
-        "../../../lib/sdk/recovery/intelligence",
+        "../../../lib/sdk/migration/intelligence",
         "../../../components/ui/card",
         "../../../components/ui/button"
       ]
@@ -1909,11 +2051,11 @@
       "imports": [
         "@tanstack/react-router",
         "@tanstack/react-query",
-        "@tanstack/react-start",
-        "@/lib/shopify.functions",
-        "@/components/app-shell",
-        "@/lib/format",
-        "lucide-react"
+        "../../components/app-shell",
+        "lucide-react",
+        "../../integrations/supabase/client",
+        "sonner",
+        "../../components/ui/card"
       ]
     },
     {
@@ -1998,11 +2140,13 @@
     "ENCRYPTION_KEY",
     "SHOPIFY_API_KEY",
     "SHOPIFY_API_SECRET",
+    "SHOPIFY_API_KEY_STORE_B",
+    "SHOPIFY_API_SECRET_STORE_B",
     "SHOPIFY_APP_URL",
     "APP_URL",
     "SHOPIFY_SCOPES",
     "SHOPIFY_TOKEN_ENCRYPTION_KEY",
     "MAGIC_LINK_SECRET"
   ],
-  "last_generated": "2026-07-21T10:58:36.008Z"
+  "last_generated": "2026-07-21T13:58:06.837Z"
 }

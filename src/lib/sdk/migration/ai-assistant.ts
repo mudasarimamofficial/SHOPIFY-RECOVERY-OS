@@ -6,7 +6,9 @@ export interface ExplanationRequest {
   extractedConfiguration: any;
 }
 
-export async function explainShopifyLimitation(req: ExplanationRequest): Promise<RecoveryWizardPlan> {
+export async function explainShopifyLimitation(
+  req: ExplanationRequest,
+): Promise<RecoveryWizardPlan> {
   const apiKey = process.env.NVIDIA_API_KEY;
   const baseUrl = process.env.NVIDIA_BASE_URL;
 
@@ -20,23 +22,24 @@ export async function explainShopifyLimitation(req: ExplanationRequest): Promise
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
         model: "meta/llama-3.1-70b-instruct", // Correct NVIDIA NIM model string
         messages: [
           {
             role: "system",
-            content: "You are the Imam Recovery OS AI Assistant. Your ONLY job is to explain Shopify API limitations and translate extracted JSON configurations into simple, step-by-step manual recovery instructions for merchants. Never invent or hallucinate data. ONLY use the provided JSON."
+            content:
+              "You are the Imam Migration OS AI Assistant. Your job is to generate Migration Books, Migration Timelines, Conflict Analysis, and explain Shopify API limitations. Translate extracted JSON configurations into simple, step-by-step manual migration instructions. Never hallucinate data. ONLY use the provided JSON.",
           },
           {
             role: "user",
-            content: `Resource: ${req.resourceType}\nLimitation: ${req.limitationReason}\nConfiguration:\n${JSON.stringify(req.extractedConfiguration)}`
-          }
+            content: `Resource: ${req.resourceType}\nLimitation: ${req.limitationReason}\nConfiguration:\n${JSON.stringify(req.extractedConfiguration)}`,
+          },
         ],
         temperature: 0.1,
         max_tokens: 1024,
-      })
+      }),
     });
 
     if (!response.ok) {
@@ -52,7 +55,7 @@ export async function explainShopifyLimitation(req: ExplanationRequest): Promise
     const basePlan = generateFallbackPlan(req.resourceType, req.extractedConfiguration);
     basePlan.steps = [
       { title: "AI Recovery Guidance", instruction: explanation },
-      ...basePlan.steps
+      ...basePlan.steps,
     ];
 
     return basePlan;
@@ -67,8 +70,11 @@ function generateFallbackPlan(resourceType: string, extractedData: any): Recover
     estimatedTimeMinutes: 5,
     difficulty: "Easy",
     steps: [
-      { title: "Manual Review Required", instruction: "This resource requires manual configuration in the Shopify Admin." }
-    ]
+      {
+        title: "Manual Review Required",
+        instruction: "This resource requires manual configuration in the Shopify Admin.",
+      },
+    ],
   };
 
   return {

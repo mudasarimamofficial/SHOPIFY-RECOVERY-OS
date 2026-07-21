@@ -11,7 +11,7 @@ const OUTPUT_PATH = path.join(
 
 function generateMatrix() {
   let md = `# Resource Capability Matrix\n\n`;
-  md += `This matrix is automatically generated to track the exact technical capabilities, limitations, and APIs used for every Shopify resource in the Imam Recovery OS pipeline.\n\n`;
+  md += `This matrix is automatically generated to track the exact technical capabilities, limitations, and APIs used for every Shopify resource in the Imam Migration OS pipeline.\n\n`;
 
   md += `| Resource | Group | Backed Up? | Restored? | API Used | Scopes Required | Limitations |\n`;
   md += `|---|---|---|---|---|---|---|\n`;

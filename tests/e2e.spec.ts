@@ -9,7 +9,7 @@ test.describe("Authentication & Core Workflows", () => {
   test("Renders auth page correctly", async ({ page }) => {
     await page.goto("/auth");
     await expect(page.locator("h1")).toContainText("Welcome back.");
-    await expect(page.locator("text=Imam Recovery OS").first()).toBeVisible();
+    await expect(page.locator("text=Imam Migration OS").first()).toBeVisible();
 
     // Switch to signup (retry if hydration misses the first click)
     await expect(async () => {

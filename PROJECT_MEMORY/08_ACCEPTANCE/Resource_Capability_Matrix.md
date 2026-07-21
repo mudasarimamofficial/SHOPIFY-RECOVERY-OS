@@ -1,6 +1,6 @@
 # Resource Capability Matrix
 
-This matrix is automatically generated to track the exact technical capabilities, limitations, and APIs used for every Shopify resource in the Imam Recovery OS pipeline.
+This matrix is automatically generated to track the exact technical capabilities, limitations, and APIs used for every Shopify resource in the Imam Migration OS pipeline.
 
 | Resource | Group | Backed Up? | Restored? | API Used | Scopes Required | Limitations |
 |---|---|---|---|---|---|---|

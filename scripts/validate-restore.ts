@@ -67,7 +67,10 @@ async function validateRestore() {
           "/custom_collections.json?fields=id",
           "custom_collections",
         );
-        const smart = await client.pagedCount("/smart_collections.json?fields=id", "smart_collections");
+        const smart = await client.pagedCount(
+          "/smart_collections.json?fields=id",
+          "smart_collections",
+        );
         liveCount = custom + smart;
       } else if (item.key === "pages") {
         liveCount = await client.pagedCount("/pages.json?fields=id", "pages");
@@ -77,7 +80,10 @@ async function validateRestore() {
         // Articles require querying per blog
         const blogs = await client.paged<{ id: number }>("/blogs.json?fields=id", "blogs");
         for (const b of blogs) {
-          liveCount += await client.pagedCount(`/blogs/${b.id}/articles.json?fields=id`, "articles");
+          liveCount += await client.pagedCount(
+            `/blogs/${b.id}/articles.json?fields=id`,
+            "articles",
+          );
         }
       } else if (item.key === "redirects") {
         liveCount = await client.pagedCount("/redirects.json?fields=id", "redirects");

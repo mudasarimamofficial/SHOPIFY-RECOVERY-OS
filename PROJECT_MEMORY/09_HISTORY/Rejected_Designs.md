@@ -3,7 +3,7 @@ id: DOC-9NLJHE
 title: Rejected Designs
 status: ACTIVE
 importance: HIGH
-owner: Imam Recovery OS
+owner: Imam Migration OS
 last_verified: 2026-07-18
 verification_method: MANUAL
 related: []

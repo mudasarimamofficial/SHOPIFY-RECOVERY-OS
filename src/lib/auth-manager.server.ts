@@ -9,7 +9,7 @@ export class AuthManager {
    */
   static async getUnifiedClient(
     supabaseAdmin: SupabaseClient,
-    storeId: string
+    storeId: string,
   ): Promise<ShopifyClient> {
     const { data: store, error } = await supabaseAdmin
       .from("stores")
@@ -36,7 +36,7 @@ export class AuthManager {
    */
   static async getUnifiedClientByDomain(
     supabaseAdmin: SupabaseClient,
-    shopDomain: string
+    shopDomain: string,
   ): Promise<ShopifyClient> {
     const { data: store, error } = await supabaseAdmin
       .from("stores")

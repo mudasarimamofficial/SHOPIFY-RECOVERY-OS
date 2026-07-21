@@ -3,7 +3,7 @@ id: ADR-0001
 title: Move from OAuth to Custom App Authentication
 status: ACTIVE
 importance: CRITICAL
-owner: Imam Recovery OS
+owner: Imam Migration OS
 last_verified: 2026-07-18
 verification_method: MANUAL
 related: []
@@ -31,7 +31,7 @@ The previous application architecture attempted to use a standard Shopify OAuth 
 ## Options Considered
 
 1. **Bypass Vercel Protect**: Configure Vercel to allow Shopify IPs to bypass the SSO protection for the `/api/auth/callback` route.
-2. **Shopify Token Exchange**: Use Shopify App Bridge Token Exchange. (Rejected because Imam Recovery OS is `embedded = false` and Token Exchange only works for Embedded apps).
+2. **Shopify Token Exchange**: Use Shopify App Bridge Token Exchange. (Rejected because Imam Migration OS is `embedded = false` and Token Exchange only works for Embedded apps).
 3. **Custom App Tokens**: Distribute the app as a "Custom App" within the Shopify Admin, bypassing OAuth entirely and requiring the merchant to provide a statically generated `shpat_...` Admin API token.
 
 ## Decision
@@ -47,7 +47,7 @@ We elected to use **Option 3 (Custom App Tokens)**. The application is intended 
 
 ## Future Migration Path
 
-If we ever list Imam Recovery OS on the Shopify Public App Store, we MUST revert to the OAuth flow and resolve the networking restrictions on the callback URLs.
+If we ever list Imam Migration OS on the Shopify Public App Store, we MUST revert to the OAuth flow and resolve the networking restrictions on the callback URLs.
 
 ## Files Affected
 

@@ -3,7 +3,7 @@ id: ACCEPTANCE-FORENSIC-20260721
 title: Enterprise Forensic Audit — 2026-07-21
 status: FAILED
 importance: CRITICAL
-owner: Imam Recovery OS
+owner: Imam Migration OS
 last_verified: 2026-07-21
 verification_method: Clean-room static review, local execution, live Supabase CLI inspection, and deployed-browser smoke tests
 acceptance_status: REJECTED

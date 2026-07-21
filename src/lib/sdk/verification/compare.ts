@@ -3,27 +3,30 @@ import type { ShopifyClient } from "../../shopify.server";
 // Hard limit to prevent OOM during massive enterprise comparisons
 const MAX_COMPARE_LIMIT = 50000;
 
-async function fetchAllGraphQL(client: ShopifyClient, baseQuery: string, resource: string): Promise<any[]> {
-  let allNodes: any[] = [];
+async function fetchAllGraphQL(
+  client: ShopifyClient,
+  baseQuery: string,
+  resource: string,
+): Promise<any[]> {
+  const allNodes: any[] = [];
   let hasNext = true;
   let cursor: string | null = null;
 
   // Insert pageInfo into the query automatically
   const injectPageInfo = (q: string, c: string | null) => {
     const after = c ? `, after: "${c}"` : "";
-    return q.replace(/\(first: (\d+)\)/, `(first: $1${after})`).replace(
-      /edges \{/,
-      `pageInfo { hasNextPage endCursor } edges {`
-    );
+    return q
+      .replace(/\(first: (\d+)\)/, `(first: $1${after})`)
+      .replace(/edges \{/, `pageInfo { hasNextPage endCursor } edges {`);
   };
 
   while (hasNext && allNodes.length < MAX_COMPARE_LIMIT) {
     const q = injectPageInfo(baseQuery, cursor);
     const res = await client.graphql<any>(q);
     const connection = res[resource];
-    
+
     if (!connection) break;
-    
+
     const nodes = connection.edges?.map((e: any) => e.node) || [];
     allNodes.push(...nodes);
 
@@ -35,7 +38,9 @@ async function fetchAllGraphQL(client: ShopifyClient, baseQuery: string, resourc
   }
 
   if (allNodes.length >= MAX_COMPARE_LIMIT) {
-    console.warn(`[WARNING] Comparison truncated at ${MAX_COMPARE_LIMIT} items to prevent memory exhaustion.`);
+    console.warn(
+      `[WARNING] Comparison truncated at ${MAX_COMPARE_LIMIT} items to prevent memory exhaustion.`,
+    );
   }
 
   return allNodes;
@@ -72,7 +77,7 @@ export async function compareProducts(
 
   const query = `{ products(first: 250) { edges { node { 
     handle title status vendor productType tags descriptionHtml seo { title description } options { name values } 
-    variants(first: 50) { edges { node { title sku barcode price compareAtPrice requiresShipping inventoryPolicy inventoryItem { measurement { weight { value unit } } } selectedOptions { name value } } } } 
+    variants(first: 50) { edges { node { title sku barcode price compareAtPrice inventoryPolicy inventoryItem { requiresShipping measurement { weight { value unit } } } selectedOptions { name value } } } } 
   } } } }`;
 
   const prodA = await fetchAllGraphQL(clientA, query, "products");
@@ -155,12 +160,24 @@ export async function compareProducts(
         vA.sku || vA.title,
       );
       assertEqual("barcode", vA.barcode, vB.barcode, "ProductVariant", vA.sku || vA.title);
-      assertEqual("weight", vA.inventoryItem?.measurement?.weight?.value, vB.inventoryItem?.measurement?.weight?.value, "ProductVariant", vA.sku || vA.title);
-      assertEqual("weightUnit", vA.inventoryItem?.measurement?.weight?.unit, vB.inventoryItem?.measurement?.weight?.unit, "ProductVariant", vA.sku || vA.title);
+      assertEqual(
+        "weight",
+        vA.inventoryItem?.measurement?.weight?.value,
+        vB.inventoryItem?.measurement?.weight?.value,
+        "ProductVariant",
+        vA.sku || vA.title,
+      );
+      assertEqual(
+        "weightUnit",
+        vA.inventoryItem?.measurement?.weight?.unit,
+        vB.inventoryItem?.measurement?.weight?.unit,
+        "ProductVariant",
+        vA.sku || vA.title,
+      );
       assertEqual(
         "requiresShipping",
-        vA.requiresShipping,
-        vB.requiresShipping,
+        vA.inventoryItem?.requiresShipping,
+        vB.inventoryItem?.requiresShipping,
         "ProductVariant",
         vA.sku || vA.title,
       );

@@ -1,4 +1,4 @@
-# Production Acceptance Report: Imam Recovery OS V2
+# Production Acceptance Report: Imam Migration OS V2
 
 **Generated:** 2026-07-20  
 **Authority:** Senior Engineering Leadership (CTO / Principal Migration Authority)  

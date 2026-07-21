@@ -70,7 +70,7 @@ function ConnectPage() {
       <PageHeader
         eyebrow="Setup"
         title="Connect Store"
-        description="Authorize Imam Recovery OS securely using either Shopify OAuth or a Custom App Admin Token."
+        description="Authorize Imam Migration OS securely using either Shopify OAuth or a Custom App Admin Token."
       />
       <div className="grid gap-8 p-8 lg:grid-cols-[minmax(0,1fr)_360px]">
         <div className="surface-panel p-8">
@@ -190,7 +190,8 @@ function ConnectPage() {
                 <CheckCircle2 className="mt-0.5 h-4 w-4 text-success" /> Multi-Provider Architecture
               </li>
               <li className="flex gap-2">
-                <CheckCircle2 className="mt-0.5 h-4 w-4 text-success" /> Tokens are AES-256-GCM encrypted
+                <CheckCircle2 className="mt-0.5 h-4 w-4 text-success" /> Tokens are AES-256-GCM
+                encrypted
               </li>
               <li className="flex gap-2">
                 <CheckCircle2 className="mt-0.5 h-4 w-4 text-success" /> Never cached in plaintext

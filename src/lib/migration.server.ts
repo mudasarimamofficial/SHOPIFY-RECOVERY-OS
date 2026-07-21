@@ -101,7 +101,7 @@ export async function generateRestorePlan(
     redirects: ["products_bulk", "collections_bulk", "pages"],
     markets: [],
     theme: [],
-    third_party_apps: ["theme"]
+    third_party_apps: ["theme"],
   };
 
   // This list intentionally contains only handlers that are implemented and
@@ -216,6 +216,28 @@ export async function executeRestoreStep(admin: SupabaseClient, jobId: string) {
       // Done
       const finalStatus =
         (reportData.objectsFailed || 0) > 0 ? "completed_with_failures" : "completed";
+
+      try {
+        const { generateAndStoreReports } = await import("./sdk/migration/reports.server");
+        await generateAndStoreReports({
+          backupId: job.backup_id,
+          restoreId: jobId,
+          storeA: plan.target_store_id, // we might need real store names
+          storeB: targetStore.shop_domain,
+          restoreResults: reportData,
+          conflicts: reportData.failedItems || [],
+          telemetry: {
+            duration: 0, // calculate if needed
+            cpu: 0,
+            peakHeap: 0,
+            totalResources: reportData.objectsRestored + reportData.objectsFailed,
+            apiCost: reportData.liveGraphqlCost,
+          },
+        });
+      } catch (e) {
+        console.error("Failed to generate reports", e);
+      }
+
       await admin
         .from("restore_jobs")
         .update({
@@ -297,7 +319,7 @@ export async function executeRestoreStep(admin: SupabaseClient, jobId: string) {
 
     if (fileData) {
       // Import the executor we built
-      const { executeResourceRestore } = await import("./sdk/recovery/executor");
+      const { executeResourceRestore } = await import("./sdk/migration/executor");
 
       // Execute real restore using streaming blob
       const res = await executeResourceRestore(

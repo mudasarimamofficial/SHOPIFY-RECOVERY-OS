@@ -3,7 +3,7 @@ id: FILE-M4LJ95
 title: card.tsx
 status: ACTIVE
 importance: HIGH
-owner: Imam Recovery OS
+owner: Imam Migration OS
 last_verified: 2026-07-20
 verification_method: AUTOMATED_AST
 related: []

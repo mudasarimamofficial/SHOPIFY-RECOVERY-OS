@@ -22,7 +22,7 @@ const folders = [
 
 const files = {
   "README.md": "Main entry point for the Project Brain.",
-  "00_START_HERE/01_Project_Summary.md": "High-level overview of Imam Recovery OS.",
+  "00_START_HERE/01_Project_Summary.md": "High-level overview of Imam Migration OS.",
   "00_START_HERE/02_Current_Status.md": "Current branch, deployment, URL, tech debt, and blockers.",
   "00_START_HERE/03_AI_Handover.md": "Onboarding guide for future AI models.",
   "00_START_HERE/04_Reading_Order.md": "Suggested reading order for new developers/AIs.",
@@ -127,7 +127,7 @@ id: ${id}
 title: ${title}
 status: ACTIVE
 importance: UNKNOWN
-owner: Imam Recovery OS
+owner: Imam Migration OS
 last_verified: ${new Date().toISOString().split("T")[0]}
 verification_method: MANUAL
 related: []

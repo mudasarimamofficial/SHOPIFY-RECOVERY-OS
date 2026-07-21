@@ -3,7 +3,7 @@ id: DOC-32P2N5
 title: Lessons Learned
 status: ACTIVE
 importance: HIGH
-owner: Imam Recovery OS
+owner: Imam Migration OS
 last_verified: 2026-07-18
 verification_method: MANUAL
 related: []

@@ -3,7 +3,7 @@ id: DOC-6MJ3BB
 title: 01 Project Summary
 status: ACTIVE
 importance: HIGH
-owner: Imam Recovery OS
+owner: Imam Migration OS
 last_verified: 2026-07-18
 verification_method: MANUAL
 related: []
@@ -28,7 +28,7 @@ _Note: This document was auto-generated. Please update with relevant details._
 
 ## Purpose
 
-High-level overview of Imam Recovery OS.
+High-level overview of Imam Migration OS.
 
 ## Content
 

@@ -3,7 +3,7 @@ id: DOC-SV2EUD
 title: Prompt Library
 status: ACTIVE
 importance: HIGH
-owner: Imam Recovery OS
+owner: Imam Migration OS
 last_verified: 2026-07-18
 verification_method: MANUAL
 related: []

@@ -28,8 +28,20 @@ function getSupabaseAdmin(): SupabaseClient {
   });
 }
 
-const API_KEY = process.env.SHOPIFY_API_KEY;
-const API_SECRET = process.env.SHOPIFY_API_SECRET;
+const API_KEY_STORE_A = process.env.SHOPIFY_API_KEY;
+const API_SECRET_STORE_A = process.env.SHOPIFY_API_SECRET;
+const API_KEY_STORE_B = process.env.SHOPIFY_API_KEY_STORE_B;
+const API_SECRET_STORE_B = process.env.SHOPIFY_API_SECRET_STORE_B;
+
+export function getAppCredentials(isDestination = false) {
+  if (isDestination) {
+    if (!API_KEY_STORE_B) throw new Error("SHOPIFY_API_KEY_STORE_B not configured");
+    return { key: API_KEY_STORE_B, secret: API_SECRET_STORE_B };
+  }
+  if (!API_KEY_STORE_A) throw new Error("SHOPIFY_API_KEY not configured");
+  return { key: API_KEY_STORE_A, secret: API_SECRET_STORE_A };
+}
+
 const APP_URL = (
   process.env.SHOPIFY_APP_URL ||
   process.env.APP_URL ||
@@ -62,10 +74,10 @@ export function generateState(): string {
   return randomBytes(16).toString("hex");
 }
 
-export function buildAuthorizeUrl(shop: string, state: string): string {
-  if (!API_KEY) throw new Error("SHOPIFY_API_KEY is not configured");
+export function buildAuthorizeUrl(shop: string, state: string, isDestination = false): string {
+  const { key } = getAppCredentials(isDestination);
   const params = new URLSearchParams({
-    client_id: API_KEY,
+    client_id: key,
     scope: SHOPIFY_SCOPES,
     redirect_uri: OAUTH_REDIRECT_URI,
     state,
@@ -81,8 +93,9 @@ export function buildAuthorizeUrl(shop: string, state: string): string {
  * All params except `hmac`/`signature` are sorted and joined `k=v&…`, then
  * HMAC-SHA256'd with the app secret and compared in constant time.
  */
-export function verifyCallbackHmac(params: URLSearchParams): boolean {
-  if (!API_SECRET) return false;
+export function verifyCallbackHmac(params: URLSearchParams, isDestination = false): boolean {
+  const { secret } = getAppCredentials(isDestination);
+  if (!secret) return false;
   const hmac = params.get("hmac");
   if (!hmac) return false;
 
@@ -93,7 +106,7 @@ export function verifyCallbackHmac(params: URLSearchParams): boolean {
   }
   entries.sort();
   const message = entries.join("&");
-  const digest = createHmac("sha256", API_SECRET).update(message).digest();
+  const digest = createHmac("sha256", secret).update(message).digest();
 
   let provided: Buffer;
   try {
@@ -131,14 +144,13 @@ export interface TokenExchangeResult {
 export async function exchangeCodeForToken(
   shop: string,
   code: string,
+  isDestination = false,
 ): Promise<TokenExchangeResult> {
-  if (!API_KEY || !API_SECRET) {
-    throw new Error("Shopify API credentials are not configured");
-  }
+  const { key, secret } = getAppCredentials(isDestination);
   const res = await fetch(`https://${shop}/admin/oauth/access_token`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Accept: "application/json" },
-    body: JSON.stringify({ client_id: API_KEY, client_secret: API_SECRET, code }),
+    body: JSON.stringify({ client_id: key, client_secret: secret, code }),
   });
   if (!res.ok) {
     const body = await res.text().catch(() => "");
@@ -220,12 +232,6 @@ export async function handleOAuthCallback(request: Request): Promise<Response> {
   if (!isValidShopDomain(shop) || !code || !state) {
     return redirectTo(origin, "/connect?error=invalid_request");
   }
-  if (!verifyCallbackHmac(params)) {
-    return redirectTo(origin, "/connect?error=hmac_failed");
-  }
-  if (!isTimestampFresh(params.get("timestamp"), Date.now())) {
-    return redirectTo(origin, "/connect?error=timestamp_invalid");
-  }
 
   const supabase = getSupabaseAdmin();
 
@@ -234,13 +240,22 @@ export async function handleOAuthCallback(request: Request): Promise<Response> {
     .from("oauth_sessions")
     .delete()
     .eq("state", state)
-    .select("user_id, shop_domain")
+    .select("user_id, shop_domain, is_destination")
     .maybeSingle();
   if (sErr || !session) return redirectTo(origin, "/connect?error=state_invalid");
   if (session.shop_domain !== shop) return redirectTo(origin, "/connect?error=shop_mismatch");
 
+  const isDestination = session.is_destination ?? false;
+
+  if (!verifyCallbackHmac(params, isDestination)) {
+    return redirectTo(origin, "/connect?error=hmac_failed");
+  }
+  if (!isTimestampFresh(params.get("timestamp"), Date.now())) {
+    return redirectTo(origin, "/connect?error=timestamp_invalid");
+  }
+
   try {
-    const { access_token, scope } = await exchangeCodeForToken(shop, code);
+    const { access_token, scope } = await exchangeCodeForToken(shop, code, isDestination);
 
     // Verify the freshly-issued token against the Admin REST API.
     const client = makeShopifyClient(shop, access_token);
@@ -274,6 +289,10 @@ export async function handleOAuthCallback(request: Request): Promise<Response> {
           auth_method: "oauth",
           installed_at: new Date().toISOString(),
           last_synced_at: new Date().toISOString(),
+          is_destination: isDestination,
+          client_id: getAppCredentials(isDestination).key,
+          installation_status: "installed",
+          verification_status: "verified"
         },
         { onConflict: "user_id,shop_domain" },
       )

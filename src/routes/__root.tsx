@@ -25,7 +25,7 @@ function NotFoundComponent() {
           Route not found
         </h1>
         <p className="mt-3 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist in this Imam Recovery OS instance.
+          The page you're looking for doesn't exist in this Imam Migration OS instance.
         </p>
         <div className="mt-8">
           <Link
@@ -85,13 +85,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Imam Recovery OS — Disaster Recovery for Shopify" },
+      { title: "Imam Migration OS — Disaster Recovery for Shopify" },
       {
         name: "description",
         content:
           "Enterprise-grade disaster recovery for Shopify. One-click portable backups, versioned snapshots, and full store restore.",
       },
-      { property: "og:title", content: "Imam Recovery OS — Disaster Recovery for Shopify" },
+      { property: "og:title", content: "Imam Migration OS — Disaster Recovery for Shopify" },
       {
         property: "og:description",
         content:

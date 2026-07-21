@@ -25,13 +25,13 @@ describe("token encryption (AES-256-GCM)", () => {
 describe("recovery-package encryption key (fail-closed)", () => {
   it("throws when ENCRYPTION_KEY is missing (no default key)", async () => {
     delete process.env.ENCRYPTION_KEY;
-    const { EncryptTransform } = await import("../sdk/recovery/streams");
+    const { EncryptTransform } = await import("../sdk/migration/streams");
     expect(() => new EncryptTransform()).toThrow(/ENCRYPTION_KEY is not configured/);
   });
 
   it("throws when ENCRYPTION_KEY is not 32 bytes", async () => {
     process.env.ENCRYPTION_KEY = "abcd";
-    const { EncryptTransform } = await import("../sdk/recovery/streams");
+    const { EncryptTransform } = await import("../sdk/migration/streams");
     expect(() => new EncryptTransform()).toThrow(/must be 32 bytes/);
   });
 });

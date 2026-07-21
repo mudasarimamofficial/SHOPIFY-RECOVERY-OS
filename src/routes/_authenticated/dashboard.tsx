@@ -95,7 +95,7 @@ function DashboardPage() {
                 Connect your first Shopify store
               </h3>
               <p className="mt-2 max-w-md text-sm text-muted-foreground">
-                Imam Recovery OS needs an Admin API access token from a custom app on your Shopify
+                Imam Migration OS needs an Admin API access token from a custom app on your Shopify
                 store. Takes about 60 seconds.
               </p>
             </div>

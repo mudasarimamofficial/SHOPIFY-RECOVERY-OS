@@ -1,98 +1,113 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
-import { listBackups } from "@/lib/shopify.functions";
-import { PageHeader } from "@/components/app-shell";
-import { formatBytes, formatDate } from "@/lib/format";
-import { FileBarChart } from "lucide-react";
+import { PageHeader } from "../../components/app-shell";
+import { FileText, Download, Copy, RefreshCw, FileCode } from "lucide-react";
+import { supabase } from "../../integrations/supabase/client";
+import { toast } from "sonner";
+import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/card";
 
 export const Route = createFileRoute("/_authenticated/reports")({
   component: ReportsPage,
+  loader: ({ context: { queryClient } }) =>
+    queryClient.ensureQueryData(
+      queryOptions({
+        queryKey: ["reports"],
+        queryFn: async () => {
+          const { data, error } = await supabase
+            .from("reports")
+            .select("*")
+            .order("created_at", { ascending: false });
+          if (error) throw error;
+          return data;
+        },
+      }),
+    ),
 });
 
 function ReportsPage() {
-  const fn = useServerFn(listBackups);
-  const { data } = useSuspenseQuery(queryOptions({ queryKey: ["backups"], queryFn: () => fn() }));
+  const { data: reports } = useSuspenseQuery(
+    queryOptions({
+      queryKey: ["reports"],
+      queryFn: async () => {
+        const { data, error } = await supabase
+          .from("reports")
+          .select("*")
+          .order("created_at", { ascending: false });
+        if (error) throw error;
+        return data;
+      },
+    }),
+  );
 
-  const completed = data.filter((b) => b.status === "completed");
-  const avgScore = completed.length
-    ? Math.round(completed.reduce((n, b) => n + (b.recovery_score ?? 0), 0) / completed.length)
-    : null;
-  const totalSize = data.reduce((n, b) => n + (b.size_bytes ?? 0), 0);
+  const copyToClipboard = (content: string) => {
+    navigator.clipboard.writeText(content);
+    toast.success("Copied to clipboard");
+  };
+
+  const downloadReport = (report: any) => {
+    const blob = new Blob([report.content], {
+      type: report.format === "json" ? "application/json" : "text/markdown",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${report.type.replace(/\s+/g, "_").toLowerCase()}_${report.restore_id}.${report.format}`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div>
       <PageHeader
-        eyebrow="Analytics"
-        title="Recovery reports"
-        description="Cross-store recovery posture, package inventory, and completeness over time."
+        title="Enterprise Recovery Reports"
+        description="Zero Trust evidence of runtime restoration, conflicts, and merchant intelligence."
+        eyebrow="INTELLIGENCE"
       />
-      <div className="p-8 space-y-6">
-        <div className="grid gap-3 sm:grid-cols-3">
-          <StatCard label="Backups completed" value={String(completed.length)} />
-          <StatCard
-            label="Average recovery score"
-            value={avgScore !== null ? `${avgScore}/100` : "—"}
-            accent
-          />
-          <StatCard label="Total archive size" value={formatBytes(totalSize)} />
-        </div>
-
-        <div className="surface-panel">
-          <div className="border-b border-border px-5 py-3 mono text-[11px] uppercase tracking-widest text-muted-foreground">
-            Snapshot log
+      <div className="p-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {reports?.length === 0 ? (
+          <div className="col-span-full text-center p-12 text-muted-foreground border rounded-lg bg-surface">
+            No reports generated yet. Execute a restore to generate recovery intelligence.
           </div>
-          {completed.length === 0 ? (
-            <div className="flex flex-col items-center gap-3 p-12 text-center">
-              <FileBarChart className="h-8 w-8 text-muted-foreground" />
-              <p className="text-sm text-muted-foreground">No completed backups yet.</p>
-            </div>
-          ) : (
-            <table className="w-full text-sm">
-              <thead className="mono border-b border-border bg-surface/40 text-[10px] uppercase tracking-widest text-muted-foreground">
-                <tr>
-                  <th className="px-5 py-3 text-left font-normal">Store</th>
-                  <th className="px-5 py-3 text-left font-normal">Label</th>
-                  <th className="px-5 py-3 text-right font-normal">Score</th>
-                  <th className="px-5 py-3 text-right font-normal">Size</th>
-                  <th className="px-5 py-3 text-right font-normal">Completed</th>
-                </tr>
-              </thead>
-              <tbody>
-                {completed.map((b) => (
-                  <tr key={b.id} className="border-b border-border last:border-b-0">
-                    <td className="mono px-5 py-3 text-xs">
-                      {(b.stores as { shop_domain?: string } | null)?.shop_domain ?? "—"}
-                    </td>
-                    <td className="px-5 py-3">{b.label ?? "Snapshot"}</td>
-                    <td className="mono px-5 py-3 text-right text-gradient-accent">
-                      {b.recovery_score ?? "—"}
-                    </td>
-                    <td className="mono px-5 py-3 text-right text-xs">
-                      {formatBytes(b.size_bytes)}
-                    </td>
-                    <td className="mono px-5 py-3 text-right text-xs text-muted-foreground">
-                      {formatDate(b.completed_at)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function StatCard({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
-  return (
-    <div className="surface-panel p-5">
-      <div className="mono text-[10px] uppercase tracking-widest text-muted-foreground">
-        {label}
-      </div>
-      <div className={`mono mt-2 text-3xl font-semibold ${accent ? "text-gradient-accent" : ""}`}>
-        {value}
+        ) : (
+          reports?.map((report) => (
+            <Card key={report.id} className="flex flex-col">
+              <CardHeader className="pb-4 border-b">
+                <div className="flex items-center gap-2">
+                  {report.format === "json" ? (
+                    <FileCode className="h-5 w-5 text-blue-500" />
+                  ) : (
+                    <FileText className="h-5 w-5 text-green-500" />
+                  )}
+                  <CardTitle className="text-base">{report.type}</CardTitle>
+                </div>
+                <div className="text-xs text-muted-foreground mt-1">
+                  Store A: {report.store_a} &rarr; Store B: {report.store_b}
+                </div>
+              </CardHeader>
+              <CardContent className="pt-4 flex-1 flex flex-col justify-between gap-4">
+                <div className="text-sm text-muted-foreground line-clamp-3">
+                  {report.content.slice(0, 150)}...
+                </div>
+                <div className="flex items-center gap-2 mt-auto">
+                  <button
+                    onClick={() => downloadReport(report)}
+                    className="flex-1 inline-flex items-center justify-center gap-2 rounded-md bg-secondary px-3 py-2 text-xs font-medium hover:bg-secondary/80"
+                  >
+                    <Download className="h-3.5 w-3.5" /> Download
+                  </button>
+                  <button
+                    onClick={() => copyToClipboard(report.content)}
+                    className="flex-1 inline-flex items-center justify-center gap-2 rounded-md border bg-background px-3 py-2 text-xs font-medium hover:bg-muted"
+                  >
+                    <Copy className="h-3.5 w-3.5" /> Copy
+                  </button>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
       </div>
     </div>
   );

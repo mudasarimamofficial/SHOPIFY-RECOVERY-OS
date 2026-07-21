@@ -1,4 +1,4 @@
-import { classifyShopifyError } from "../src/lib/sdk/recovery/executor";
+import { classifyShopifyError } from "../src/lib/sdk/migration/executor";
 
 export interface FailureScenario {
   name: string;

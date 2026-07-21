@@ -3,7 +3,7 @@ id: DOC-2D3VAR
 title: Bulk Operations
 status: ACTIVE
 importance: HIGH
-owner: Imam Recovery OS
+owner: Imam Migration OS
 last_verified: 2026-07-18
 verification_method: MANUAL
 related: []

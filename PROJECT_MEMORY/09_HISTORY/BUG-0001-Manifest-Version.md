@@ -3,7 +3,7 @@ id: BUG-0001
 title: Restore Engine Requires recovery/1 but Backup Writes recovery/2
 status: OPEN
 importance: CRITICAL
-owner: Imam Recovery OS
+owner: Imam Migration OS
 last_verified: 2026-07-18
 verification_method: CODE_REVIEW
 related: ["ADR-0001"]

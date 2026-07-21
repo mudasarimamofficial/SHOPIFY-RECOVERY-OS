@@ -11,7 +11,7 @@ id: ${id}
 title: ${title}
 status: ACTIVE
 importance: HIGH
-owner: Imam Recovery OS
+owner: Imam Migration OS
 last_verified: ${new Date().toISOString().split("T")[0]}
 verification_method: AUTOMATED_AST
 related: []

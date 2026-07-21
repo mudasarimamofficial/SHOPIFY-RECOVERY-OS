@@ -5,12 +5,12 @@ Confidence: HIGH
 
 # Universal AI Context Pack
 
-**Project:** Imam Recovery OS
+**Project:** Imam Migration OS
 **Goal:** This file serves as the universal onboarding payload for Claude Code, Cursor, Windsurf, Gemini CLI, Copilot, and any future AI agent. Reading this file provides instant situational awareness.
 
 ## 1. Project Identity
 
-Imam Recovery OS is a production-grade Shopify App that extracts store data (Products, Customers, Orders) via the Admin API Bulk Operations, compresses it into JSONL payloads, stores it securely using AES-256-GCM encryption in Supabase, and provides an orchestrated Restore engine to inject that data back into target stores in dependency order.
+Imam Migration OS is a production-grade Shopify App that extracts store data (Products, Customers, Orders) via the Admin API Bulk Operations, compresses it into JSONL payloads, stores it securely using AES-256-GCM encryption in Supabase, and provides an orchestrated Restore engine to inject that data back into target stores in dependency order.
 
 ## 2. Core Architecture
 

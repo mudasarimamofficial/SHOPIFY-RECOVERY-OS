@@ -87,7 +87,7 @@ function AuthPage() {
       <div className="relative w-full max-w-md">
         <Link to="/" className="mb-8 flex items-center justify-center gap-2">
           <LogoMark />
-          <span className="text-sm font-semibold tracking-tight">Imam Recovery OS</span>
+          <span className="text-sm font-semibold tracking-tight">Imam Migration OS</span>
         </Link>
 
         <div className="surface-panel p-8">

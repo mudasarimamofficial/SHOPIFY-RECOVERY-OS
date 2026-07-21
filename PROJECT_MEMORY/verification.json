@@ -4,13 +4,13 @@
     "functions": 100,
     "routes": 100,
     "tables": 0,
-    "env": 16,
+    "env": 18,
     "graphs": 0
   },
   "verified": 95,
   "unknown": 0,
   "assumptions": 0,
-  "documentationDrift": 0,
-  "healthScore": 100,
-  "lastVerified": "2026-07-21T10:58:39.456Z"
+  "documentationDrift": 16,
+  "healthScore": 68,
+  "lastVerified": "2026-07-21T13:58:19.437Z"
 }
