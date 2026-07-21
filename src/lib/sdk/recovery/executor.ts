@@ -11,16 +11,33 @@ export type ErrorClassification =
   | "Unsupported Endpoint"
   | "Data Corruption"
   | "Configuration Issue"
+  | "Already Exists"
+  | "Duplicate"
+  | "Conflict"
+  | "Skipped"
+  | "Merged"
+  | "Updated"
+  | "No Change"
+  | "User Decision Required"
   | "Unknown";
 
 export function classifyShopifyError(e: any): ErrorClassification {
   const msg = (e.message || String(e)).toLowerCase();
 
+  // Conflict Intelligence
+  if (msg.includes("path has already been taken") || msg.includes("already taken") || msg.includes("has already been taken")) {
+    return "Already Exists";
+  }
+  if (msg.includes("must be unique") || msg.includes("already exists")) {
+    return "Conflict";
+  }
+
+  // Core Failures
   if (msg.includes("shopify limitation")) return "Shopify Limitation";
   if (msg.includes("permission issue") || msg.includes("configuration issue"))
     return "Configuration Issue";
   if (msg.includes("current implementation bug")) return "Current Implementation Bug";
-  if (msg.includes("data corruption")) return "Data Corruption";
+  
   if (msg.includes("unsupported endpoint") || msg.includes("404") || msg.includes("not found"))
     return "Unsupported Endpoint";
   if (msg.includes("429") || msg.includes("rate limit") || msg.includes("throttled"))
@@ -40,11 +57,11 @@ export function classifyShopifyError(e: any): ErrorClassification {
   )
     return "Network Failure";
   if (msg.includes("deprecated")) return "API Change";
+  
+  // Strict Corruption Detection
   if (msg.includes("invalid") || msg.includes("malformed") || msg.includes("json"))
     return "Data Corruption";
-
   if (msg.includes("cannot be blank") || msg.includes("is required")) return "Data Corruption";
-  if (msg.includes("already taken") || msg.includes("must be unique")) return "Shopify Limitation";
 
   return "Unknown";
 }

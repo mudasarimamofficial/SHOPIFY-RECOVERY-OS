@@ -4,7 +4,19 @@
 //  - partial   : metadata only or subject to Shopify restrictions
 //  - manual    : requires manual reconnect / re-auth outside Shopify
 //  - unavail   : not accessible via Admin API
-export type Recoverability = "full" | "partial" | "manual" | "unavail";
+export type Recoverability = 
+  | "full" 
+  | "partial" 
+  | "manual" 
+  | "unavail"
+  | "Shopify Limitation"
+  | "External Provider"
+  | "Unsupported"
+  | "Already Exists"
+  | "Conflict"
+  | "Permission Required"
+  | "Configuration Required"
+  | "User Decision Required";
 
 export interface ResourceSpec {
   key: string;
@@ -101,17 +113,18 @@ export const RESOURCE_CATALOG: ResourceSpec[] = [
     key: "discounts",
     label: "Discount codes & automatic",
     group: "Commerce",
-    recoverability: "manual",
+    recoverability: "Shopify Limitation",
     note: "Requires live Shopify Admin credentials to safely generate GraphQL PriceRule boundaries.",
   },
   {
     key: "shipping",
     label: "Shipping profiles & zones",
     group: "Commerce",
-    recoverability: "manual",
+    recoverability: "Configuration Required",
+    scanned: true,
     note: "Shipping Zones contain deep geographical dependencies requiring active sandbox validation.",
   },
-  { key: "markets", label: "Markets configuration", group: "Commerce", recoverability: "partial", note: "Live API verification required." },
+  { key: "markets", label: "Markets configuration", group: "Commerce", recoverability: "Shopify Limitation", scanned: true, note: "Live API verification required." },
   {
     key: "translations",
     label: "Translations & locales",
@@ -136,28 +149,43 @@ export const RESOURCE_CATALOG: ResourceSpec[] = [
     key: "payments",
     label: "Payment providers (Shopify Payments, Stripe, PayPal)",
     group: "External",
-    recoverability: "manual",
+    recoverability: "External Provider",
   },
-  { key: "domains", label: "Custom domains & DNS", group: "External", recoverability: "manual" },
-  { key: "pixels", label: "Meta Pixel ownership", group: "External", recoverability: "manual" },
+  { key: "domains", label: "Custom domains & DNS", group: "External", recoverability: "Configuration Required", scanned: true },
+  { key: "pixels", label: "Meta Pixel ownership", group: "External", recoverability: "External Provider" },
   {
     key: "google_analytics",
     label: "Google Analytics / Merchant Center",
     group: "External",
-    recoverability: "manual",
+    recoverability: "External Provider",
   },
   {
     key: "email_auth",
     label: "Email SPF / DKIM / DMARC",
     group: "External",
-    recoverability: "manual",
+    recoverability: "Configuration Required",
   },
   {
     key: "third_party_apps",
     label: "Third-party app subscriptions & data",
     group: "External",
-    recoverability: "manual",
+    recoverability: "External Provider",
+    scanned: true,
     note: "App data is completely locked inside third-party servers. No Shopify API exists to extract this.",
+  },
+  {
+    key: "menus",
+    label: "Store Navigation & Menus",
+    group: "Commerce",
+    recoverability: "Configuration Required",
+    scanned: true,
+  },
+  {
+    key: "web_pixels",
+    label: "Web Pixels & Customer Events",
+    group: "External",
+    recoverability: "Configuration Required",
+    scanned: true,
   },
   // Added for Production Completion Phase
   {

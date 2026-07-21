@@ -19,6 +19,7 @@ import { Route as AuthenticatedRestoreRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedBackupsIndexRouteImport } from './routes/_authenticated/backups.index'
 import { Route as AuthenticatedBackupsBackupIdRouteImport } from './routes/_authenticated/backups.$backupId'
+import { Route as AuthenticatedRecoveryWizardRouteImport } from './routes/_authenticated/recovery/wizard'
 import { Route as AuthenticatedStoresIndexRouteImport } from './routes/_authenticated/stores.index'
 import { Route as AuthenticatedStoresStoreIdRouteImport } from './routes/_authenticated/stores.$storeId'
 
@@ -73,6 +74,12 @@ const AuthenticatedBackupsBackupIdRoute =
     path: '/backups/$backupId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedRecoveryWizardRoute =
+  AuthenticatedRecoveryWizardRouteImport.update({
+    id: '/recovery/wizard',
+    path: '/recovery/wizard',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedStoresIndexRoute =
   AuthenticatedStoresIndexRouteImport.update({
     id: '/stores/',
@@ -95,6 +102,7 @@ export interface FileRoutesByFullPath {
   '/restore': typeof AuthenticatedRestoreRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/backups/$backupId': typeof AuthenticatedBackupsBackupIdRoute
+  '/recovery/wizard': typeof AuthenticatedRecoveryWizardRoute
   '/stores/$storeId': typeof AuthenticatedStoresStoreIdRoute
   '/backups/': typeof AuthenticatedBackupsIndexRoute
   '/stores/': typeof AuthenticatedStoresIndexRoute
@@ -108,6 +116,7 @@ export interface FileRoutesByTo {
   '/restore': typeof AuthenticatedRestoreRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/backups/$backupId': typeof AuthenticatedBackupsBackupIdRoute
+  '/recovery/wizard': typeof AuthenticatedRecoveryWizardRoute
   '/stores/$storeId': typeof AuthenticatedStoresStoreIdRoute
   '/backups': typeof AuthenticatedBackupsIndexRoute
   '/stores': typeof AuthenticatedStoresIndexRoute
@@ -123,6 +132,7 @@ export interface FileRoutesById {
   '/_authenticated/restore': typeof AuthenticatedRestoreRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/backups/$backupId': typeof AuthenticatedBackupsBackupIdRoute
+  '/_authenticated/recovery/wizard': typeof AuthenticatedRecoveryWizardRoute
   '/_authenticated/stores/$storeId': typeof AuthenticatedStoresStoreIdRoute
   '/_authenticated/backups/': typeof AuthenticatedBackupsIndexRoute
   '/_authenticated/stores/': typeof AuthenticatedStoresIndexRoute
@@ -138,6 +148,7 @@ export interface FileRouteTypes {
     | '/restore'
     | '/settings'
     | '/backups/$backupId'
+    | '/recovery/wizard'
     | '/stores/$storeId'
     | '/backups/'
     | '/stores/'
@@ -151,6 +162,7 @@ export interface FileRouteTypes {
     | '/restore'
     | '/settings'
     | '/backups/$backupId'
+    | '/recovery/wizard'
     | '/stores/$storeId'
     | '/backups'
     | '/stores'
@@ -165,6 +177,7 @@ export interface FileRouteTypes {
     | '/_authenticated/restore'
     | '/_authenticated/settings'
     | '/_authenticated/backups/$backupId'
+    | '/_authenticated/recovery/wizard'
     | '/_authenticated/stores/$storeId'
     | '/_authenticated/backups/'
     | '/_authenticated/stores/'
@@ -248,6 +261,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBackupsBackupIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/recovery/wizard': {
+      id: '/_authenticated/recovery/wizard'
+      path: '/recovery/wizard'
+      fullPath: '/recovery/wizard'
+      preLoaderRoute: typeof AuthenticatedRecoveryWizardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/stores/': {
       id: '/_authenticated/stores/'
       path: '/stores'
@@ -272,6 +292,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedRestoreRoute: typeof AuthenticatedRestoreRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedBackupsBackupIdRoute: typeof AuthenticatedBackupsBackupIdRoute
+  AuthenticatedRecoveryWizardRoute: typeof AuthenticatedRecoveryWizardRoute
   AuthenticatedStoresStoreIdRoute: typeof AuthenticatedStoresStoreIdRoute
   AuthenticatedBackupsIndexRoute: typeof AuthenticatedBackupsIndexRoute
   AuthenticatedStoresIndexRoute: typeof AuthenticatedStoresIndexRoute
@@ -284,6 +305,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedRestoreRoute: AuthenticatedRestoreRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedBackupsBackupIdRoute: AuthenticatedBackupsBackupIdRoute,
+  AuthenticatedRecoveryWizardRoute: AuthenticatedRecoveryWizardRoute,
   AuthenticatedStoresStoreIdRoute: AuthenticatedStoresStoreIdRoute,
   AuthenticatedBackupsIndexRoute: AuthenticatedBackupsIndexRoute,
   AuthenticatedStoresIndexRoute: AuthenticatedStoresIndexRoute,

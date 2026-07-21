@@ -34,6 +34,14 @@ const SCAN_STAGES = [
   "products_bulk",
   "customers_bulk",
   "orders_bulk",
+  "domains",
+  "shipping",
+  "markets",
+  "third_party_apps",
+  "payments",
+  "menus",
+  "translations",
+  "web_pixels",
   "finalize",
 ];
 
@@ -115,6 +123,46 @@ async function runRestStage(client: ShopifyClient, stageKey: string, admin?: Sup
         allObjects.push(...objs);
       }
       return { count: allObjects.length, data: allObjects };
+    }
+    case "domains": {
+      const q = `{ shop { primaryDomain { url host } } }`;
+      const res = await client.graphql<{ shop: any }>(q);
+      return { count: 1, data: res.shop };
+    }
+    case "shipping": {
+      const q = `{ deliveryProfiles(first: 50) { edges { node { id name default profileLocationGroups { locationGroup { id } } zoneCountryCount } } } }`;
+      const res = await client.graphql<{ deliveryProfiles: any }>(q);
+      return { count: res.deliveryProfiles.edges.length, data: res.deliveryProfiles.edges.map((e: any) => e.node) };
+    }
+    case "markets": {
+      const q = `{ markets(first: 50) { edges { node { id name handle enabled primary } } } }`;
+      const res = await client.graphql<{ markets: any }>(q);
+      return { count: res.markets.edges.length, data: res.markets.edges.map((e: any) => e.node) };
+    }
+    case "third_party_apps": {
+      const q = `{ appInstallations(first: 100) { edges { node { id app { title developerName } } } } }`;
+      const res = await client.graphql<{ appInstallations: any }>(q);
+      return { count: res.appInstallations.edges.length, data: res.appInstallations.edges.map((e: any) => e.node) };
+    }
+    case "payments": {
+      const q = `{ shop { paymentSettings { supportedDigitalWallets acceptedCardBrands customManualPaymentMethods { name } } } }`;
+      const res = await client.graphql<{ shop: any }>(q);
+      return { count: 1, data: res.shop?.paymentSettings || {} };
+    }
+    case "menus": {
+      const q = `{ menus(first: 50) { edges { node { id title handle items { title url type } } } } }`;
+      const res = await client.graphql<{ menus: any }>(q);
+      return { count: res.menus.edges.length, data: res.menus.edges.map((e: any) => e.node) };
+    }
+    case "translations": {
+      const q = `{ shopLocales { locale name primary published } }`;
+      const res = await client.graphql<{ shopLocales: any }>(q);
+      return { count: res.shopLocales.length, data: res.shopLocales };
+    }
+    case "web_pixels": {
+      const q = `{ webPixelEvents(first: 50) { edges { node { id title } } } }`;
+      const res = await client.graphql<any>(q).catch(() => ({ webPixelEvents: { edges: [] } }));
+      return { count: res.webPixelEvents?.edges?.length || 0, data: res.webPixelEvents?.edges?.map((e: any) => e.node) || [] };
     }
     default:
       throw new Error(`Unknown REST stage: ${stageKey}`);

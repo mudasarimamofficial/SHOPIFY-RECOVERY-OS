@@ -172,6 +172,24 @@
       ]
     },
     {
+      "name": "explainShopifyLimitation",
+      "file": "src/lib/sdk/recovery/ai-assistant.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "generateDependencyGraphMermaid",
+      "file": "src/lib/sdk/recovery/dependency-graph.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
       "name": "classifyShopifyError",
       "file": "src/lib/sdk/recovery/executor.ts",
       "databaseTables": [],
@@ -183,6 +201,33 @@
     {
       "name": "executeResourceRestore",
       "file": "src/lib/sdk/recovery/executor.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "generateRecoveryPlan",
+      "file": "src/lib/sdk/recovery/intelligence.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "generateMerchantRecoveryBookMarkdown",
+      "file": "src/lib/sdk/reports/generator.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "triggerDownload",
+      "file": "src/lib/sdk/reports/generator.ts",
       "databaseTables": [],
       "tags": [
         "utility",
@@ -1234,10 +1279,21 @@
       "databaseTables": []
     },
     {
+      "file": "src/lib/auth-manager.server.ts",
+      "imports": [
+        "@supabase/supabase-js",
+        "./shopify.server"
+      ],
+      "databaseTables": [
+        "stores"
+      ]
+    },
+    {
       "file": "src/lib/backup.server.ts",
       "imports": [
         "@supabase/supabase-js",
         "./shopify.server",
+        "./auth-manager.server",
         "./resource-catalog",
         "node:crypto"
       ],
@@ -1302,7 +1358,8 @@
       "file": "src/lib/restore.server.ts",
       "imports": [
         "@supabase/supabase-js",
-        "./shopify.server"
+        "./shopify.server",
+        "./auth-manager.server"
       ],
       "databaseTables": [
         "backups",
@@ -1312,6 +1369,13 @@
       ]
     },
     {
+      "file": "src/lib/sdk/recovery/ai-assistant.ts",
+      "imports": [
+        "./intelligence"
+      ],
+      "databaseTables": []
+    },
+    {
       "file": "src/lib/sdk/recovery/archive.ts",
       "imports": [
         "@supabase/supabase-js",
@@ -1319,6 +1383,11 @@
         "./types",
         "./streams"
       ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/lib/sdk/recovery/dependency-graph.ts",
+      "imports": [],
       "databaseTables": []
     },
     {
@@ -1339,6 +1408,11 @@
         "node:stream",
         "node:readline"
       ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/lib/sdk/recovery/intelligence.ts",
+      "imports": [],
       "databaseTables": []
     },
     {
@@ -1365,6 +1439,14 @@
     {
       "file": "src/lib/sdk/recovery/types.ts",
       "imports": [],
+      "databaseTables": []
+    },
+    {
+      "file": "src/lib/sdk/reports/generator.ts",
+      "imports": [
+        "../../resource-catalog",
+        "../recovery/intelligence"
+      ],
       "databaseTables": []
     },
     {
@@ -1595,6 +1677,17 @@
       "databaseTables": []
     },
     {
+      "file": "src/routes/_authenticated/recovery/wizard.tsx",
+      "imports": [
+        "@tanstack/react-router",
+        "react",
+        "../../../lib/sdk/recovery/intelligence",
+        "../../../components/ui/card",
+        "../../../components/ui/button"
+      ],
+      "databaseTables": []
+    },
+    {
       "file": "src/routes/_authenticated/reports.tsx",
       "imports": [
         "@tanstack/react-router",
@@ -1696,6 +1789,7 @@
         "./routes/_authenticated/settings",
         "./routes/_authenticated/backups.index",
         "./routes/_authenticated/backups.$backupId",
+        "./routes/_authenticated/recovery/wizard",
         "./routes/_authenticated/stores.index",
         "./routes/_authenticated/stores.$storeId",
         "./router.tsx",
@@ -1801,6 +1895,16 @@
       ]
     },
     {
+      "file": "src/routes/_authenticated/recovery/wizard.tsx",
+      "imports": [
+        "@tanstack/react-router",
+        "react",
+        "../../../lib/sdk/recovery/intelligence",
+        "../../../components/ui/card",
+        "../../../components/ui/button"
+      ]
+    },
+    {
       "file": "src/routes/_authenticated/reports.tsx",
       "imports": [
         "@tanstack/react-router",
@@ -1888,6 +1992,8 @@
     "VITE_SUPABASE_PUBLISHABLE_KEY",
     "SUPABASE_PUBLISHABLE_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
+    "NVIDIA_API_KEY",
+    "NVIDIA_BASE_URL",
     "RECOVERY_SIGNING_SECRET",
     "ENCRYPTION_KEY",
     "SHOPIFY_API_KEY",
@@ -1898,5 +2004,5 @@
     "SHOPIFY_TOKEN_ENCRYPTION_KEY",
     "MAGIC_LINK_SECRET"
   ],
-  "last_generated": "2026-07-21T09:32:34.054Z"
+  "last_generated": "2026-07-21T10:58:21.390Z"
 }

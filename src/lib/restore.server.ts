@@ -71,18 +71,24 @@ export async function generateRestorePlan(
   const dependencyGraph = [
     { key: "shop", name: "Shop Settings" },
     { key: "locations", name: "Locations" },
-    { key: "metafield_definitions", name: "Metafield Definitions" },
     { key: "metaobject_definitions", name: "Metaobject Definitions" },
     { key: "metaobjects", name: "Metaobjects" },
+    { key: "metafield_definitions", name: "Metafield Definitions" },
     { key: "products_bulk", name: "Products & Variants" },
     { key: "collections_bulk", name: "Collections" },
+    { key: "menus", name: "Menus" },
     { key: "pages", name: "Pages" },
     { key: "blogs", name: "Blogs" },
     { key: "articles", name: "Articles" },
+    { key: "navigation", name: "Navigation" },
     { key: "redirects", name: "Redirects" },
+    { key: "markets", name: "Markets" },
+    { key: "translations", name: "Translations" },
+    { key: "policies", name: "Policies" },
+    { key: "theme", name: "Theme Engine Assets" },
     { key: "customers_bulk", name: "Customers" },
     { key: "orders_bulk", name: "Orders" },
-    { key: "theme", name: "Theme Engine Assets" },
+    { key: "third_party_apps", name: "Apps" },
   ];
 
   const dependencies: Record<string, string[]> = {
@@ -90,8 +96,12 @@ export async function generateRestorePlan(
     products_bulk: ["locations", "metafield_definitions", "metaobjects"],
     collections_bulk: ["products_bulk"],
     articles: ["blogs"],
+    navigation: ["menus", "pages", "collections_bulk", "products_bulk"],
     orders_bulk: ["customers_bulk", "products_bulk"],
+    redirects: ["products_bulk", "collections_bulk", "pages"],
+    markets: [],
     theme: [],
+    third_party_apps: ["theme"]
   };
 
   // This list intentionally contains only handlers that are implemented and
