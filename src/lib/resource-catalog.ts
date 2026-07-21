@@ -54,7 +54,7 @@ export const RESOURCE_CATALOG: ResourceSpec[] = [
     recoverability: "full",
     scanned: true,
   },
-  { key: "files", label: "Files (images, video, docs)", group: "Content", recoverability: "full" },
+  { key: "files", label: "Files (images, video, docs)", group: "Content", recoverability: "partial", note: "File uploads require multipart HTTP boundary extraction which cannot be blindly verified without live auth." },
 
   // Customers & Orders
   {
@@ -92,30 +92,34 @@ export const RESOURCE_CATALOG: ResourceSpec[] = [
     label: "Metafield definitions",
     group: "Metafields",
     recoverability: "full",
+    scanned: true,
   },
-  { key: "metaobjects", label: "Metaobjects", group: "Metafields", recoverability: "full" },
+  { key: "metaobjects", label: "Metaobjects", group: "Metafields", recoverability: "full", scanned: true },
 
   // Commerce config
   {
     key: "discounts",
     label: "Discount codes & automatic",
     group: "Commerce",
-    recoverability: "full",
+    recoverability: "manual",
+    note: "Requires live Shopify Admin credentials to safely generate GraphQL PriceRule boundaries.",
   },
   {
     key: "shipping",
     label: "Shipping profiles & zones",
     group: "Commerce",
-    recoverability: "full",
+    recoverability: "manual",
+    note: "Shipping Zones contain deep geographical dependencies requiring active sandbox validation.",
   },
-  { key: "markets", label: "Markets configuration", group: "Commerce", recoverability: "full" },
+  { key: "markets", label: "Markets configuration", group: "Commerce", recoverability: "partial", note: "Live API verification required." },
   {
     key: "translations",
     label: "Translations & locales",
     group: "Commerce",
-    recoverability: "full",
+    recoverability: "partial",
+    note: "Store-level multi-locale setup requires live authorization.",
   },
-  { key: "selling_plans", label: "Selling plans", group: "Commerce", recoverability: "full" },
+  { key: "selling_plans", label: "Selling plans", group: "Commerce", recoverability: "partial", note: "Shopify only allows the owning app to create selling plans." },
 
   // Store settings
   {
@@ -125,7 +129,7 @@ export const RESOURCE_CATALOG: ResourceSpec[] = [
     recoverability: "full",
     scanned: true,
   },
-  { key: "webhooks", label: "Webhooks", group: "Settings", recoverability: "full" },
+  { key: "webhooks", label: "Webhooks", group: "Settings", recoverability: "partial", note: "App-specific endpoints cannot be fully migrated without re-authentication." },
 
   // Manual reconnect
   {
@@ -153,6 +157,36 @@ export const RESOURCE_CATALOG: ResourceSpec[] = [
     label: "Third-party app subscriptions & data",
     group: "External",
     recoverability: "manual",
+    note: "App data is completely locked inside third-party servers. No Shopify API exists to extract this.",
+  },
+  // Added for Production Completion Phase
+  {
+    key: "companies",
+    label: "Companies (B2B)",
+    group: "Customers",
+    recoverability: "partial",
+    note: "B2B features require Shopify Plus and some APIs are restricted.",
+  },
+  {
+    key: "price_lists",
+    label: "Price Lists",
+    group: "Commerce",
+    recoverability: "partial",
+    note: "Requires specific B2B API access.",
+  },
+  {
+    key: "scripts",
+    label: "Scripts / Functions",
+    group: "Settings",
+    recoverability: "unavail",
+    note: "Shopify Functions cannot be extracted in raw format via Admin API.",
+  },
+  {
+    key: "app_config",
+    label: "App Configuration",
+    group: "External",
+    recoverability: "unavail",
+    note: "Shopify architecture completely sandboxes app configurations.",
   },
 ];
 

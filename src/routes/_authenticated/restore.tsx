@@ -37,6 +37,31 @@ function RestorePage() {
   const [jobId, setJobId] = useState<string | null>(null);
   const [restoreStatus, setRestoreStatus] = useState<string | null>(null);
   const [restoreProgress, setRestoreProgress] = useState(0);
+  const [currentResource, setCurrentResource] = useState<string>("");
+  const [report, setReport] = useState<any>(null);
+
+  const [selectedResources, setSelectedResources] = useState<string[]>([
+    "shop",
+    "locations",
+    "files",
+    "metaobjects",
+    "metafields",
+    "products_bulk",
+    "collections",
+    "pages",
+    "blogs",
+    "articles",
+    "redirects",
+    "customers_bulk",
+    "orders_bulk",
+    "theme",
+  ]);
+
+  const toggleResource = (res: string) => {
+    setSelectedResources((prev) =>
+      prev.includes(res) ? prev.filter((r) => r !== res) : [...prev, res],
+    );
+  };
 
   const completedBackups = backups.filter((b: any) => b.status === "completed");
 
@@ -45,7 +70,11 @@ function RestorePage() {
     setIsGenerating(true);
     try {
       const result = await generatePlan({
-        data: { backup_id: selectedBackup, target_store_id: selectedStore },
+        data: {
+          backup_id: selectedBackup,
+          target_store_id: selectedStore,
+          selected_resources: selectedResources,
+        },
       });
       setPlan(result);
     } catch (e: any) {
@@ -72,8 +101,11 @@ function RestorePage() {
           done = true;
           setRestoreStatus("completed");
           setRestoreProgress(100);
+          if (result.report) setReport(result.report);
         } else {
           setRestoreProgress(result.progress ?? 0);
+          setCurrentResource(result.current_resource ?? "");
+          if (result.report) setReport(result.report);
           await new Promise((r) => setTimeout(r, 1000));
         }
       }
@@ -131,6 +163,47 @@ function RestorePage() {
               </select>
             </div>
 
+            <div className="pt-4 pb-2 border-t mt-4">
+              <label className="text-sm font-medium mb-2 block">Select Resources to Restore</label>
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                {[
+                  "shop",
+                  "locations",
+                  "files",
+                  "metaobjects",
+                  "metafields",
+                  "products_bulk",
+                  "collections",
+                  "pages",
+                  "blogs",
+                  "articles",
+                  "redirects",
+                  "customers_bulk",
+                  "orders_bulk",
+                  "gift_cards",
+                  "discounts",
+                  "shipping",
+                  "markets",
+                  "theme",
+                  "navigation",
+                ].map((res) => (
+                  <label key={res} className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="rounded border-gray-300"
+                      checked={selectedResources.includes(res)}
+                      onChange={() => toggleResource(res)}
+                      disabled={isGenerating || !!jobId}
+                    />
+                    <span className="truncate">{res.replace("_bulk", "")}</span>
+                  </label>
+                ))}
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">
+                * Parent dependencies (e.g. locations for products) are automatically included.
+              </p>
+            </div>
+
             {!plan && !jobId && (
               <Button
                 onClick={handleAnalyze}
@@ -176,17 +249,75 @@ function RestorePage() {
           )}
 
           {jobId && (
-            <div className="surface-panel p-8 text-center">
-              <h3 className="text-lg font-semibold tracking-tight">
-                {restoreStatus === "completed" ? "Restore Complete!" : "Restoring..."}
+            <div className="surface-panel p-8">
+              <h3 className="text-lg font-semibold tracking-tight text-center mb-6">
+                {restoreStatus === "completed"
+                  ? "Enterprise Restore Complete"
+                  : "Enterprise Restore Active"}
               </h3>
+
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <div className="bg-background rounded-md border p-4 text-center">
+                  <div className="text-xs text-muted-foreground uppercase tracking-widest">
+                    Progress
+                  </div>
+                  <div className="text-2xl font-mono mt-1">{restoreProgress}%</div>
+                  <div className="text-xs text-muted-foreground mt-1 truncate">
+                    {currentResource || "Initializing..."}
+                  </div>
+                </div>
+                <div className="bg-background rounded-md border p-4 text-center">
+                  <div className="text-xs text-muted-foreground uppercase tracking-widest">
+                    Success Rate
+                  </div>
+                  <div className="text-2xl font-mono mt-1 text-success">
+                    {report?.objectsRestored || 0}
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-1">Objects Restored</div>
+                </div>
+                <div className="bg-background rounded-md border p-4 text-center">
+                  <div className="text-xs text-muted-foreground uppercase tracking-widest">
+                    API Cost
+                  </div>
+                  <div className="text-2xl font-mono mt-1">{report?.liveGraphqlCost || 0}</div>
+                  <div className="text-xs text-muted-foreground mt-1">GraphQL Points</div>
+                </div>
+                <div className="bg-background rounded-md border p-4 text-center">
+                  <div className="text-xs text-danger uppercase tracking-widest">Failures</div>
+                  <div className="text-2xl font-mono mt-1 text-danger">
+                    {report?.objectsFailed || 0}
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-1">Objects Failed</div>
+                </div>
+              </div>
+
               <div className="mt-4 h-2 w-full bg-secondary rounded-full overflow-hidden">
                 <div
                   className="h-full bg-primary transition-all duration-500"
                   style={{ width: `${restoreProgress}%` }}
                 />
               </div>
-              <p className="mt-2 text-sm text-muted-foreground">{restoreProgress}%</p>
+
+              {report?.failedItems?.length > 0 && (
+                <div className="mt-6 border rounded-md">
+                  <div className="bg-muted px-4 py-2 text-sm font-medium border-b flex justify-between">
+                    <span>Failure Log</span>
+                    <span className="text-danger">{report.failedItems.length} issues</span>
+                  </div>
+                  <div className="max-h-48 overflow-y-auto p-4 space-y-3 bg-background">
+                    {report.failedItems.slice(-20).map((f: any, i: number) => (
+                      <div key={i} className="text-xs font-mono break-words">
+                        <span className="inline-block px-1.5 py-0.5 rounded bg-danger/10 text-danger font-bold mr-2">
+                          {f.classification || "ERR"}
+                        </span>
+                        <span className="text-muted-foreground">
+                          [{f.id}]: {f.error}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

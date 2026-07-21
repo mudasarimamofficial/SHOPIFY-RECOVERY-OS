@@ -9,7 +9,7 @@ const connectSchema = z.object({
 
 export const connectShopifyStore = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((v) => connectSchema.parse(v))
+  .validator((v) => connectSchema.parse(v))
   .handler(async ({ data, context }) => {
     const {
       makeShopifyClient,
@@ -74,7 +74,7 @@ export const connectShopifyStore = createServerFn({ method: "POST" })
 // authorization URL for the browser to redirect to.
 export const beginShopifyOAuth = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((v) => z.object({ shop_domain: z.string().min(3).max(200) }).parse(v))
+  .validator((v) => z.object({ shop_domain: z.string().min(3).max(200) }).parse(v))
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { normalizeShop, isValidShopDomain, generateState, buildAuthorizeUrl } =
@@ -111,7 +111,7 @@ export const listStores = createServerFn({ method: "GET" })
 
 export const getStore = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((v) => z.object({ id: z.string().uuid() }).parse(v))
+  .validator((v) => z.object({ id: z.string().uuid() }).parse(v))
   .handler(async ({ data, context }) => {
     const { data: store, error } = await context.supabase
       .from("stores")
@@ -124,7 +124,7 @@ export const getStore = createServerFn({ method: "GET" })
 
 export const deleteStore = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((v) => z.object({ id: z.string().uuid() }).parse(v))
+  .validator((v) => z.object({ id: z.string().uuid() }).parse(v))
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase.from("stores").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
@@ -133,7 +133,7 @@ export const deleteStore = createServerFn({ method: "POST" })
 
 export const startBackup = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((v) =>
+  .validator((v) =>
     z.object({ store_id: z.string().uuid(), label: z.string().max(120).optional() }).parse(v),
   )
   .handler(async ({ data, context }) => {
@@ -166,7 +166,7 @@ export const startBackup = createServerFn({ method: "POST" })
 
 export const stepBackupFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((v) => z.object({ backup_id: z.string().uuid() }).parse(v))
+  .validator((v) => z.object({ backup_id: z.string().uuid() }).parse(v))
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { stepBackup } = await import("@/lib/backup.server");
@@ -204,7 +204,7 @@ export const listBackups = createServerFn({ method: "GET" })
 
 export const getBackup = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((v) => z.object({ id: z.string().uuid() }).parse(v))
+  .validator((v) => z.object({ id: z.string().uuid() }).parse(v))
   .handler(async ({ data, context }) => {
     const { data: backup, error } = await context.supabase
       .from("backups")
@@ -223,21 +223,6 @@ export const getBackup = createServerFn({ method: "GET" })
       .order("created_at", { ascending: true });
 
     return { backup, resources: resources ?? [] };
-  });
-
-export const downloadBackup = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((v) => z.object({ id: z.string().uuid() }).parse(v))
-  .handler(async ({ data, context }) => {
-    const { data: b, error } = await context.supabase
-      .from("backups")
-      .select("id, package_data")
-      .eq("id", data.id)
-      .maybeSingle();
-    if (error || !b) throw new Error("Backup not found");
-    const pkg = b.package_data as { zip_base64: string; filename: string } | null;
-    if (!pkg?.zip_base64) throw new Error("Package unavailable");
-    return { filename: pkg.filename, zip_base64: pkg.zip_base64 };
   });
 
 export const listRecentActivity = createServerFn({ method: "GET" })
@@ -286,8 +271,14 @@ export const dashboardSummary = createServerFn({ method: "GET" })
 
 export const generateRestorePlanFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((v) =>
-    z.object({ backup_id: z.string().uuid(), target_store_id: z.string().uuid() }).parse(v),
+  .validator((v) =>
+    z
+      .object({
+        backup_id: z.string().uuid(),
+        target_store_id: z.string().uuid(),
+        selected_resources: z.array(z.string()).optional(),
+      })
+      .parse(v),
   )
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -300,12 +291,12 @@ export const generateRestorePlanFn = createServerFn({ method: "POST" })
       .maybeSingle();
     if (storeErr || !store) throw new Error("Target store not found");
 
-    return await generateRestorePlan(supabaseAdmin, data.backup_id, store);
+    return await generateRestorePlan(supabaseAdmin, data.backup_id, store, data.selected_resources);
   });
 
 export const startRestoreFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((v) =>
+  .validator((v) =>
     z
       .object({ backup_id: z.string().uuid(), target_store_id: z.string().uuid(), plan: z.any() })
       .parse(v),
@@ -332,7 +323,7 @@ export const startRestoreFn = createServerFn({ method: "POST" })
 
 export const stepRestoreFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((v) => z.object({ job_id: z.string().uuid() }).parse(v))
+  .validator((v) => z.object({ job_id: z.string().uuid() }).parse(v))
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { executeRestoreStep } = await import("@/lib/restore.server");

@@ -5,13 +5,13 @@ async function test() {
   console.log("=== ENCRYPTION SUBSYSTEM TEST ===");
   const testToken = "shpua_1234567890abcdef1234567890abcdef";
   console.log("Original Token:", testToken);
-  
+
   const encrypted = encryptToken(testToken);
   console.log("Encrypted:", encrypted);
-  
+
   const decrypted = decryptToken(encrypted);
   console.log("Decrypted:", decrypted);
-  
+
   if (decrypted === testToken) {
     console.log("STATUS: PASS");
   } else {

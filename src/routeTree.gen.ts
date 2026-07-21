@@ -9,51 +9,36 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthenticatedStoresRouteImport } from './routes/_authenticated/stores'
-import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
-import { Route as AuthenticatedRestoreRouteImport } from './routes/_authenticated/restore'
-import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
-import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedConnectRouteImport } from './routes/_authenticated/connect'
-import { Route as AuthenticatedBackupsRouteImport } from './routes/_authenticated/backups'
-import { Route as AuthenticatedStoresStoreIdRouteImport } from './routes/_authenticated/stores.$storeId'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
+import { Route as AuthenticatedRestoreRouteImport } from './routes/_authenticated/restore'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedBackupsIndexRouteImport } from './routes/_authenticated/backups.index'
 import { Route as AuthenticatedBackupsBackupIdRouteImport } from './routes/_authenticated/backups.$backupId'
+import { Route as AuthenticatedStoresIndexRouteImport } from './routes/_authenticated/stores.index'
+import { Route as AuthenticatedStoresStoreIdRouteImport } from './routes/_authenticated/stores.$storeId'
 
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedStoresRoute = AuthenticatedStoresRouteImport.update({
-  id: '/stores',
-  path: '/stores',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedRestoreRoute = AuthenticatedRestoreRouteImport.update({
-  id: '/restore',
-  path: '/restore',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
-  id: '/reports',
-  path: '/reports',
+const AuthenticatedConnectRoute = AuthenticatedConnectRouteImport.update({
+  id: '/connect',
+  path: '/connect',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
@@ -61,111 +46,128 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedConnectRoute = AuthenticatedConnectRouteImport.update({
-  id: '/connect',
-  path: '/connect',
+const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedBackupsRoute = AuthenticatedBackupsRouteImport.update({
-  id: '/backups',
-  path: '/backups',
+const AuthenticatedRestoreRoute = AuthenticatedRestoreRouteImport.update({
+  id: '/restore',
+  path: '/restore',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedStoresStoreIdRoute =
-  AuthenticatedStoresStoreIdRouteImport.update({
-    id: '/$storeId',
-    path: '/$storeId',
-    getParentRoute: () => AuthenticatedStoresRoute,
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedBackupsIndexRoute =
+  AuthenticatedBackupsIndexRouteImport.update({
+    id: '/backups/',
+    path: '/backups/',
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedBackupsBackupIdRoute =
   AuthenticatedBackupsBackupIdRouteImport.update({
-    id: '/$backupId',
-    path: '/$backupId',
-    getParentRoute: () => AuthenticatedBackupsRoute,
+    id: '/backups/$backupId',
+    path: '/backups/$backupId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedStoresIndexRoute =
+  AuthenticatedStoresIndexRouteImport.update({
+    id: '/stores/',
+    path: '/stores/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedStoresStoreIdRoute =
+  AuthenticatedStoresStoreIdRouteImport.update({
+    id: '/stores/$storeId',
+    path: '/stores/$storeId',
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/backups': typeof AuthenticatedBackupsRouteWithChildren
   '/connect': typeof AuthenticatedConnectRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/restore': typeof AuthenticatedRestoreRoute
   '/settings': typeof AuthenticatedSettingsRoute
-  '/stores': typeof AuthenticatedStoresRouteWithChildren
   '/backups/$backupId': typeof AuthenticatedBackupsBackupIdRoute
   '/stores/$storeId': typeof AuthenticatedStoresStoreIdRoute
+  '/backups/': typeof AuthenticatedBackupsIndexRoute
+  '/stores/': typeof AuthenticatedStoresIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/backups': typeof AuthenticatedBackupsRouteWithChildren
   '/connect': typeof AuthenticatedConnectRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/restore': typeof AuthenticatedRestoreRoute
   '/settings': typeof AuthenticatedSettingsRoute
-  '/stores': typeof AuthenticatedStoresRouteWithChildren
   '/backups/$backupId': typeof AuthenticatedBackupsBackupIdRoute
   '/stores/$storeId': typeof AuthenticatedStoresStoreIdRoute
+  '/backups': typeof AuthenticatedBackupsIndexRoute
+  '/stores': typeof AuthenticatedStoresIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
-  '/_authenticated/backups': typeof AuthenticatedBackupsRouteWithChildren
   '/_authenticated/connect': typeof AuthenticatedConnectRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/restore': typeof AuthenticatedRestoreRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
-  '/_authenticated/stores': typeof AuthenticatedStoresRouteWithChildren
   '/_authenticated/backups/$backupId': typeof AuthenticatedBackupsBackupIdRoute
   '/_authenticated/stores/$storeId': typeof AuthenticatedStoresStoreIdRoute
+  '/_authenticated/backups/': typeof AuthenticatedBackupsIndexRoute
+  '/_authenticated/stores/': typeof AuthenticatedStoresIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/auth'
-    | '/backups'
     | '/connect'
     | '/dashboard'
     | '/reports'
     | '/restore'
     | '/settings'
-    | '/stores'
     | '/backups/$backupId'
     | '/stores/$storeId'
+    | '/backups/'
+    | '/stores/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
-    | '/backups'
     | '/connect'
     | '/dashboard'
     | '/reports'
     | '/restore'
     | '/settings'
-    | '/stores'
     | '/backups/$backupId'
     | '/stores/$storeId'
+    | '/backups'
+    | '/stores'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
-    | '/_authenticated/backups'
     | '/_authenticated/connect'
     | '/_authenticated/dashboard'
     | '/_authenticated/reports'
     | '/_authenticated/restore'
     | '/_authenticated/settings'
-    | '/_authenticated/stores'
     | '/_authenticated/backups/$backupId'
     | '/_authenticated/stores/$storeId'
+    | '/_authenticated/backups/'
+    | '/_authenticated/stores/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -176,11 +178,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -190,39 +192,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/stores': {
-      id: '/_authenticated/stores'
-      path: '/stores'
-      fullPath: '/stores'
-      preLoaderRoute: typeof AuthenticatedStoresRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/settings': {
-      id: '/_authenticated/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/restore': {
-      id: '/_authenticated/restore'
-      path: '/restore'
-      fullPath: '/restore'
-      preLoaderRoute: typeof AuthenticatedRestoreRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/reports': {
-      id: '/_authenticated/reports'
-      path: '/reports'
-      fullPath: '/reports'
-      preLoaderRoute: typeof AuthenticatedReportsRouteImport
+    '/_authenticated/connect': {
+      id: '/_authenticated/connect'
+      path: '/connect'
+      fullPath: '/connect'
+      preLoaderRoute: typeof AuthenticatedConnectRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard': {
@@ -232,77 +213,80 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/connect': {
-      id: '/_authenticated/connect'
-      path: '/connect'
-      fullPath: '/connect'
-      preLoaderRoute: typeof AuthenticatedConnectRouteImport
+    '/_authenticated/reports': {
+      id: '/_authenticated/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof AuthenticatedReportsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/backups': {
-      id: '/_authenticated/backups'
+    '/_authenticated/restore': {
+      id: '/_authenticated/restore'
+      path: '/restore'
+      fullPath: '/restore'
+      preLoaderRoute: typeof AuthenticatedRestoreRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/backups/': {
+      id: '/_authenticated/backups/'
       path: '/backups'
-      fullPath: '/backups'
-      preLoaderRoute: typeof AuthenticatedBackupsRouteImport
+      fullPath: '/backups/'
+      preLoaderRoute: typeof AuthenticatedBackupsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/backups/$backupId': {
+      id: '/_authenticated/backups/$backupId'
+      path: '/backups/$backupId'
+      fullPath: '/backups/$backupId'
+      preLoaderRoute: typeof AuthenticatedBackupsBackupIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/stores/': {
+      id: '/_authenticated/stores/'
+      path: '/stores'
+      fullPath: '/stores/'
+      preLoaderRoute: typeof AuthenticatedStoresIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/stores/$storeId': {
       id: '/_authenticated/stores/$storeId'
-      path: '/$storeId'
+      path: '/stores/$storeId'
       fullPath: '/stores/$storeId'
       preLoaderRoute: typeof AuthenticatedStoresStoreIdRouteImport
-      parentRoute: typeof AuthenticatedStoresRoute
-    }
-    '/_authenticated/backups/$backupId': {
-      id: '/_authenticated/backups/$backupId'
-      path: '/$backupId'
-      fullPath: '/backups/$backupId'
-      preLoaderRoute: typeof AuthenticatedBackupsBackupIdRouteImport
-      parentRoute: typeof AuthenticatedBackupsRoute
+      parentRoute: typeof AuthenticatedRouteRoute
     }
   }
 }
 
-interface AuthenticatedBackupsRouteChildren {
-  AuthenticatedBackupsBackupIdRoute: typeof AuthenticatedBackupsBackupIdRoute
-}
-
-const AuthenticatedBackupsRouteChildren: AuthenticatedBackupsRouteChildren = {
-  AuthenticatedBackupsBackupIdRoute: AuthenticatedBackupsBackupIdRoute,
-}
-
-const AuthenticatedBackupsRouteWithChildren =
-  AuthenticatedBackupsRoute._addFileChildren(AuthenticatedBackupsRouteChildren)
-
-interface AuthenticatedStoresRouteChildren {
-  AuthenticatedStoresStoreIdRoute: typeof AuthenticatedStoresStoreIdRoute
-}
-
-const AuthenticatedStoresRouteChildren: AuthenticatedStoresRouteChildren = {
-  AuthenticatedStoresStoreIdRoute: AuthenticatedStoresStoreIdRoute,
-}
-
-const AuthenticatedStoresRouteWithChildren =
-  AuthenticatedStoresRoute._addFileChildren(AuthenticatedStoresRouteChildren)
-
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedBackupsRoute: typeof AuthenticatedBackupsRouteWithChildren
   AuthenticatedConnectRoute: typeof AuthenticatedConnectRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
   AuthenticatedRestoreRoute: typeof AuthenticatedRestoreRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
-  AuthenticatedStoresRoute: typeof AuthenticatedStoresRouteWithChildren
+  AuthenticatedBackupsBackupIdRoute: typeof AuthenticatedBackupsBackupIdRoute
+  AuthenticatedStoresStoreIdRoute: typeof AuthenticatedStoresStoreIdRoute
+  AuthenticatedBackupsIndexRoute: typeof AuthenticatedBackupsIndexRoute
+  AuthenticatedStoresIndexRoute: typeof AuthenticatedStoresIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedBackupsRoute: AuthenticatedBackupsRouteWithChildren,
   AuthenticatedConnectRoute: AuthenticatedConnectRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedReportsRoute: AuthenticatedReportsRoute,
   AuthenticatedRestoreRoute: AuthenticatedRestoreRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
-  AuthenticatedStoresRoute: AuthenticatedStoresRouteWithChildren,
+  AuthenticatedBackupsBackupIdRoute: AuthenticatedBackupsBackupIdRoute,
+  AuthenticatedStoresStoreIdRoute: AuthenticatedStoresStoreIdRoute,
+  AuthenticatedBackupsIndexRoute: AuthenticatedBackupsIndexRoute,
+  AuthenticatedStoresIndexRoute: AuthenticatedStoresIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

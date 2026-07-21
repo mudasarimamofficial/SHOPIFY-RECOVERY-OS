@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery, useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { getBackup, downloadBackup } from "@/lib/shopify.functions";
+import { getBackup } from "@/lib/shopify.functions";
 import { PageHeader } from "@/components/app-shell";
 import { StatusDot } from "./dashboard";
 import { formatBytes, formatDate } from "@/lib/format";
@@ -16,7 +16,6 @@ export const Route = createFileRoute("/_authenticated/backups/$backupId")({
 function BackupDetail() {
   const { backupId } = Route.useParams();
   const fn = useServerFn(getBackup);
-  const dlFn = useServerFn(downloadBackup);
   const { data } = useSuspenseQuery(
     queryOptions({
       queryKey: ["backup", backupId],
@@ -30,16 +29,12 @@ function BackupDetail() {
   );
 
   const dl = useMutation({
-    mutationFn: () => dlFn({ data: { id: backupId } }),
-    onSuccess: (res) => {
-      const bin = Uint8Array.from(atob(res.zip_base64), (c) => c.charCodeAt(0));
-      const blob = new Blob([bin], { type: "application/zip" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = res.filename;
-      a.click();
-      URL.revokeObjectURL(url);
+    mutationFn: async () => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data } = await supabase.auth.getSession();
+      const token = data?.session?.access_token;
+      if (!token) throw new Error("Unauthorized: No session token found");
+      window.location.assign(`/api/download/${backupId}?token=${token}`);
     },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Download failed"),
   });

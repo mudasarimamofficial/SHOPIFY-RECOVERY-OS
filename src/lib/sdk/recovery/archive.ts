@@ -76,7 +76,7 @@ export class RecoveryArchive {
       .from(this.bucket)
       .upload(`${this.backupId}/manifest.json`, signedPayload, {
         upsert: true,
-        contentType: "application/json",
+        contentType: "application/octet-stream",
       });
     if (error) throw new Error(`Failed to write manifest: ${error.message}`);
   }

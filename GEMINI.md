@@ -1,0 +1,22 @@
+# Cursor Rules for Imam Recovery OS
+
+This repository relies on a permanent institutional memory system located in `/PROJECT_MEMORY`.
+As an AI coding agent, you are strictly required to maintain this memory.
+
+## 🛑 MANDATORY ONBOARDING
+
+Before writing ANY code in a new session, you MUST:
+
+1. Read `/PROJECT_MEMORY/00_START_HERE/03_AI_Handover.md`.
+2. Read `/PROJECT_MEMORY/00_START_HERE/02_Current_Status.md`.
+
+## 🛑 REQUIRED OUTPUTS
+
+When you modify a source file or architectural pattern, you MUST do the following before you consider your task complete:
+
+1. **Source Index Updates**: If you edit a file in `src/`, update its corresponding document in `/PROJECT_MEMORY/04_CODEBASE/FILES/`.
+2. **Re-Index**: Run `node scripts/build-memory-index.cjs` to automatically regenerate `project.index.json` and the Mermaid graphs in `/PROJECT_MEMORY/26_KNOWLEDGE_GRAPH/`.
+3. **Architecture Records**: If you change how a subsystem works, create an `ADR-XXXX.md` in `/PROJECT_MEMORY/19_DECISIONS/`.
+4. **Bug Records**: If you fix a production defect, create a `BUG-XXXX.md` in `/PROJECT_MEMORY/21_BUGS/`.
+
+Do not let the documentation drift from the source code. The memory is part of the architecture.

@@ -1,0 +1,1902 @@
+{
+  "functions": [
+    {
+      "name": "AppShell",
+      "file": "src/components/app-shell.tsx",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "PageHeader",
+      "file": "src/components/app-shell.tsx",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "useIsMobile",
+      "file": "src/hooks/use-mobile.tsx",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "stepBackup",
+      "file": "src/lib/backup.server.ts",
+      "databaseTables": [
+        "recovery_packages",
+        "backups",
+        "backup_resources",
+        "activity_log"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "handleDownload",
+      "file": "src/lib/download.server.ts",
+      "databaseTables": [
+        "backups",
+        "recovery_packages"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "consumeLastCapturedError",
+      "file": "src/lib/error-capture.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "renderErrorPage",
+      "file": "src/lib/error-page.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "formatBytes",
+      "file": "src/lib/format.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "formatRelative",
+      "file": "src/lib/format.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "formatDate",
+      "file": "src/lib/format.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "enqueueJob",
+      "file": "src/lib/queue.server.ts",
+      "databaseTables": [
+        "jobs",
+        "job_logs"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "logJobEvent",
+      "file": "src/lib/queue.server.ts",
+      "databaseTables": [
+        "jobs",
+        "job_logs"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "processNextJob",
+      "file": "src/lib/queue.server.ts",
+      "databaseTables": [
+        "jobs",
+        "job_logs"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "catalogByGroup",
+      "file": "src/lib/resource-catalog.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "generateRestorePlan",
+      "file": "src/lib/restore.server.ts",
+      "databaseTables": [
+        "backups",
+        "restore_jobs",
+        "activity_log",
+        "recovery_packages"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "executeRestoreStep",
+      "file": "src/lib/restore.server.ts",
+      "databaseTables": [
+        "backups",
+        "restore_jobs",
+        "activity_log",
+        "recovery_packages"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "classifyShopifyError",
+      "file": "src/lib/sdk/recovery/executor.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "executeResourceRestore",
+      "file": "src/lib/sdk/recovery/executor.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "withExponentialBackoff",
+      "file": "src/lib/sdk/shopify/rate-limiter.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "computeAssetChecksum",
+      "file": "src/lib/sdk/verification/binary-hash.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "verifyChecksumPair",
+      "file": "src/lib/sdk/verification/binary-hash.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "generateRecoveryCertificate",
+      "file": "src/lib/sdk/verification/certificate.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "compareProducts",
+      "file": "src/lib/sdk/verification/compare.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "compareCollections",
+      "file": "src/lib/sdk/verification/compare.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "compareCustomers",
+      "file": "src/lib/sdk/verification/compare.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "comparePages",
+      "file": "src/lib/sdk/verification/compare.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "compareFiles",
+      "file": "src/lib/sdk/verification/compare.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "classifyThemeFile",
+      "file": "src/lib/sdk/verification/theme-verifier.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "verifyThemeAssets",
+      "file": "src/lib/sdk/verification/theme-verifier.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "normalizeShop",
+      "file": "src/lib/shopify-oauth.server.ts",
+      "databaseTables": [
+        "oauth_sessions",
+        "stores",
+        "activity_log"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "isValidShopDomain",
+      "file": "src/lib/shopify-oauth.server.ts",
+      "databaseTables": [
+        "oauth_sessions",
+        "stores",
+        "activity_log"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "generateState",
+      "file": "src/lib/shopify-oauth.server.ts",
+      "databaseTables": [
+        "oauth_sessions",
+        "stores",
+        "activity_log"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "buildAuthorizeUrl",
+      "file": "src/lib/shopify-oauth.server.ts",
+      "databaseTables": [
+        "oauth_sessions",
+        "stores",
+        "activity_log"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "verifyCallbackHmac",
+      "file": "src/lib/shopify-oauth.server.ts",
+      "databaseTables": [
+        "oauth_sessions",
+        "stores",
+        "activity_log"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "isTimestampFresh",
+      "file": "src/lib/shopify-oauth.server.ts",
+      "databaseTables": [
+        "oauth_sessions",
+        "stores",
+        "activity_log"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "exchangeCodeForToken",
+      "file": "src/lib/shopify-oauth.server.ts",
+      "databaseTables": [
+        "oauth_sessions",
+        "stores",
+        "activity_log"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "registerWebhooks",
+      "file": "src/lib/shopify-oauth.server.ts",
+      "databaseTables": [
+        "oauth_sessions",
+        "stores",
+        "activity_log"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "handleOAuthCallback",
+      "file": "src/lib/shopify-oauth.server.ts",
+      "databaseTables": [
+        "oauth_sessions",
+        "stores",
+        "activity_log"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "verifyWebhookHmac",
+      "file": "src/lib/shopify-webhooks.server.ts",
+      "databaseTables": [
+        "stores"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "handleShopifyWebhooks",
+      "file": "src/lib/shopify-webhooks.server.ts",
+      "databaseTables": [
+        "stores"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "connectShopifyStore",
+      "file": "src/lib/shopify.functions.ts",
+      "databaseTables": [
+        "stores",
+        "activity_log",
+        "oauth_sessions",
+        "backups",
+        "backup_resources",
+        "restore_jobs"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "beginShopifyOAuth",
+      "file": "src/lib/shopify.functions.ts",
+      "databaseTables": [
+        "stores",
+        "activity_log",
+        "oauth_sessions",
+        "backups",
+        "backup_resources",
+        "restore_jobs"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "listStores",
+      "file": "src/lib/shopify.functions.ts",
+      "databaseTables": [
+        "stores",
+        "activity_log",
+        "oauth_sessions",
+        "backups",
+        "backup_resources",
+        "restore_jobs"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "getStore",
+      "file": "src/lib/shopify.functions.ts",
+      "databaseTables": [
+        "stores",
+        "activity_log",
+        "oauth_sessions",
+        "backups",
+        "backup_resources",
+        "restore_jobs"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "deleteStore",
+      "file": "src/lib/shopify.functions.ts",
+      "databaseTables": [
+        "stores",
+        "activity_log",
+        "oauth_sessions",
+        "backups",
+        "backup_resources",
+        "restore_jobs"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "startBackup",
+      "file": "src/lib/shopify.functions.ts",
+      "databaseTables": [
+        "stores",
+        "activity_log",
+        "oauth_sessions",
+        "backups",
+        "backup_resources",
+        "restore_jobs"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "stepBackupFn",
+      "file": "src/lib/shopify.functions.ts",
+      "databaseTables": [
+        "stores",
+        "activity_log",
+        "oauth_sessions",
+        "backups",
+        "backup_resources",
+        "restore_jobs"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "listBackups",
+      "file": "src/lib/shopify.functions.ts",
+      "databaseTables": [
+        "stores",
+        "activity_log",
+        "oauth_sessions",
+        "backups",
+        "backup_resources",
+        "restore_jobs"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "getBackup",
+      "file": "src/lib/shopify.functions.ts",
+      "databaseTables": [
+        "stores",
+        "activity_log",
+        "oauth_sessions",
+        "backups",
+        "backup_resources",
+        "restore_jobs"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "listRecentActivity",
+      "file": "src/lib/shopify.functions.ts",
+      "databaseTables": [
+        "stores",
+        "activity_log",
+        "oauth_sessions",
+        "backups",
+        "backup_resources",
+        "restore_jobs"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "dashboardSummary",
+      "file": "src/lib/shopify.functions.ts",
+      "databaseTables": [
+        "stores",
+        "activity_log",
+        "oauth_sessions",
+        "backups",
+        "backup_resources",
+        "restore_jobs"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "generateRestorePlanFn",
+      "file": "src/lib/shopify.functions.ts",
+      "databaseTables": [
+        "stores",
+        "activity_log",
+        "oauth_sessions",
+        "backups",
+        "backup_resources",
+        "restore_jobs"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "startRestoreFn",
+      "file": "src/lib/shopify.functions.ts",
+      "databaseTables": [
+        "stores",
+        "activity_log",
+        "oauth_sessions",
+        "backups",
+        "backup_resources",
+        "restore_jobs"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "stepRestoreFn",
+      "file": "src/lib/shopify.functions.ts",
+      "databaseTables": [
+        "stores",
+        "activity_log",
+        "oauth_sessions",
+        "backups",
+        "backup_resources",
+        "restore_jobs"
+      ],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "encryptToken",
+      "file": "src/lib/shopify.server.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "decryptToken",
+      "file": "src/lib/shopify.server.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "normalizeShopDomain",
+      "file": "src/lib/shopify.server.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "makeShopifyClient",
+      "file": "src/lib/shopify.server.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "fetchShopInfo",
+      "file": "src/lib/shopify.server.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "runWithConcurrency",
+      "file": "src/lib/shopify.server.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "cn",
+      "file": "src/lib/utils.ts",
+      "databaseTables": [],
+      "tags": [
+        "utility",
+        "server-function"
+      ]
+    },
+    {
+      "name": "LogoMark",
+      "file": "src/routes/index.tsx",
+      "databaseTables": [],
+      "tags": [
+        "route-action"
+      ]
+    },
+    {
+      "name": "StatusDot",
+      "file": "src/routes/_authenticated/dashboard.tsx",
+      "databaseTables": [],
+      "tags": [
+        "route-action"
+      ]
+    }
+  ],
+  "files": [
+    {
+      "file": "src/components/app-shell.tsx",
+      "imports": [
+        "@tanstack/react-router",
+        "react",
+        "lucide-react",
+        "@/integrations/supabase/client",
+        "@/routes/index",
+        "@tanstack/react-query"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/accordion.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-accordion",
+        "lucide-react",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/alert-dialog.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-alert-dialog",
+        "@/lib/utils",
+        "@/components/ui/button"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/alert.tsx",
+      "imports": [
+        "react",
+        "class-variance-authority",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/aspect-ratio.tsx",
+      "imports": [
+        "@radix-ui/react-aspect-ratio"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/avatar.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-avatar",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/badge.tsx",
+      "imports": [
+        "react",
+        "class-variance-authority",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/breadcrumb.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-slot",
+        "lucide-react",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/button.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-slot",
+        "class-variance-authority",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/calendar.tsx",
+      "imports": [
+        "react",
+        "lucide-react",
+        "react-day-picker",
+        "@/lib/utils",
+        "@/components/ui/button"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/card.tsx",
+      "imports": [
+        "react",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/carousel.tsx",
+      "imports": [
+        "react",
+        "embla-carousel-react",
+        "lucide-react",
+        "@/lib/utils",
+        "@/components/ui/button"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/chart.tsx",
+      "imports": [
+        "react",
+        "recharts",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/checkbox.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-checkbox",
+        "lucide-react",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/collapsible.tsx",
+      "imports": [
+        "@radix-ui/react-collapsible"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/command.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-dialog",
+        "cmdk",
+        "lucide-react",
+        "@/lib/utils",
+        "@/components/ui/dialog"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/context-menu.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-context-menu",
+        "lucide-react",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/dialog.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-dialog",
+        "lucide-react",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/drawer.tsx",
+      "imports": [
+        "react",
+        "vaul",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/dropdown-menu.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-dropdown-menu",
+        "lucide-react",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/form.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-label",
+        "@radix-ui/react-slot",
+        "react-hook-form",
+        "@/lib/utils",
+        "@/components/ui/label"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/hover-card.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-hover-card",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/input-otp.tsx",
+      "imports": [
+        "react",
+        "input-otp",
+        "lucide-react",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/input.tsx",
+      "imports": [
+        "react",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/label.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-label",
+        "class-variance-authority",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/menubar.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-menubar",
+        "lucide-react",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/navigation-menu.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-navigation-menu",
+        "class-variance-authority",
+        "lucide-react",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/pagination.tsx",
+      "imports": [
+        "react",
+        "lucide-react",
+        "@/lib/utils",
+        "@/components/ui/button"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/popover.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-popover",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/progress.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-progress",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/radio-group.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-radio-group",
+        "lucide-react",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/resizable.tsx",
+      "imports": [
+        "lucide-react",
+        "react-resizable-panels",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/scroll-area.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-scroll-area",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/select.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-select",
+        "lucide-react",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/separator.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-separator",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/sheet.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-dialog",
+        "class-variance-authority",
+        "lucide-react",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/sidebar.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-slot",
+        "class-variance-authority",
+        "lucide-react",
+        "@/hooks/use-mobile",
+        "@/lib/utils",
+        "@/components/ui/button",
+        "@/components/ui/input",
+        "@/components/ui/separator",
+        "@/components/ui/sheet",
+        "@/components/ui/skeleton",
+        "@/components/ui/tooltip"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/skeleton.tsx",
+      "imports": [
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/slider.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-slider",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/sonner.tsx",
+      "imports": [
+        "sonner"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/switch.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-switch",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/table.tsx",
+      "imports": [
+        "react",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/tabs.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-tabs",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/textarea.tsx",
+      "imports": [
+        "react",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/toggle-group.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-toggle-group",
+        "class-variance-authority",
+        "@/lib/utils",
+        "@/components/ui/toggle"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/toggle.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-toggle",
+        "class-variance-authority",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/components/ui/tooltip.tsx",
+      "imports": [
+        "react",
+        "@radix-ui/react-tooltip",
+        "@/lib/utils"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/hooks/use-mobile.tsx",
+      "imports": [
+        "react"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/integrations/supabase/auth-attacher.ts",
+      "imports": [
+        "@tanstack/react-start",
+        "./client"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/integrations/supabase/auth-middleware.ts",
+      "imports": [
+        "@tanstack/react-start",
+        "@tanstack/react-start/server",
+        "@supabase/supabase-js",
+        "./types"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/integrations/supabase/client.server.ts",
+      "imports": [
+        "@supabase/supabase-js",
+        "./types"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/integrations/supabase/client.ts",
+      "imports": [
+        "@supabase/supabase-js",
+        "./types",
+        "@/integrations/supabase/client"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/integrations/supabase/types.ts",
+      "imports": [],
+      "databaseTables": []
+    },
+    {
+      "file": "src/lib/backup.server.ts",
+      "imports": [
+        "@supabase/supabase-js",
+        "./shopify.server",
+        "./resource-catalog",
+        "node:crypto"
+      ],
+      "databaseTables": [
+        "recovery_packages",
+        "backups",
+        "backup_resources",
+        "activity_log"
+      ]
+    },
+    {
+      "file": "src/lib/download.server.ts",
+      "imports": [
+        "@/integrations/supabase/client.server",
+        "jszip"
+      ],
+      "databaseTables": [
+        "backups",
+        "recovery_packages"
+      ]
+    },
+    {
+      "file": "src/lib/error-capture.ts",
+      "imports": [],
+      "databaseTables": []
+    },
+    {
+      "file": "src/lib/error-page.ts",
+      "imports": [],
+      "databaseTables": []
+    },
+    {
+      "file": "src/lib/format.ts",
+      "imports": [],
+      "databaseTables": []
+    },
+    {
+      "file": "src/lib/pipeline/id-mapper.ts",
+      "imports": [
+        "@supabase/supabase-js"
+      ],
+      "databaseTables": [
+        "id_mappings"
+      ]
+    },
+    {
+      "file": "src/lib/queue.server.ts",
+      "imports": [
+        "@supabase/supabase-js"
+      ],
+      "databaseTables": [
+        "jobs",
+        "job_logs"
+      ]
+    },
+    {
+      "file": "src/lib/resource-catalog.ts",
+      "imports": [],
+      "databaseTables": []
+    },
+    {
+      "file": "src/lib/restore.server.ts",
+      "imports": [
+        "@supabase/supabase-js",
+        "./shopify.server"
+      ],
+      "databaseTables": [
+        "backups",
+        "restore_jobs",
+        "activity_log",
+        "recovery_packages"
+      ]
+    },
+    {
+      "file": "src/lib/sdk/recovery/archive.ts",
+      "imports": [
+        "@supabase/supabase-js",
+        "crypto",
+        "./types",
+        "./streams"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/lib/sdk/recovery/differ.ts",
+      "imports": [
+        "./archive",
+        "./types"
+      ],
+      "databaseTables": [
+        "recovery_packages"
+      ]
+    },
+    {
+      "file": "src/lib/sdk/recovery/executor.ts",
+      "imports": [
+        "../../shopify.server",
+        "../../pipeline/id-mapper",
+        "node:stream",
+        "node:readline"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/lib/sdk/recovery/repair.ts",
+      "imports": [
+        "@supabase/supabase-js",
+        "./types",
+        "./archive",
+        "crypto"
+      ],
+      "databaseTables": [
+        "recovery_packages"
+      ]
+    },
+    {
+      "file": "src/lib/sdk/recovery/streams.ts",
+      "imports": [
+        "crypto",
+        "@supabase/supabase-js",
+        "stream"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/lib/sdk/recovery/types.ts",
+      "imports": [],
+      "databaseTables": []
+    },
+    {
+      "file": "src/lib/sdk/shopify/bulk-operations.ts",
+      "imports": [
+        "./client"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/lib/sdk/shopify/client.ts",
+      "imports": [
+        "./rate-limiter",
+        "./bulk-operations"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/lib/sdk/shopify/discovery.ts",
+      "imports": [
+        "./client"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/lib/sdk/shopify/rate-limiter.ts",
+      "imports": [],
+      "databaseTables": []
+    },
+    {
+      "file": "src/lib/sdk/verification/binary-hash.ts",
+      "imports": [
+        "node:crypto"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/lib/sdk/verification/certificate.ts",
+      "imports": [
+        "node:crypto",
+        "./compare"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/lib/sdk/verification/compare.ts",
+      "imports": [
+        "../../shopify.server"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/lib/sdk/verification/theme-verifier.ts",
+      "imports": [
+        "./binary-hash"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/lib/shopify-oauth.server.ts",
+      "imports": [
+        "node:crypto",
+        "@supabase/supabase-js",
+        "./shopify.server"
+      ],
+      "databaseTables": [
+        "oauth_sessions",
+        "stores",
+        "activity_log"
+      ]
+    },
+    {
+      "file": "src/lib/shopify-webhooks.server.ts",
+      "imports": [
+        "node:crypto",
+        "@supabase/supabase-js"
+      ],
+      "databaseTables": [
+        "stores"
+      ]
+    },
+    {
+      "file": "src/lib/shopify.functions.ts",
+      "imports": [
+        "@tanstack/react-start",
+        "zod",
+        "@/integrations/supabase/auth-middleware"
+      ],
+      "databaseTables": [
+        "stores",
+        "activity_log",
+        "oauth_sessions",
+        "backups",
+        "backup_resources",
+        "restore_jobs"
+      ]
+    },
+    {
+      "file": "src/lib/shopify.server.ts",
+      "imports": [
+        "node:crypto"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/lib/utils.ts",
+      "imports": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/lib/__tests__/encryption.test.ts",
+      "imports": [
+        "vitest"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/lib/__tests__/id-mapper.test.ts",
+      "imports": [
+        "vitest",
+        "../pipeline/id-mapper"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/lib/__tests__/shopify-oauth.test.ts",
+      "imports": [
+        "vitest",
+        "node:crypto"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/lib/__tests__/shopify-webhooks.test.ts",
+      "imports": [
+        "vitest",
+        "node:crypto"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/router.tsx",
+      "imports": [
+        "@tanstack/react-query",
+        "@tanstack/react-router",
+        "./routeTree.gen"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/routes/auth.tsx",
+      "imports": [
+        "@tanstack/react-router",
+        "react",
+        "sonner",
+        "@/integrations/supabase/client",
+        "./index",
+        "lucide-react"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/routes/index.tsx",
+      "imports": [
+        "@tanstack/react-router",
+        "lucide-react"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/routes/_authenticated/backups.$backupId.tsx",
+      "imports": [
+        "@tanstack/react-router",
+        "@tanstack/react-query",
+        "@tanstack/react-start",
+        "sonner",
+        "@/lib/shopify.functions",
+        "@/components/app-shell",
+        "./dashboard",
+        "@/lib/format",
+        "lucide-react",
+        "@/lib/resource-catalog"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/routes/_authenticated/backups.index.tsx",
+      "imports": [
+        "@tanstack/react-router",
+        "@tanstack/react-query",
+        "@tanstack/react-start",
+        "@/lib/shopify.functions",
+        "@/components/app-shell",
+        "./dashboard",
+        "@/lib/format",
+        "lucide-react"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/routes/_authenticated/connect.tsx",
+      "imports": [
+        "@tanstack/react-router",
+        "react",
+        "@tanstack/react-query",
+        "@tanstack/react-start",
+        "sonner",
+        "@/components/app-shell",
+        "@/lib/shopify.functions",
+        "lucide-react"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/routes/_authenticated/dashboard.tsx",
+      "imports": [
+        "@tanstack/react-router",
+        "@tanstack/react-query",
+        "@tanstack/react-start",
+        "@/lib/shopify.functions",
+        "@/components/app-shell",
+        "lucide-react",
+        "@/lib/format"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/routes/_authenticated/reports.tsx",
+      "imports": [
+        "@tanstack/react-router",
+        "@tanstack/react-query",
+        "@tanstack/react-start",
+        "@/lib/shopify.functions",
+        "@/components/app-shell",
+        "@/lib/format",
+        "lucide-react"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/routes/_authenticated/restore.tsx",
+      "imports": [
+        "@tanstack/react-router",
+        "@tanstack/react-query",
+        "@tanstack/react-start",
+        "react",
+        "@/components/app-shell",
+        "lucide-react",
+        "@/lib/shopify.functions",
+        "@/components/ui/button"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/routes/_authenticated/route.tsx",
+      "imports": [
+        "@tanstack/react-router",
+        "@/integrations/supabase/client",
+        "@/components/app-shell"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/routes/_authenticated/settings.tsx",
+      "imports": [
+        "@tanstack/react-router",
+        "react",
+        "@/components/app-shell",
+        "@/integrations/supabase/client",
+        "lucide-react"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/routes/_authenticated/stores.$storeId.tsx",
+      "imports": [
+        "@tanstack/react-router",
+        "@tanstack/react-query",
+        "@tanstack/react-start",
+        "sonner",
+        "@/lib/shopify.functions",
+        "@/components/app-shell",
+        "./dashboard",
+        "@/lib/format",
+        "lucide-react",
+        "@/lib/resource-catalog"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/routes/_authenticated/stores.index.tsx",
+      "imports": [
+        "@tanstack/react-router",
+        "@tanstack/react-query",
+        "@tanstack/react-start",
+        "@/lib/shopify.functions",
+        "@/components/app-shell",
+        "lucide-react",
+        "@/lib/format"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/routes/__root.tsx",
+      "imports": [
+        "@tanstack/react-query",
+        "@tanstack/react-router",
+        "react",
+        "sonner",
+        "../styles.css?url",
+        "@/integrations/supabase/client"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/routeTree.gen.ts",
+      "imports": [
+        "./routes/__root",
+        "./routes/index",
+        "./routes/_authenticated/route",
+        "./routes/auth",
+        "./routes/_authenticated/connect",
+        "./routes/_authenticated/dashboard",
+        "./routes/_authenticated/reports",
+        "./routes/_authenticated/restore",
+        "./routes/_authenticated/settings",
+        "./routes/_authenticated/backups.index",
+        "./routes/_authenticated/backups.$backupId",
+        "./routes/_authenticated/stores.index",
+        "./routes/_authenticated/stores.$storeId",
+        "./router.tsx",
+        "./start.ts"
+      ],
+      "databaseTables": []
+    },
+    {
+      "file": "src/server.ts",
+      "imports": [
+        "./lib/error-capture",
+        "./lib/error-page",
+        "./lib/shopify-webhooks.server",
+        "./lib/shopify-oauth.server"
+      ],
+      "databaseTables": [
+        "stores",
+        "backups",
+        "restore_jobs",
+        "activity_log"
+      ]
+    },
+    {
+      "file": "src/start.ts",
+      "imports": [
+        "@tanstack/react-start",
+        "./lib/error-page",
+        "@/integrations/supabase/auth-attacher"
+      ],
+      "databaseTables": []
+    }
+  ],
+  "routes": [
+    {
+      "file": "src/routes/auth.tsx",
+      "imports": [
+        "@tanstack/react-router",
+        "react",
+        "sonner",
+        "@/integrations/supabase/client",
+        "./index",
+        "lucide-react"
+      ]
+    },
+    {
+      "file": "src/routes/index.tsx",
+      "imports": [
+        "@tanstack/react-router",
+        "lucide-react"
+      ]
+    },
+    {
+      "file": "src/routes/_authenticated/backups.$backupId.tsx",
+      "imports": [
+        "@tanstack/react-router",
+        "@tanstack/react-query",
+        "@tanstack/react-start",
+        "sonner",
+        "@/lib/shopify.functions",
+        "@/components/app-shell",
+        "./dashboard",
+        "@/lib/format",
+        "lucide-react",
+        "@/lib/resource-catalog"
+      ]
+    },
+    {
+      "file": "src/routes/_authenticated/backups.index.tsx",
+      "imports": [
+        "@tanstack/react-router",
+        "@tanstack/react-query",
+        "@tanstack/react-start",
+        "@/lib/shopify.functions",
+        "@/components/app-shell",
+        "./dashboard",
+        "@/lib/format",
+        "lucide-react"
+      ]
+    },
+    {
+      "file": "src/routes/_authenticated/connect.tsx",
+      "imports": [
+        "@tanstack/react-router",
+        "react",
+        "@tanstack/react-query",
+        "@tanstack/react-start",
+        "sonner",
+        "@/components/app-shell",
+        "@/lib/shopify.functions",
+        "lucide-react"
+      ]
+    },
+    {
+      "file": "src/routes/_authenticated/dashboard.tsx",
+      "imports": [
+        "@tanstack/react-router",
+        "@tanstack/react-query",
+        "@tanstack/react-start",
+        "@/lib/shopify.functions",
+        "@/components/app-shell",
+        "lucide-react",
+        "@/lib/format"
+      ]
+    },
+    {
+      "file": "src/routes/_authenticated/reports.tsx",
+      "imports": [
+        "@tanstack/react-router",
+        "@tanstack/react-query",
+        "@tanstack/react-start",
+        "@/lib/shopify.functions",
+        "@/components/app-shell",
+        "@/lib/format",
+        "lucide-react"
+      ]
+    },
+    {
+      "file": "src/routes/_authenticated/restore.tsx",
+      "imports": [
+        "@tanstack/react-router",
+        "@tanstack/react-query",
+        "@tanstack/react-start",
+        "react",
+        "@/components/app-shell",
+        "lucide-react",
+        "@/lib/shopify.functions",
+        "@/components/ui/button"
+      ]
+    },
+    {
+      "file": "src/routes/_authenticated/route.tsx",
+      "imports": [
+        "@tanstack/react-router",
+        "@/integrations/supabase/client",
+        "@/components/app-shell"
+      ]
+    },
+    {
+      "file": "src/routes/_authenticated/settings.tsx",
+      "imports": [
+        "@tanstack/react-router",
+        "react",
+        "@/components/app-shell",
+        "@/integrations/supabase/client",
+        "lucide-react"
+      ]
+    },
+    {
+      "file": "src/routes/_authenticated/stores.$storeId.tsx",
+      "imports": [
+        "@tanstack/react-router",
+        "@tanstack/react-query",
+        "@tanstack/react-start",
+        "sonner",
+        "@/lib/shopify.functions",
+        "@/components/app-shell",
+        "./dashboard",
+        "@/lib/format",
+        "lucide-react",
+        "@/lib/resource-catalog"
+      ]
+    },
+    {
+      "file": "src/routes/_authenticated/stores.index.tsx",
+      "imports": [
+        "@tanstack/react-router",
+        "@tanstack/react-query",
+        "@tanstack/react-start",
+        "@/lib/shopify.functions",
+        "@/components/app-shell",
+        "lucide-react",
+        "@/lib/format"
+      ]
+    },
+    {
+      "file": "src/routes/__root.tsx",
+      "imports": [
+        "@tanstack/react-query",
+        "@tanstack/react-router",
+        "react",
+        "sonner",
+        "../styles.css?url",
+        "@/integrations/supabase/client"
+      ]
+    }
+  ],
+  "environment": [
+    "VITE_SUPABASE_URL",
+    "SUPABASE_URL",
+    "VITE_SUPABASE_PUBLISHABLE_KEY",
+    "SUPABASE_PUBLISHABLE_KEY",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "RECOVERY_SIGNING_SECRET",
+    "ENCRYPTION_KEY",
+    "SHOPIFY_API_KEY",
+    "SHOPIFY_API_SECRET",
+    "SHOPIFY_APP_URL",
+    "APP_URL",
+    "SHOPIFY_SCOPES",
+    "SHOPIFY_TOKEN_ENCRYPTION_KEY",
+    "MAGIC_LINK_SECRET"
+  ],
+  "last_generated": "2026-07-21T08:27:58.015Z"
+}

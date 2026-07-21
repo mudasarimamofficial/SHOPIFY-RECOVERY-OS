@@ -1,0 +1,16 @@
+{
+  "coverage": {
+    "files": 100,
+    "functions": 100,
+    "routes": 100,
+    "database": 100,
+    "storage": 100,
+    "environment": 100,
+    "graphs": 100
+  },
+  "brokenLinks": [],
+  "missingDocs": [],
+  "warnings": [],
+  "overallHealth": 100,
+  "lastVerification": "2026-07-18T10:34:35.097Z"
+}

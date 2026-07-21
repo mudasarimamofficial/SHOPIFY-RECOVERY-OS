@@ -60,9 +60,106 @@ export default {
         return await handleShopifyWebhooks(request);
       }
 
+      if (url.pathname.startsWith("/api/download/")) {
+        const { handleDownload } = await import("./lib/download.server");
+        return await handleDownload(request);
+      }
+
       // Shopify OAuth callback (offline token exchange + install).
       if (url.pathname === "/api/auth/callback") {
         return await handleOAuthCallback(request);
+      }
+
+      if (url.pathname === "/api/magic-link") {
+        // Dev/QA authentication helper - only active when MAGIC_LINK_SECRET is set.
+        // DO NOT deploy to production without setting this to a strong random value.
+        const magicLinkSecret = process.env.MAGIC_LINK_SECRET;
+        if (!magicLinkSecret || url.searchParams.get("secret") !== magicLinkSecret) {
+          return new Response("Unauthorized", { status: 401 });
+        }
+        const { supabaseAdmin } = await import("./integrations/supabase/client.server");
+        const { data, error } = await supabaseAdmin.auth.admin.generateLink({
+          type: "magiclink",
+          email: "mudasarimamofficial@gmail.com",
+        });
+        if (error) {
+          return new Response(JSON.stringify({ error: error.message }), {
+            status: 500,
+            headers: { "Content-Type": "application/json" },
+          });
+        }
+        return new Response(JSON.stringify({ link: data.properties.action_link }), {
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+
+      if (url.pathname === "/api/db-debug") {
+        const magicLinkSecret = process.env.MAGIC_LINK_SECRET;
+        if (!magicLinkSecret || url.searchParams.get("secret") !== magicLinkSecret) {
+          return new Response("Unauthorized", { status: 401 });
+        }
+        const { supabaseAdmin } = await import("./integrations/supabase/client.server");
+        const { data: stores } = await supabaseAdmin
+          .from("stores")
+          .select("id, shop_domain, name, status");
+        const { data: backups } = await supabaseAdmin
+          .from("backups")
+          .select("id, label, status, progress, current_stage, errors_count, created_at")
+          .order("created_at", { ascending: false })
+          .limit(5);
+        const { data: restoreJobs } = await supabaseAdmin
+          .from("restore_jobs")
+          .select("id, backup_id, target_store_id, status, progress, report, created_at")
+          .order("created_at", { ascending: false })
+          .limit(5);
+        const { data: activity } = await supabaseAdmin
+          .from("activity_log")
+          .select("id, kind, title, detail, created_at")
+          .order("created_at", { ascending: false })
+          .limit(10);
+
+        return new Response(JSON.stringify({ stores, backups, restoreJobs, activity }, null, 2), {
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+
+      if (url.pathname === "/api/store-counts") {
+        const magicLinkSecret = process.env.MAGIC_LINK_SECRET;
+        if (!magicLinkSecret || url.searchParams.get("secret") !== magicLinkSecret) {
+          return new Response("Unauthorized", { status: 401 });
+        }
+        const { supabaseAdmin } = await import("./integrations/supabase/client.server");
+        const { decryptToken, makeShopifyClient } = await import("./lib/shopify.server");
+
+        const { data: stores } = await supabaseAdmin.from("stores").select("*");
+        const counts: Record<string, any> = {};
+
+        for (const store of stores || []) {
+          if (!store.access_token_ciphertext) continue;
+          try {
+            const token = decryptToken(store.access_token_ciphertext);
+            const client = makeShopifyClient(store.shop_domain, token);
+
+            const prodRes = await client.rest<any>("/products/count.json");
+            const custRes = await client.rest<any>("/customers/count.json");
+            const ordRes = await client.rest<any>("/orders/count.json?status=any");
+            const smartRes = await client.rest<any>("/smart_collections/count.json");
+            const customRes = await client.rest<any>("/custom_collections/count.json");
+
+            counts[store.shop_domain] = {
+              products: prodRes?.count ?? 0,
+              customers: custRes?.count ?? 0,
+              orders: ordRes?.count ?? 0,
+              collections: (smartRes?.count ?? 0) + (customRes?.count ?? 0),
+            };
+          } catch (e: any) {
+            counts[store.shop_domain] = { error: e.message };
+          }
+        }
+
+        return new Response(JSON.stringify(counts, null, 2), {
+          headers: { "Content-Type": "application/json" },
+        });
       }
 
       const handler = await getServerEntry();
