@@ -1,11 +1,11 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import {
   makeShopifyClient,
-  decryptToken,
   fetchShopInfo,
   SHOPIFY_API_VERSION,
   type ShopifyClient,
 } from "./shopify.server";
+import { AuthManager } from "./auth-manager.server";
 import { RESOURCE_CATALOG } from "./resource-catalog";
 
 interface StoreRow {
@@ -228,8 +228,7 @@ export async function stepBackup(admin: SupabaseClient, store: StoreRow, backupI
     return { done: true };
   }
 
-  const token = decryptToken(store.access_token_ciphertext);
-  const client = makeShopifyClient(store.shop_domain, token);
+  const client = await AuthManager.getUnifiedClient(admin, store.id);
 
   try {
     if (currentStage.endsWith("_bulk")) {

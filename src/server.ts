@@ -129,7 +129,7 @@ export default {
           return new Response("Unauthorized", { status: 401 });
         }
         const { supabaseAdmin } = await import("./integrations/supabase/client.server");
-        const { decryptToken, makeShopifyClient } = await import("./lib/shopify.server");
+        const { AuthManager } = await import("./lib/auth-manager.server");
 
         const { data: stores } = await supabaseAdmin.from("stores").select("*");
         const counts: Record<string, any> = {};
@@ -137,8 +137,7 @@ export default {
         for (const store of stores || []) {
           if (!store.access_token_ciphertext) continue;
           try {
-            const token = decryptToken(store.access_token_ciphertext);
-            const client = makeShopifyClient(store.shop_domain, token);
+            const client = await AuthManager.getUnifiedClient(supabaseAdmin, store.id);
 
             const prodRes = await client.rest<any>("/products/count.json");
             const custRes = await client.rest<any>("/customers/count.json");

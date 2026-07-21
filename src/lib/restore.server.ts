@@ -1,11 +1,11 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import {
   makeShopifyClient,
-  decryptToken,
   fetchShopInfo,
   type ShopifyClient,
   SHOPIFY_API_VERSION,
 } from "./shopify.server";
+import { AuthManager } from "./auth-manager.server";
 
 interface StoreRow {
   id: string;
@@ -52,8 +52,7 @@ export async function generateRestorePlan(
     throw new Error("Invalid or missing package manifest");
   }
 
-  const token = decryptToken(targetStore.access_token_ciphertext);
-  const client = makeShopifyClient(targetStore.shop_domain, token);
+  const client = await AuthManager.getUnifiedClient(admin, targetStore.id);
 
   // Verify API version compatibility
   const sourceApi = manifest.api_version || "unknown";
@@ -196,8 +195,7 @@ export async function executeRestoreStep(admin: SupabaseClient, jobId: string) {
 
   try {
     const targetStore = job.target_store as StoreRow;
-    const token = decryptToken(targetStore.access_token_ciphertext);
-    const client = makeShopifyClient(targetStore.shop_domain, token);
+    const client = await AuthManager.getUnifiedClient(admin, targetStore.id);
 
     const plan = job.plan as RestorePlan;
     const progress = job.progress || 0;

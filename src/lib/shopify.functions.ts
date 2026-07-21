@@ -50,6 +50,7 @@ export const connectShopifyStore = createServerFn({ method: "POST" })
           api_version: SHOPIFY_API_VERSION,
           access_token_ciphertext: ciphertext,
           status: "connected",
+          auth_method: "custom_app_token",
           last_synced_at: new Date().toISOString(),
         },
         { onConflict: "user_id,shop_domain" },
