@@ -23,7 +23,7 @@ export async function explainShopifyLimitation(req: ExplanationRequest): Promise
         "Authorization": `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "meta/llama3-70b-instruct", // or whatever model NVIDIA integrates exposes
+        model: "meta/llama-3.1-70b-instruct", // Correct NVIDIA NIM model string
         messages: [
           {
             role: "system",
