@@ -7,7 +7,6 @@ import {
   Zap,
   Lock,
   ArrowRight,
-  Server,
   PackageCheck,
   Activity,
 } from "lucide-react";

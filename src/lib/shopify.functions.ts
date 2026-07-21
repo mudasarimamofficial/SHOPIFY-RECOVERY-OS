@@ -5,7 +5,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 const connectSchema = z.object({
   shop_domain: z.string().min(3).max(200),
   access_token: z.string().min(10).max(500),
-  isDestination: z.boolean().optional().default(false)
+  isDestination: z.boolean().optional().default(false),
 });
 
 export const connectShopifyStore = createServerFn({ method: "POST" })
@@ -55,8 +55,8 @@ export const connectShopifyStore = createServerFn({ method: "POST" })
           last_synced_at: new Date().toISOString(),
           is_destination: data.isDestination,
           installation_status: "installed",
-          verification_status: "verified"
-        },
+          verification_status: "verified",
+        } as any,
         { onConflict: "user_id,shop_domain" },
       )
       .select()
@@ -79,7 +79,14 @@ export const connectShopifyStore = createServerFn({ method: "POST" })
 // authorization URL for the browser to redirect to.
 export const beginShopifyOAuth = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((v) => z.object({ shop_domain: z.string().min(3).max(200), isDestination: z.boolean().optional().default(false) }).parse(v))
+  .validator((v) =>
+    z
+      .object({
+        shop_domain: z.string().min(3).max(200),
+        isDestination: z.boolean().optional().default(false),
+      })
+      .parse(v),
+  )
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { normalizeShop, isValidShopDomain, generateState, buildAuthorizeUrl } =
@@ -95,8 +102,8 @@ export const beginShopifyOAuth = createServerFn({ method: "POST" })
       state,
       user_id: context.userId,
       shop_domain: shop,
-      is_destination: data.isDestination
-    });
+      is_destination: data.isDestination,
+    } as any);
     if (error) throw new Error(`Could not start Shopify authorization: ${error.message}`);
 
     return { authorizeUrl: buildAuthorizeUrl(shop, state, data.isDestination), shop };
@@ -153,7 +160,9 @@ export const startBackup = createServerFn({ method: "POST" })
     if (storeErr || !store) throw new Error("Store not found");
 
     if (store.is_destination) {
-      throw new Error("Store B Companion App cannot perform backup extraction. Extraction is strictly isolated to Store A.");
+      throw new Error(
+        "Store B Companion App cannot perform backup extraction. Extraction is strictly isolated to Store A.",
+      );
     }
 
     const { data: backup, error: backupErr } = await supabaseAdmin
@@ -287,6 +296,7 @@ export const generateRestorePlanFn = createServerFn({ method: "POST" })
         backup_id: z.string().uuid(),
         target_store_id: z.string().uuid(),
         selected_resources: z.array(z.string()).optional(),
+        mode: z.string().optional(),
       })
       .parse(v),
   )
@@ -302,24 +312,26 @@ export const generateRestorePlanFn = createServerFn({ method: "POST" })
     if (storeErr || !store) throw new Error("Target store not found");
 
     if (!store.is_destination) {
-      throw new Error("Target store must be authenticated through the Store B Companion App. Restoring to Store A is strictly prohibited.");
+      throw new Error(
+        "Target store must be authenticated through the Store B Companion App. Restoring to Store A is strictly prohibited.",
+      );
     }
 
-    return await generateRestorePlan(supabaseAdmin, data.backup_id, store, data.selected_resources);
+    return await generateRestorePlan(supabaseAdmin, data.backup_id, store, data.selected_resources, data.mode);
   });
 
 export const startRestoreFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((v) =>
     z
-      .object({ backup_id: z.string().uuid(), target_store_id: z.string().uuid(), plan: z.any() })
+      .object({ backup_id: z.string().uuid(), target_store_id: z.string().uuid(), plan: z.any(), mode: z.string().optional() })
       .parse(v),
   )
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     const { data: job, error } = await supabaseAdmin
-      .from("restore_jobs")
+      .from("migration_jobs")
       .insert({
         user_id: context.userId,
         backup_id: data.backup_id,
@@ -327,7 +339,8 @@ export const startRestoreFn = createServerFn({ method: "POST" })
         status: "running",
         progress: 0,
         plan: data.plan,
-      })
+        mode: data.mode || "merge"
+      } as any)
       .select("id")
       .single();
 
@@ -338,7 +351,7 @@ export const startRestoreFn = createServerFn({ method: "POST" })
 export const stepRestoreFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((v) => z.object({ job_id: z.string().uuid() }).parse(v))
-  .handler(async ({ data, context }) => {
+  .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { executeRestoreStep } = await import("@/lib/migration.server");
 

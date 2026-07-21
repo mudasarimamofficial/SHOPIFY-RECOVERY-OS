@@ -6,7 +6,7 @@ export async function executeDeepCompareEngine(
   migrationJobId: string,
   targetStoreId: string,
   sourceStoreId: string,
-  logActivity: (msg: string) => Promise<void>
+  logActivity: (msg: string) => Promise<void>,
 ): Promise<void> {
   await logActivity("Initiating Deep Compare Engine.");
 
@@ -17,7 +17,7 @@ export async function executeDeepCompareEngine(
     // Simplistic mock deep compare logic for products as a demonstration
     const [sourceRes, targetRes] = await Promise.all([
       sourceClient.rest<any>("/products/count.json").catch(() => ({ count: 0 })),
-      targetClient.rest<any>("/products/count.json").catch(() => ({ count: 0 }))
+      targetClient.rest<any>("/products/count.json").catch(() => ({ count: 0 })),
     ]);
 
     const sourceCount = sourceRes?.count || 0;
@@ -39,14 +39,14 @@ export async function executeDeepCompareEngine(
 
     await supabase.from("deep_compare_results").insert({
       migration_job_id: migrationJobId,
-      resource_type: 'products',
+      resource_type: "products",
       match_percentage: matchPercentage,
       migration_percentage: migrationPercentage,
       integrity_percentage: integrityPercentage,
       differences: {
         source_count: sourceCount,
-        target_count: targetCount
-      }
+        target_count: targetCount,
+      },
     });
 
     await logActivity(`Deep Compare completed for products. Match: ${matchPercentage.toFixed(2)}%`);

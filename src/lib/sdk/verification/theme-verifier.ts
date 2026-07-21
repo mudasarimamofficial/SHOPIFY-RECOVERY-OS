@@ -1,4 +1,4 @@
-import { AssetChecksum, computeAssetChecksum, verifyChecksumPair } from "./binary-hash";
+import { AssetChecksum, verifyChecksumPair } from "./binary-hash";
 
 export type ThemeFileType =
   "liquid" | "json" | "css" | "js" | "config" | "locale" | "binary" | "other";

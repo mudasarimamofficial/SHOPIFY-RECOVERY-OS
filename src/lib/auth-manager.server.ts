@@ -13,7 +13,7 @@ export class AuthManager {
   ): Promise<ShopifyClient> {
     const { data: store, error } = await supabaseAdmin
       .from("stores")
-      .select("shop_domain, access_token_ciphertext")
+      .select("shop_domain, access_token_ciphertext, is_destination")
       .eq("id", storeId)
       .maybeSingle();
 
@@ -28,7 +28,40 @@ export class AuthManager {
     }
 
     const token = decryptToken(store.access_token_ciphertext);
-    return makeShopifyClient(store.shop_domain, token);
+    const baseClient = makeShopifyClient(store.shop_domain, token);
+
+    // Apply strict RBAC
+    return this.enforceRBAC(baseClient, store.is_destination);
+  }
+
+  private static enforceRBAC(client: ShopifyClient, isDestination: boolean): ShopifyClient {
+    return {
+      ...client,
+      async rest<T>(path: string, options?: RequestInit): Promise<T> {
+        const method = (options?.method || "GET").toUpperCase();
+        if (isDestination && method === "GET" && path.includes("/bulk")) {
+          throw new Error(
+            "SECURITY VIOLATION: Store B (Destination) cannot perform bulk extractions.",
+          );
+        }
+        if (!isDestination && ["POST", "PUT", "DELETE"].includes(method)) {
+          throw new Error("SECURITY VIOLATION: Store A (Source) is strictly Read-Only.");
+        }
+        return client.rest<T>(path, options);
+      },
+      async graphql<T>(query: string, variables?: any): Promise<T> {
+        const isMutation = query.trim().toLowerCase().startsWith("mutation");
+        if (!isDestination && isMutation) {
+          throw new Error("SECURITY VIOLATION: Store A (Source) is strictly Read-Only.");
+        }
+        if (isDestination && !isMutation && query.includes("bulkOperationRunQuery")) {
+          throw new Error(
+            "SECURITY VIOLATION: Store B (Destination) cannot perform bulk extractions.",
+          );
+        }
+        return client.graphql<T>(query, variables);
+      },
+    };
   }
 
   /**

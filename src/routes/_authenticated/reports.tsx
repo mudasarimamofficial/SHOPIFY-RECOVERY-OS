@@ -1,7 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { PageHeader } from "../../components/app-shell";
-import { FileText, Download, Copy, RefreshCw, FileCode } from "lucide-react";
+import { FileText, Download, Copy, FileCode } from "lucide-react";
 import { supabase } from "../../integrations/supabase/client";
 import { toast } from "sonner";
 import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/card";
@@ -13,7 +13,7 @@ export const Route = createFileRoute("/_authenticated/reports")({
       queryOptions({
         queryKey: ["reports"],
         queryFn: async () => {
-          const { data, error } = await supabase
+          const { data, error } = await (supabase as any)
             .from("reports")
             .select("*")
             .order("created_at", { ascending: false });
@@ -29,7 +29,7 @@ function ReportsPage() {
     queryOptions({
       queryKey: ["reports"],
       queryFn: async () => {
-        const { data, error } = await supabase
+        const { data, error } = await (supabase as any)
           .from("reports")
           .select("*")
           .order("created_at", { ascending: false });
@@ -71,7 +71,7 @@ function ReportsPage() {
             No reports generated yet. Execute a restore to generate recovery intelligence.
           </div>
         ) : (
-          reports?.map((report) => (
+          reports?.map((report: any) => (
             <Card key={report.id} className="flex flex-col">
               <CardHeader className="pb-4 border-b">
                 <div className="flex items-center gap-2">

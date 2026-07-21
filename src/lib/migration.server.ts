@@ -1,10 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import {
-  makeShopifyClient,
-  fetchShopInfo,
-  type ShopifyClient,
-  SHOPIFY_API_VERSION,
-} from "./shopify.server";
+import { encryptToken, SHOPIFY_API_VERSION } from "./shopify.server";
 import { AuthManager } from "./auth-manager.server";
 
 interface StoreRow {
@@ -32,6 +27,7 @@ export interface RestorePlan {
     target_api: string;
   };
   items: RestorePlanItem[];
+  mode?: string;
 }
 
 export async function generateRestorePlan(
@@ -39,6 +35,7 @@ export async function generateRestorePlan(
   backupId: string,
   targetStore: StoreRow,
   selectedResources?: string[],
+  mode?: string,
 ): Promise<RestorePlan> {
   const { data: backup, error } = await admin
     .from("backups")
@@ -184,12 +181,13 @@ export async function generateRestorePlan(
       target_api: SHOPIFY_API_VERSION,
     },
     items,
+    mode: mode || "merge",
   };
 }
 
 export async function executeRestoreStep(admin: SupabaseClient, jobId: string) {
   const { data: job, error } = await admin
-    .from("restore_jobs")
+    .from("migration_jobs")
     .select("*, target_store:stores(*)")
     .eq("id", jobId)
     .single();
@@ -212,22 +210,59 @@ export async function executeRestoreStep(admin: SupabaseClient, jobId: string) {
     const reportData = (job.report || {}) as any;
 
     const currentItemIndex = reportData.currentItemIndex || 0;
+
+    if (progress === 0 && (job.mode || plan.mode) === "clean" && !reportData.cleaned) {
+      const { executeCleanMigrationEngine } = await import("./sdk/migration/cleaning.server");
+      await executeCleanMigrationEngine(admin, jobId, targetStore.id, async (msg) => {
+        await admin.from("activity_log").insert({
+          user_id: job.user_id,
+          store_id: targetStore.id,
+          kind: "clean",
+          title: "Clean Migration",
+          detail: msg,
+        });
+      });
+      reportData.cleaned = true;
+      await admin.from("migration_jobs").update({ report: reportData }).eq("id", jobId);
+    }
+
     if (currentItemIndex >= plan.items.length) {
       // Done
       const finalStatus =
         (reportData.objectsFailed || 0) > 0 ? "completed_with_failures" : "completed";
 
       try {
+        const { executeDeepCompareEngine } = await import("./sdk/migration/deep-compare.server");
+        await executeDeepCompareEngine(
+          admin,
+          jobId,
+          targetStore.id,
+          plan.target_store_id, // we might need the original Store A id here, which was part of backup
+          async (msg) => {
+            await admin.from("activity_log").insert({
+              user_id: job.user_id,
+              store_id: targetStore.id,
+              kind: "verification",
+              title: "Deep Compare Engine",
+              detail: msg,
+            });
+          },
+        );
+      } catch (e) {
+        console.error("Failed to execute deep compare engine", e);
+      }
+
+      try {
         const { generateAndStoreReports } = await import("./sdk/migration/reports.server");
         await generateAndStoreReports({
           backupId: job.backup_id,
           restoreId: jobId,
-          storeA: plan.target_store_id, // we might need real store names
+          storeA: plan.target_store_id,
           storeB: targetStore.shop_domain,
           restoreResults: reportData,
           conflicts: reportData.failedItems || [],
           telemetry: {
-            duration: 0, // calculate if needed
+            duration: 0,
             cpu: 0,
             peakHeap: 0,
             totalResources: reportData.objectsRestored + reportData.objectsFailed,
@@ -239,7 +274,7 @@ export async function executeRestoreStep(admin: SupabaseClient, jobId: string) {
       }
 
       await admin
-        .from("restore_jobs")
+        .from("migration_jobs")
         .update({
           status: finalStatus,
           progress: 100,
@@ -272,9 +307,9 @@ export async function executeRestoreStep(admin: SupabaseClient, jobId: string) {
       };
       const nextProgress = Math.min(99, Math.round((nextItemIndex / plan.items.length) * 100));
       await admin
-        .from("restore_jobs")
-        .update({ progress: nextProgress, report: updatedReport })
-        .eq("id", jobId);
+      .from("migration_jobs")
+      .update({ progress: nextProgress, report: updatedReport })
+      .eq("id", jobId);
       return {
         done: false,
         progress: nextProgress,
@@ -331,6 +366,7 @@ export async function executeRestoreStep(admin: SupabaseClient, jobId: string) {
         idMapper,
         currentOffset,
         CHUNK_SIZE,
+        job.mode || plan.mode || "merge"
       );
       successCount = res.successCount;
       failureCount = res.failureCount;
@@ -379,7 +415,7 @@ export async function executeRestoreStep(admin: SupabaseClient, jobId: string) {
     }
 
     await admin
-      .from("restore_jobs")
+      .from("migration_jobs")
       .update({
         progress: nextProgress,
         report: updatedReport,
@@ -398,7 +434,7 @@ export async function executeRestoreStep(admin: SupabaseClient, jobId: string) {
     };
   } catch (err: any) {
     await admin
-      .from("restore_jobs")
+      .from("migration_jobs")
       .update({
         status: "failed",
       })

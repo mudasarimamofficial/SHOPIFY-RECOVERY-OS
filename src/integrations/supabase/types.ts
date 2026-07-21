@@ -167,7 +167,7 @@ export type Database = {
           },
         ];
       };
-      restore_jobs: {
+      migration_jobs: {
         Row: {
           backup_id: string;
           completed_at: string | null;
@@ -180,6 +180,7 @@ export type Database = {
           status: string;
           target_store_id: string | null;
           user_id: string;
+          mode: string | null;
         };
         Insert: {
           backup_id: string;
@@ -193,6 +194,7 @@ export type Database = {
           status?: string;
           target_store_id?: string | null;
           user_id: string;
+          mode?: string | null;
         };
         Update: {
           backup_id?: string;
@@ -206,6 +208,7 @@ export type Database = {
           status?: string;
           target_store_id?: string | null;
           user_id?: string;
+          mode?: string | null;
         };
         Relationships: [
           {
@@ -235,6 +238,7 @@ export type Database = {
           email: string | null;
           id: string;
           installed_at: string | null;
+          is_destination: boolean | null;
           last_synced_at: string | null;
           name: string | null;
           plan: string | null;
@@ -256,6 +260,7 @@ export type Database = {
           email?: string | null;
           id?: string;
           installed_at?: string | null;
+          is_destination?: boolean | null;
           last_synced_at?: string | null;
           name?: string | null;
           plan?: string | null;
@@ -277,6 +282,7 @@ export type Database = {
           email?: string | null;
           id?: string;
           installed_at?: string | null;
+          is_destination?: boolean | null;
           last_synced_at?: string | null;
           name?: string | null;
           plan?: string | null;

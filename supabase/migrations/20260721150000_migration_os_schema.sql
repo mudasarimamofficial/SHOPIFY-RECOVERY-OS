@@ -66,3 +66,25 @@ CREATE POLICY "Enable all for service role" ON migration_jobs USING (true) WITH 
 CREATE POLICY "Enable all for service role" ON store_preparations USING (true) WITH CHECK (true);
 CREATE POLICY "Enable all for service role" ON conflict_intelligence USING (true) WITH CHECK (true);
 CREATE POLICY "Enable all for service role" ON deep_compare_results USING (true) WITH CHECK (true);
+
+-- User Policies
+CREATE POLICY "Users access own migration jobs" ON migration_jobs FOR ALL 
+  USING (target_store_id IN (SELECT id FROM stores WHERE user_id = auth.uid()));
+
+CREATE POLICY "Users access own preparations" ON store_preparations FOR ALL 
+  USING (target_store_id IN (SELECT id FROM stores WHERE user_id = auth.uid()));
+
+CREATE POLICY "Users access own conflicts" ON conflict_intelligence FOR ALL 
+  USING (migration_job_id IN (
+    SELECT id FROM migration_jobs WHERE target_store_id IN (
+      SELECT id FROM stores WHERE user_id = auth.uid()
+    )
+  ));
+
+CREATE POLICY "Users access own deep compare" ON deep_compare_results FOR ALL 
+  USING (migration_job_id IN (
+    SELECT id FROM migration_jobs WHERE target_store_id IN (
+      SELECT id FROM stores WHERE user_id = auth.uid()
+    )
+  ));
+

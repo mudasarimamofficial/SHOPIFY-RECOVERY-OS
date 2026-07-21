@@ -1,13 +1,13 @@
 import { createClient } from "@supabase/supabase-js";
 import { classifyShopifyError } from "./executor";
-import type { StoreComparisonResult } from "../verification/compare";
+// Removed import
 
 export interface ReportGenerationPayload {
   backupId: string;
   restoreId: string;
   storeA: string;
   storeB: string;
-  compareResults?: StoreComparisonResult[];
+  compareResults?: any[];
   restoreResults?: any;
   telemetry?: any;
   conflicts?: any[];
@@ -102,6 +102,6 @@ function generateConflictReport(conflicts: any[]) {
   return JSON.stringify(conflicts, null, 2);
 }
 
-function generateCompareReport(results: StoreComparisonResult[]) {
+function generateCompareReport(results: any[]) {
   return JSON.stringify(results, null, 2);
 }

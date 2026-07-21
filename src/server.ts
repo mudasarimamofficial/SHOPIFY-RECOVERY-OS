@@ -117,7 +117,7 @@ export default {
           .order("created_at", { ascending: false })
           .limit(5);
         const { data: restoreJobs } = await supabaseAdmin
-          .from("restore_jobs")
+          .from("migration_jobs")
           .select("id, backup_id, target_store_id, status, progress, report, created_at")
           .order("created_at", { ascending: false })
           .limit(5);

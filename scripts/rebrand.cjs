@@ -1,28 +1,22 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
-const DIRECTORIES_TO_SCAN = [
-  'src',
-  'scripts',
-  'PROJECT_MEMORY',
-  'tests',
-  'supabase'
-];
+const DIRECTORIES_TO_SCAN = ["src", "scripts", "PROJECT_MEMORY", "tests", "supabase"];
 
 const ROOT_FILES_TO_SCAN = [
-  'package.json',
-  'shopify.app.toml',
-  'README.md',
-  'system-architecture.md',
-  '.env.example',
-  '.env.production'
+  "package.json",
+  "shopify.app.toml",
+  "README.md",
+  "system-architecture.md",
+  ".env.example",
+  ".env.production",
 ];
 
 const REPLACEMENTS = [
-  { from: /Imam Migration OS/g, to: 'Imam Migration OS' },
-  { from: /Migration OS/g, to: 'Migration OS' },
-  { from: /Imam Migration/g, to: 'Imam Migration' },
-  { from: /Migration Book/g, to: 'Migration Book' }, // Basic mapping, we'll refine manually if needed.
+  { from: /Imam Migration OS/g, to: "Imam Migration OS" },
+  { from: /Migration OS/g, to: "Migration OS" },
+  { from: /Imam Migration/g, to: "Imam Migration" },
+  { from: /Migration Book/g, to: "Migration Book" }, // Basic mapping, we'll refine manually if needed.
 ];
 
 function processFile(filePath) {
@@ -31,9 +25,14 @@ function processFile(filePath) {
     if (!stat.isFile()) return;
 
     // Skip node_modules, .git, etc. just in case
-    if (filePath.includes('node_modules') || filePath.includes('.git') || filePath.includes('.system_generated')) return;
+    if (
+      filePath.includes("node_modules") ||
+      filePath.includes(".git") ||
+      filePath.includes(".system_generated")
+    )
+      return;
 
-    let content = fs.readFileSync(filePath, 'utf8');
+    let content = fs.readFileSync(filePath, "utf8");
     let originalContent = content;
 
     for (const r of REPLACEMENTS) {
@@ -41,7 +40,7 @@ function processFile(filePath) {
     }
 
     if (content !== originalContent) {
-      fs.writeFileSync(filePath, content, 'utf8');
+      fs.writeFileSync(filePath, content, "utf8");
       console.log(`Updated: ${filePath}`);
     }
   } catch (e) {
@@ -68,7 +67,7 @@ function processDirectory(dirPath) {
 
 // 1. Process root files
 for (const file of ROOT_FILES_TO_SCAN) {
-  const fullPath = path.join(__dirname, '..', file);
+  const fullPath = path.join(__dirname, "..", file);
   if (fs.existsSync(fullPath)) {
     processFile(fullPath);
   }
@@ -76,7 +75,7 @@ for (const file of ROOT_FILES_TO_SCAN) {
 
 // 2. Process directories
 for (const dir of DIRECTORIES_TO_SCAN) {
-  const fullPath = path.join(__dirname, '..', dir);
+  const fullPath = path.join(__dirname, "..", dir);
   if (fs.existsSync(fullPath)) {
     processDirectory(fullPath);
   }

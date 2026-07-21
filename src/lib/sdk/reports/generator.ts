@@ -1,5 +1,5 @@
 import { RESOURCE_CATALOG } from "../../resource-catalog";
-import type { RecoveryWizardPlan } from "../recovery/intelligence";
+// Removed import
 
 export interface RecoveryReportContext {
   storeDomain: string; // Store A
@@ -8,7 +8,7 @@ export interface RecoveryReportContext {
   sourceAppClientId?: string; // Imam Migration OS Store A Client ID
   targetAppClientId?: string; // Imam Migration OS Store B Client ID
   failedResources: Array<{ type: string; reason: string; items: string[] }>;
-  manualResources: RecoveryWizardPlan[];
+  manualResources: any[];
 }
 
 export function generateMerchantRecoveryBookMarkdown(ctx: RecoveryReportContext): string {
@@ -51,7 +51,7 @@ export function generateMerchantRecoveryBookMarkdown(ctx: RecoveryReportContext)
     markdown += `- **Difficulty:** ${plan.difficulty}\n\n`;
 
     markdown += `#### Step-by-Step Instructions\n`;
-    plan.steps.forEach((step, idx) => {
+    (plan.steps || []).forEach((step: any, idx: any) => {
       markdown += `${idx + 1}. **${step.title}**: ${step.instruction}\n`;
     });
 

@@ -103,7 +103,7 @@
       "file": "src/lib/migration.server.ts",
       "databaseTables": [
         "backups",
-        "restore_jobs",
+        "migration_jobs",
         "activity_log",
         "recovery_packages"
       ],
@@ -117,7 +117,7 @@
       "file": "src/lib/migration.server.ts",
       "databaseTables": [
         "backups",
-        "restore_jobs",
+        "migration_jobs",
         "activity_log",
         "recovery_packages"
       ],
@@ -539,7 +539,7 @@
         "oauth_sessions",
         "backups",
         "backup_resources",
-        "restore_jobs"
+        "migration_jobs"
       ],
       "tags": [
         "utility",
@@ -555,7 +555,7 @@
         "oauth_sessions",
         "backups",
         "backup_resources",
-        "restore_jobs"
+        "migration_jobs"
       ],
       "tags": [
         "utility",
@@ -571,7 +571,7 @@
         "oauth_sessions",
         "backups",
         "backup_resources",
-        "restore_jobs"
+        "migration_jobs"
       ],
       "tags": [
         "utility",
@@ -587,7 +587,7 @@
         "oauth_sessions",
         "backups",
         "backup_resources",
-        "restore_jobs"
+        "migration_jobs"
       ],
       "tags": [
         "utility",
@@ -603,7 +603,7 @@
         "oauth_sessions",
         "backups",
         "backup_resources",
-        "restore_jobs"
+        "migration_jobs"
       ],
       "tags": [
         "utility",
@@ -619,7 +619,7 @@
         "oauth_sessions",
         "backups",
         "backup_resources",
-        "restore_jobs"
+        "migration_jobs"
       ],
       "tags": [
         "utility",
@@ -635,7 +635,7 @@
         "oauth_sessions",
         "backups",
         "backup_resources",
-        "restore_jobs"
+        "migration_jobs"
       ],
       "tags": [
         "utility",
@@ -651,7 +651,7 @@
         "oauth_sessions",
         "backups",
         "backup_resources",
-        "restore_jobs"
+        "migration_jobs"
       ],
       "tags": [
         "utility",
@@ -667,7 +667,7 @@
         "oauth_sessions",
         "backups",
         "backup_resources",
-        "restore_jobs"
+        "migration_jobs"
       ],
       "tags": [
         "utility",
@@ -683,7 +683,7 @@
         "oauth_sessions",
         "backups",
         "backup_resources",
-        "restore_jobs"
+        "migration_jobs"
       ],
       "tags": [
         "utility",
@@ -699,7 +699,7 @@
         "oauth_sessions",
         "backups",
         "backup_resources",
-        "restore_jobs"
+        "migration_jobs"
       ],
       "tags": [
         "utility",
@@ -715,7 +715,7 @@
         "oauth_sessions",
         "backups",
         "backup_resources",
-        "restore_jobs"
+        "migration_jobs"
       ],
       "tags": [
         "utility",
@@ -731,7 +731,7 @@
         "oauth_sessions",
         "backups",
         "backup_resources",
-        "restore_jobs"
+        "migration_jobs"
       ],
       "tags": [
         "utility",
@@ -747,7 +747,7 @@
         "oauth_sessions",
         "backups",
         "backup_resources",
-        "restore_jobs"
+        "migration_jobs"
       ],
       "tags": [
         "utility",
@@ -1417,7 +1417,7 @@
       ],
       "databaseTables": [
         "backups",
-        "restore_jobs",
+        "migration_jobs",
         "activity_log",
         "recovery_packages"
       ]
@@ -1539,8 +1539,7 @@
       "file": "src/lib/sdk/migration/reports.server.ts",
       "imports": [
         "@supabase/supabase-js",
-        "./executor",
-        "../verification/compare"
+        "./executor"
       ],
       "databaseTables": [
         "reports",
@@ -1564,8 +1563,7 @@
     {
       "file": "src/lib/sdk/reports/generator.ts",
       "imports": [
-        "../../resource-catalog",
-        "../recovery/intelligence"
+        "../../resource-catalog"
       ],
       "databaseTables": []
     },
@@ -1661,7 +1659,7 @@
         "oauth_sessions",
         "backups",
         "backup_resources",
-        "restore_jobs"
+        "migration_jobs"
       ]
     },
     {
@@ -1950,7 +1948,7 @@
       "databaseTables": [
         "stores",
         "backups",
-        "restore_jobs",
+        "migration_jobs",
         "activity_log"
       ]
     },
@@ -2148,5 +2146,5 @@
     "SHOPIFY_TOKEN_ENCRYPTION_KEY",
     "MAGIC_LINK_SECRET"
   ],
-  "last_generated": "2026-07-21T13:58:06.837Z"
+  "last_generated": "2026-07-21T14:38:41.113Z"
 }

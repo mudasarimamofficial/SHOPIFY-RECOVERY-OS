@@ -83,5 +83,7 @@ function generateFallbackPlan(resourceType: string, extractedData: any): Recover
     difficulty: base.difficulty,
     steps: base.steps,
     extractedData,
+    confidenceScore: 0,
+    warnings: ["AI Assistant unavailable. Using static fallback logic."],
   };
 }

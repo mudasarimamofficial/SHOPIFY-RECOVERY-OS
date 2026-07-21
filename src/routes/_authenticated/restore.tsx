@@ -1,9 +1,9 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { PageHeader } from "@/components/app-shell";
-import { GitBranch, Undo2, ShieldAlert, Loader2, Play } from "lucide-react";
+import { GitBranch, Loader2, Play, Undo2, ShieldAlert } from "lucide-react";
 import {
   listBackups,
   listStores,
@@ -39,6 +39,7 @@ function RestorePage() {
   const [restoreProgress, setRestoreProgress] = useState(0);
   const [currentResource, setCurrentResource] = useState<string>("");
   const [report, setReport] = useState<any>(null);
+  const [migrationMode, setMigrationMode] = useState<string>("merge");
 
   const [selectedResources, setSelectedResources] = useState<string[]>([
     "shop",
@@ -74,6 +75,7 @@ function RestorePage() {
           backup_id: selectedBackup,
           target_store_id: selectedStore,
           selected_resources: selectedResources,
+          mode: migrationMode,
         },
       });
       setPlan(result);
@@ -90,7 +92,7 @@ function RestorePage() {
     setRestoreProgress(0);
     try {
       const { job_id } = await startJob({
-        data: { backup_id: plan.backup_id, target_store_id: plan.target_store_id, plan: plan },
+        data: { backup_id: plan.backup_id, target_store_id: plan.target_store_id, plan: plan, mode: migrationMode },
       });
       setJobId(job_id);
 
@@ -160,6 +162,22 @@ function RestorePage() {
                     {s.name} ({s.shop_domain})
                   </option>
                 ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium">Migration Mode</label>
+              <select
+                className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                value={migrationMode}
+                onChange={(e) => setMigrationMode(e.target.value)}
+                disabled={isGenerating || !!jobId}
+              >
+                <option value="merge">Merge (Update existing, add new)</option>
+                <option value="replace">Replace (Overwrite existing)</option>
+                <option value="clean">Clean Migration (Delete Target Store data first)</option>
+                <option value="dry_run">Dry Run (Analyze only, no mutation)</option>
+                <option value="compare_only">Compare Only (Generate deep compare report)</option>
               </select>
             </div>
 

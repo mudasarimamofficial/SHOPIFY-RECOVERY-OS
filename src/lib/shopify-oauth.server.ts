@@ -292,7 +292,7 @@ export async function handleOAuthCallback(request: Request): Promise<Response> {
           is_destination: isDestination,
           client_id: getAppCredentials(isDestination).key,
           installation_status: "installed",
-          verification_status: "verified"
+          verification_status: "verified",
         },
         { onConflict: "user_id,shop_domain" },
       )

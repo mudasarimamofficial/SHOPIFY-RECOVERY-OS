@@ -195,7 +195,7 @@ export function makeShopifyClient(domain: string, token: string): ShopifyClient 
       rawText = await res.text().catch(() => "");
       try {
         json = JSON.parse(rawText);
-      } catch (e) {
+      } catch (_e) {
         if (res.ok) throw new Error(`Shopify GraphQL JSON parsing failed`);
       }
     }

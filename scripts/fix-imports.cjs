@@ -1,23 +1,23 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
-const DIRECTORIES = ['src', 'scripts'];
+const DIRECTORIES = ["src", "scripts"];
 
 function processFile(filePath) {
   try {
     const stat = fs.statSync(filePath);
     if (!stat.isFile()) return;
 
-    let content = fs.readFileSync(filePath, 'utf8');
+    let content = fs.readFileSync(filePath, "utf8");
     let original = content;
 
-    content = content.replace(/sdk\/recovery\//g, 'sdk/migration/');
+    content = content.replace(/sdk\/recovery\//g, "sdk/migration/");
 
     if (content !== original) {
-      fs.writeFileSync(filePath, content, 'utf8');
-      console.log('Fixed import in ' + filePath);
+      fs.writeFileSync(filePath, content, "utf8");
+      console.log("Fixed import in " + filePath);
     }
-  } catch(e) {}
+  } catch (e) {}
 }
 
 function processDirectory(dirPath) {
@@ -32,11 +32,11 @@ function processDirectory(dirPath) {
         processFile(fullPath);
       }
     }
-  } catch(e) {}
+  } catch (e) {}
 }
 
 for (const dir of DIRECTORIES) {
-  const fullPath = path.join(__dirname, '..', dir);
+  const fullPath = path.join(__dirname, "..", dir);
   if (fs.existsSync(fullPath)) {
     processDirectory(fullPath);
   }

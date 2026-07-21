@@ -1,0 +1,32 @@
+name = "Imam Migration OS Store B"
+client_id = "REPLACE_WITH_CLIENT_ID"
+application_url = "https://shopify-recovery-ds3pwxk4g.vercel.app"
+embedded = true
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "REPLACE_WITH_STORE_URL"
+
+[access_scopes]
+use_legacy_install_flow = true
+scopes = "read_products,write_products,read_customers,write_customers,read_orders,write_orders,read_inventory,write_inventory,read_locations,read_fulfillments,write_fulfillments,read_shipping,write_shipping,read_draft_orders,write_draft_orders,read_discounts,write_discounts,read_price_rules,write_price_rules,read_themes,write_themes,read_content,write_content,read_files,write_files,read_metaobjects,write_metaobjects,read_markets,write_markets,read_translations,write_translations,read_locales,write_locales,read_publications,write_publications"
+
+[auth]
+redirect_urls = [
+  "https://shopify-recovery-ds3pwxk4g.vercel.app/api/auth/callback"
+]
+
+[webhooks]
+api_version = "2024-04"
+
+[[webhooks.subscriptions]]
+topics = [ "shop/redact" ]
+uri = "https://shopify-recovery-ds3pwxk4g.vercel.app/api/webhooks/shop/redact"
+
+[[webhooks.subscriptions]]
+topics = [ "customers/redact" ]
+uri = "https://shopify-recovery-ds3pwxk4g.vercel.app/api/webhooks/customers/redact"
+
+[[webhooks.subscriptions]]
+topics = [ "customers/data_request" ]
+uri = "https://shopify-recovery-ds3pwxk4g.vercel.app/api/webhooks/customers/data_request"

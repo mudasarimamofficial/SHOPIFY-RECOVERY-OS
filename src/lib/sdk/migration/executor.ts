@@ -148,8 +148,9 @@ export async function executeResourceRestore(
   fileData: Blob | ArrayBuffer,
   isSameStore: boolean,
   idMapper: IdMapper,
-  offset = 0,
-  limit = 150,
+  offset: number = 0,
+  limit: number = 50,
+  mode: string = "merge",
 ) {
   const baseResource = resourceType.replace("_bulk", "");
   const { items, totalItems } = await parseChunkFromBlob(
@@ -174,6 +175,11 @@ export async function executeResourceRestore(
 
   for (const item of chunk) {
     const itemKey = item.id || item.node?.id || item.handle || "unknown";
+    if (mode === "dry_run" || mode === "compare_only") {
+      successCount++;
+      successfulKeys.push(itemKey);
+      continue;
+    }
     try {
       if (baseResource === "pages") {
         await restorePage(client, item, isSameStore);
@@ -562,7 +568,7 @@ async function restoreCustomer(
   }
 }
 
-async function restoreOrder(
+async function _restoreOrder(
   client: ShopifyClient,
   item: any,
   isSameStore: boolean,
@@ -739,7 +745,7 @@ async function restoreRedirect(client: ShopifyClient, item: any, isSameStore: bo
   await client.rest(`/redirects.json`, { method: "POST", body: JSON.stringify(payload) });
 }
 
-async function restoreTheme(client: ShopifyClient, item: any, isSameStore: boolean) {
+async function _restoreTheme(client: ShopifyClient, item: any, isSameStore: boolean) {
   const { runWithConcurrency } = await import("../../shopify.server");
 
   // item might be the root object { theme, assets } or just the theme

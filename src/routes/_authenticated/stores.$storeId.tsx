@@ -150,7 +150,7 @@ function StoreDetail() {
                             </div>
                           )}
                         </div>
-                        <RecoveryBadge tier={r.recoverability} />
+                        <RecoveryBadge tier={r.recoverability as any} />
                       </div>
                     ))}
                   </div>
